@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Product
 from django.db.models import Q 
 from django.core.paginator import Paginator
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 
