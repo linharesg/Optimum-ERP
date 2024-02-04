@@ -106,6 +106,7 @@ class Product(models.Model):
     is_perishable = models.BooleanField()
     expiration_date = models.DateField(null=True, blank=True)
     unit_of_measurement = models.CharField(max_length=7, choices=MEASUREMENT_CHOICES)
+    cst = models.CharField(max_length=3, choices=CST_CHOICES)
     enabled = models.BooleanField(default=True)
 
     def __str__(self):
