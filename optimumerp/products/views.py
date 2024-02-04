@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
+from .forms import ProductForm
 
 # Create your views here.
 def index(request):
@@ -12,7 +13,7 @@ def index(request):
 
     # Aplicando a paginação
     paginator = Paginator(products, 100)
-    # /fornecedores?page=1 -> Obtendo a página da URL
+    # /produtos?page=1 -> Obtendo a página da URL
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
@@ -51,7 +52,7 @@ def create(request):
         form = ProductForm(request.POST, request.FILES)
         
         if form.is_valid():
-            product = form.save()
+            form.save()
             messages.success(request, "Produto cadastrado com sucesso!")
             
             return redirect("products:index")
