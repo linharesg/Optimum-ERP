@@ -3,6 +3,7 @@ from .models import Product
 from django.db.models import Q 
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
+from django.views.decorators.http import require_POST
 from django.urls import reverse
 from django.contrib import messages
 from .forms import ProductForm
@@ -100,3 +101,12 @@ def update(request, slug):
     }
 
     return render(request, "products/create.html", context)
+
+@require_POST
+def toggle_enabled(request, id):
+    product = get_object_or_404(Product, pk=id)
+
+    product.enabled = not product.enabled
+    product.save()
+    
+    return JsonResponse({ "message": "success" })
