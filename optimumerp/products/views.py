@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from .models import Product
+from .models import Product, SupplierProduct
 from django.db.models import Q 
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib import messages
@@ -118,3 +118,23 @@ def toggle_enabled(request, id):
     product.save()
     
     return JsonResponse({ "message": "success" })
+
+@require_POST
+def delete_supplier_from_product(request, id):
+    supplier_product = get_object_or_404(SupplierProduct, pk=id)
+    supplier_product.delete()
+
+    return JsonResponse({"message": "success"})
+
+@require_GET
+def get_suppliers_from_product(request, id):
+    suppliers = SupplierProduct.objects.filter(product__id=id).order_by("-id")
+
+    # Serialização
+    suppliers_serialized = [{
+        "id": supplierProduct.id,
+        "name": supplierProduct.supplier.fantasy_name,
+        "cost_price": supplierProduct.cost_price
+    } for supplierProduct in suppliers] 
+
+    return JsonResponse(suppliers_serialized, safe=False)
