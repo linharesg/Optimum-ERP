@@ -119,6 +119,13 @@ def toggle_enabled(request, id):
     
     return JsonResponse({ "message": "success" })
 
+@require_POST
+def delete_supplier_from_product(request, id):
+    supplier_product = get_object_or_404(SupplierProduct, pk=id)
+    supplier_product.delete()
+
+    return JsonResponse({"message": "success"})
+
 @require_GET
 def get_suppliers_from_product(request, id):
     suppliers = SupplierProduct.objects.filter(product__id=id).order_by("-id")
