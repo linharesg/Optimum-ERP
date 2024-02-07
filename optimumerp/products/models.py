@@ -3,6 +3,22 @@ from django.utils.text import slugify
 from .models import Supplier
 
 # Create your models here.
+
+class Category(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Categoria"
+        verbose_name_plural = "Categorias"
+
 class Product(models.Model):
     MEASUREMENT_CHOICES = {
         "KG": "Quilograma",
@@ -102,6 +118,7 @@ class Product(models.Model):
     }
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True)
     sale_price = models.FloatField()
     is_perishable = models.BooleanField()
