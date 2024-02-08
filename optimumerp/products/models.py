@@ -3,7 +3,7 @@ from django.utils.text import slugify
 from suppliers.models import Suppliers
 
 class InternalCode(models.Model):
-    code = models.CharField(max_digits=255, unique=True)
+    code = models.CharField(max_length=255, unique=True)
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
