@@ -55,7 +55,7 @@
             <input {% if supplier.enabled %}checked{% endif %} data-url="{% url 'suppliers:toggle_enabled' supplier.id %}" type="checkbox" class="form-check-input" />
           </td>
           <td class="d-flex gap-1">
-            {% comment %} <a href="{% url 'suppliers:update' supplier.slug %}" class="btn btn-warning btn-sm" title="editar fornecedor"><i class="bi bi-pencil"></i></a> {% endcomment %}
+            <a href="{% url 'suppliers:update' supplier.slug %}" class="btn btn-warning btn-sm" title="editar fornecedor"><i class="bi bi-pencil"></i></a>
             <form method="post" action="{% url 'suppliers:delete' supplier.id %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-danger btn-sm" title="remover fornecedor"><i class="bi bi-trash"></i></button>

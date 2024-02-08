@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-from .models import Supplier
+from suppliers.models import Suppliers
 
 # Create your models here.
 
@@ -152,7 +152,7 @@ class ProductInventory(models.Model):
 
 class SupplierProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    supplier = models.ForeignKey(Suppliers, on_delete=models.CASCADE)
     cost_price = models.DecimalField(max_digits=8, decimal_places=2)
 
     class Meta:
