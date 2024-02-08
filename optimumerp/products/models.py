@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils.text import slugify
-from .models import Supplier
+from suppliers.models import Suppliers
 
-# Create your models here.
-
+class InternalCode(models.Model):
+    code = models.CharField(max_digits=255, unique=True)
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
@@ -120,6 +120,9 @@ class Product(models.Model):
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True)
+    minimum_stock = models.DecimalField(max_digits=255, decimal_places=2)
+    maximum_stock = models.DecimalField(max_digits=255, decimal_places=2)
+    internal_code = models.ForeignKey(InternalCode, on_delete=models.DO_NOTHING)
     sale_price = models.FloatField()
     is_perishable = models.BooleanField()
     expiration_date = models.DateField(null=True, blank=True)
@@ -152,7 +155,7 @@ class ProductInventory(models.Model):
 
 class SupplierProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    supplier = models.ForeignKey(Suppliers, on_delete=models.CASCADE)
     cost_price = models.DecimalField(max_digits=8, decimal_places=2)
 
     class Meta:
