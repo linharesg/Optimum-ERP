@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'suppliers.apps.SuppliersConfig',
     'products.apps.ProductsConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +60,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'base' / 'templates'
+            BASE_DIR / 'base' / 'templates',
+            BASE_DIR / 'users' / 'templates'
             ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -142,4 +143,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# LOGIN_URL = "/login/"
+# Configurações de autenticação
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'
