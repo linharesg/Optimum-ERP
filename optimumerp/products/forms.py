@@ -14,7 +14,6 @@ class ProductForm(forms.ModelForm):
             "sale_price": "Preço de venda",
             "cst": "Código de situação tributária (CST)",
             "minimum_stock": "Estoque mínimo",
-            "maximum_stock": "Estoque máximo",
             "unit_of_measurement": "Unidade de medida",
             "expiration_date": "Data de expiração",
             "enabled": "Ativo"
