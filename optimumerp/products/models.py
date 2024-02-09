@@ -122,7 +122,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, blank=True, null=True)
     sale_price = models.DecimalField(max_digits=255, decimal_places=2)
     cst = models.CharField(max_length=255, choices=CST_CHOICES)
-    minimum_stock = models.DecimalField(max_digits=255, decimal_places=2)
+    minimum_stock = models.DecimalField(max_digits=255, decimal_places=2, default=0)
     maximum_stock = models.DecimalField(max_digits=255, decimal_places=2)
     unit_of_measurement = models.CharField(max_length=7, choices=MEASUREMENT_CHOICES)
     expiration_date = models.DateField(null=True, blank=True)
