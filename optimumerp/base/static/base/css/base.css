@@ -26,3 +26,34 @@ main {
   ::-webkit-scrollbar-thumb:hover {
     background: #555; 
   }
+
+.active {
+  background-color: white !important;
+  color: black !important;
+}
+
+hr {
+  color: rgb(255, 255, 255);
+}
+
+.menu-icons {
+  margin-block: 5px;
+  font-size: 23px;
+}
+
+.nav-size {
+  width: 80px;
+}
+
+.link-name {
+  display: none;
+}
+
+.nav-link {
+  padding: 1;
+}
+
+#navbar {
+  height: 100vh !important;
+  overflow: auto;
+}
