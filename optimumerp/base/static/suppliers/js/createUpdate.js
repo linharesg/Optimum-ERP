@@ -1,13 +1,13 @@
 jQuery(function () {
     const $form = $("form");
-    const $zipcodeInput = $("#zipcodeInput");
-    const $streetInput = $("#streetInput");
-    const $numberInput = $("#numberInput");
-    const $cityInput = $("#cityInput");
-    // const $stateInput = $("#stateInput");
-    const $stateInput = $("#stateSelect");
-    const $cnpjInput = $("#cnpjInput");
-    const $phoneInput = $("#phoneInput");
+    // const $zipcodeInput = $("#zipcodeInput");
+    const $zipcodeInput = $("#id_zipcode");
+    const $streetInput = $("#id_street");
+    const $numberInput = $("#id_number");
+    const $cityInput = $("#id_city");
+    const $stateInput = $("#id_state");
+    const $cnpjInput = $("#id_cnpj");
+    const $phoneInput = $("#id_phone");
     const $zipcodeIcon = $("#zipcodeIcon");
 
     $zipcodeInput.mask("00000-000");
