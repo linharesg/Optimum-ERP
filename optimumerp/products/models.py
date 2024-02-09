@@ -2,8 +2,6 @@ from django.db import models
 from django.utils.text import slugify
 from suppliers.models import Suppliers
 
-class InternalCode(models.Model):
-    code = models.CharField(max_length=255, unique=True)
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
@@ -28,15 +26,14 @@ class Product(models.Model):
     }
 
     name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, blank=True, null=True)
-    slug = models.SlugField(unique=True, blank=True)
+    sale_price = models.DecimalField(max_digits=255, decimal_places=2)
     minimum_stock = models.DecimalField(max_digits=255, decimal_places=2)
     maximum_stock = models.DecimalField(max_digits=255, decimal_places=2)
-    internal_code = models.ForeignKey(InternalCode, on_delete=models.DO_NOTHING)
-    sale_price = models.DecimalField(max_digits=255, decimal_places=2)
-    expiration_date = models.DateField(null=True, blank=True)
     unit_of_measurement = models.CharField(max_length=7, choices=MEASUREMENT_CHOICES)
+    expiration_date = models.DateField(null=True, blank=True)
     enabled = models.BooleanField(default=True)
 
     def __str__(self):
