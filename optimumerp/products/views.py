@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib import messages
 from .forms import ProductForm
+from .forms import ProductInventoryFormSet, SupplierProductFormSet
 
 # Create your views here.
 def index(request):
@@ -67,10 +68,14 @@ def create(request):
 
     # GET
     form = ProductForm()
+    product_inventory_formset = ProductInventoryFormSet()
+    supplier_product_formset = SupplierProductFormSet()
 
     context = {
         "form": form, 
         "form_action": form_action,
+        "product_inventory_formset": product_inventory_formset,
+        "supplier_product_formset": supplier_product_formset
         }
 
     return render(request, "products/create.html", context)
