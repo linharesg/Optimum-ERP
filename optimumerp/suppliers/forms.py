@@ -5,7 +5,6 @@ class SuppliersForm(forms.ModelForm):
     
     class Meta:
         model = Suppliers
-        # fields = "__all__"
         exclude = ["slug"]
         
         labels = {

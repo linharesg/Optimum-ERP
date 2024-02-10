@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'suppliers.apps.SuppliersConfig',
-    'products.apps.ProductsConfig'
+    'products.apps.ProductsConfig',
+    'transactions.apps.TransactionsConfig'
 ]
 
 MIDDLEWARE = [
@@ -59,7 +60,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'base' / 'templates'
+            BASE_DIR / 'base' / 'templates',
+            BASE_DIR / 'transactions' / 'templates'
             ],
         'APP_DIRS': True,
         'OPTIONS': {
