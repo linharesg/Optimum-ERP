@@ -3,8 +3,8 @@ from products.models import Product
 
 class Transaction(models.Model):
     TRANSACTION_TYPE_CHOICES = {
-        "Entrada": "IN",
-        "Saída": "OUT"
+        "IN": "Entrada",
+        "OUT": "Saída"
     }
 
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
