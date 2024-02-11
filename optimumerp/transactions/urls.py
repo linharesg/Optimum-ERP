@@ -8,3 +8,6 @@ urlpatterns= [
     path("search", views.search, name="search"),
     path("cadastro/", views.create, name="create")
 ]
+
+
+
