@@ -2,7 +2,7 @@ from django import forms
 from .models import Suppliers
 
 class SuppliersForm(forms.ModelForm):
-    
+       
     class Meta:
         model = Suppliers
         # fields = "__all__"
@@ -26,7 +26,8 @@ class SuppliersForm(forms.ModelForm):
         error_messages = {
             "fantasy_name": { 
                 "unique": "O fornecedor com esta razão social já está cadastrado",
-                "max_length": "Limite de 255 caracteres."
+                "max_length": "Limite de 255 caracteres.",
+                "required": "O campo é obrigatório",
             },
             "email": {
                 "unique": "Já existe um fornecedor com este e-mail."

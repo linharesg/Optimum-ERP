@@ -1,6 +1,5 @@
 jQuery(function () {
     const $form = $("form");
-    // const $zipcodeInput = $("#zipcodeInput");
     const $zipcodeInput = $("#id_zipcode");
     const $streetInput = $("#id_street");
     const $numberInput = $("#id_number");
@@ -58,7 +57,7 @@ jQuery(function () {
         // Onde a mensagem de erro será adicionada
         errorPlacement: (error, element) => {
             error.addClass("invalid-feedback");
-            if (element.prop("id") === "zipcodeInput") { // Caso seja o campo do CEP
+            if (element.prop("id") === "id_zipcode") { // Caso seja o campo do CEP
                 error.insertAfter(element.next()); // Inserir depois do ícone
             } else {
                 error.insertAfter(element);
@@ -74,6 +73,7 @@ jQuery(function () {
             },
             phone: {
                 required: true,
+                minlength: 16,
             },
             representative: {
                 required: true,
@@ -81,13 +81,14 @@ jQuery(function () {
             },
             cnpj: {
                 required: true,
+                minlength: 18,
             },
             email: {
                 required: true,
-                email: true,
             },
             zipcode: {
                 required: true,
+                minlength: 9,
             },
             street: {
                 required: true,
@@ -107,16 +108,24 @@ jQuery(function () {
             company_name: "Por favor, informe a razão social",
             representative: "Por favor, informe o nome do representante",
             fantasy_name: "Por favor, informe o nome fantasia",
-            phone: "Por favor, informe o telefone",
+            phone: {
+                required: "Por favor, informe o telefone",
+                minlength: "Informe um telefone válido"
+            },
+
             name: {
                 required: "Por favor, insira o nome do representante",
                 minlength: "O nome do representante deve ter no mínimo 3 caracteres",
             },
             cnpj: {
                 required: "Por favor, insira um CNPJ",
+                minlength: "CNPJ inválido."
             },
-            email: "Por favor, insira um endereço de e-mail válido",
-            zipcode: "Por favor, insira um CEP válido",
+            email: "",
+            zipcode: {
+                required: "Por favor, insira um CEP válido",
+                minlength: "Informe um CEP Válido"
+            },
             street: "Por favor, insira um endereço válido",
             number: "Por favor, insira um número válido",
             city: "Por favor, insira uma cidade",
