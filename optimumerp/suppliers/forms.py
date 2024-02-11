@@ -1,3 +1,4 @@
+import re
 from django import forms
 from .models import Suppliers
 
@@ -34,4 +35,20 @@ class SuppliersForm(forms.ModelForm):
             }
         }
 
+    def clean_cnpj(self):
+        cnpj = self.cleaned_data.get("cnpj", "")
+        cnpj = re.sub("[^0-9]", "", cnpj)
+        
+        return cnpj
     
+    def clean_phone(self):
+        phone = self.cleaned_data.get("phone", "")
+        phone = re.sub("[^0-9]", "", phone)
+
+        return phone
+
+    def clean_zipcode(self):
+        zipcode = self.cleaned_data.get("zipcode", "")
+        zipcode = re.sub("[^0-9]", "", zipcode)
+
+        return zipcode

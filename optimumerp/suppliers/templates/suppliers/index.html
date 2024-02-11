@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{% load phone_filter %}
+
 {% block title %}Fornecedores{% endblock  %}
 
 {% block head %}
@@ -50,7 +52,7 @@
           <td>{{ supplier.fantasy_name|title }}</td>
           <td>{{ supplier.representative|title }}</td>
           <td>{{ supplier.email }}</td>
-          <td>{{ supplier.phone }}</td>
+          <td>{{ supplier.phone|format_phone }}</td>
           <td>
             <input {% if supplier.enabled %}checked{% endif %} data-url="{% url 'suppliers:toggle_enabled' supplier.id %}" type="checkbox" class="form-check-input" />
           </td>
