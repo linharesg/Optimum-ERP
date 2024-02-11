@@ -46,14 +46,7 @@
     </a>
 
     {% comment %} Filtro {% endcomment %}
-    <form method="get" action="{% url 'products:search' %}" class="row mb-3">
-        <div class="col">
-            <input value="{{ request.GET.q }}" class="form-control" type="text" name="q" placeholder="Buscar">
-        </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Buscar</button>
-        </div>
-    </form>
+    {% include "partials/_search_filter.html" with search_value="products:search" %}
 
 {% comment %} Tabela de produtos {% endcomment %}
     <div class="table-responsive">
@@ -64,11 +57,9 @@
                     <th>Nome</th>
                     <th>Descrição</th>
                     <th>Quantidade em estoque</th>
-                    <th>Preço de venda</th>
-                    <th>É perecível</th>
-                    <th>Data de expiração</th>
                     <th>Unidade de medida</th>
-                    <th>Código de Situação Tributária (CST)</th>
+                    <th>Preço de venda</th>
+                    <th>Data de expiração</th>
                     <th>Ativo</th>
                 </tr>
             </thead>
@@ -76,8 +67,8 @@
                 {% for product in products %}
                 <tr>
                     <td>{{ product.id }}</td>
-                    <td>{{ product.name|title|truncatechars:20 }}</td>
-                    <td>{{ product.description }}</td>
+                    <td title="{{ product.name }}">{{ product.name|title|truncatechars:20 }}</td>
+                    <td title="{{ product.description }}">{{ product.description|truncatechars:20 }}</td>
                     <td>
                         {% for inventory in product_inventory %}
                         {% if product == inventory.product %}
@@ -85,26 +76,16 @@
                         {% endif %}
                         {% endfor %}
                     </td>
-                    <td>R$ {{ product.sale_price }}</td>
-                    <td> 
-                        {% if product.is_perishable %}
-                        Sim
-                        {% else %}
-                        Não
-                        {% endif %}
+                    <td>
+                        {{ product.unit_of_measurement }}
                     </td>
+                    <td>R$ {{ product.sale_price }}</td>
                     <td> 
                         {% if product.expiration_date %}
                         {{ product.expiration_date|date:"d/m/Y" }}
                         {% else %}
                         Não perecível
                         {% endif %}
-                    </td>
-                    <td>
-                        {{ product.unit_of_measurement }}
-                    </td>
-                    <td>
-                        {{ product.cst }}
                     </td>
                     <td>
                         <input type="checkbox" class="form-check-input" {% if product.enabled %}checked{% endif %} data-url={% url 'products:toggle_enabled' product.id %}>
