@@ -2,5 +2,22 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
-{{ form | crispy }}
+    <form action="{{form_action}}" method="post" novalidate enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <h2>Cadastrar Transação</h2>
+            {{form.product|as_crispy_field}}
+            {{form.type|as_crispy_field}}
+            {{form.quantity|as_crispy_field}}
+        </div>
+
+        <div class="d-grid">
+            <button class="btn btn-primary btn-lg">
+                Salvar
+            </button>
+        </div>
+    </form>
 {% endblock  %}
+
+
+
