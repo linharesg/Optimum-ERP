@@ -1,0 +1,23 @@
+{% load crispy_forms_tags %}
+
+<div>
+  <h2>Informações cadastrais</h2>
+  {{ form.company_name|as_crispy_field }}
+  {{ form.fantasy_name|as_crispy_field }}
+  {{ form.cnpj|as_crispy_field }}
+</div>
+<div>
+  <h2>Contato</h2>
+  {{ form.representative|as_crispy_field }}
+  {{ form.email|as_crispy_field }}
+  {{ form.phone|as_crispy_field }}
+</div>
+<div>
+  <h2>Endereço</h2>
+  {{ form.zipcode|as_crispy_field }}
+  <span class="input-group-text"><i id="zipcodeIcon" class="bi bi-geo-alt"></i></span>
+  {{ form.state|as_crispy_field }}
+  {{ form.city|as_crispy_field }}
+  {{ form.street|as_crispy_field }}
+  {{ form.number|as_crispy_field }}
+</div>

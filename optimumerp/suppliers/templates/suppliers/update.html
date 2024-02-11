@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-  Cadastro de Fornecedores
+  Edição de Fornecedores
 {% endblock %}
 {% block head %}
   <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
@@ -9,18 +9,18 @@
   <script src="{% static 'suppliers/js/createUpdate.js' %}"></script>
 {% endblock %}
 {% block content %}
+ 
+    <h2 class="mb-3">Atualizar fornecedor</h2>
 
-<form action="{{form_action}}" method="post" novalidate enctype="multipart/form-data">
-    {% csrf_token %}
+    <form method="post">
+      {% csrf_token %}
 
-    {% include "partials/_supplier_form.html" %}
-
-    <div class="d-grid">
-      <button class="btn btn-primary btn-lg">
-        Salvar
-      </button>
-    </div>
-
-</form>
-
+      {% include "partials/_supplier_form.html" %}
+  
+      <div class="d-grid">
+        <button class="btn btn-primary btn-lg">
+          Salvar
+        </button>
+      </div>
+    </form>
 {% endblock %}
