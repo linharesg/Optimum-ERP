@@ -42,18 +42,18 @@ class SupplierUpdateView(UpdateView):
 
 def search(request):
     search_value = request.GET.get("q").strip()
-
+    
     if not search_value:
         return redirect("suppliers:index")
     
     suppliers = Suppliers.objects.filter(Q(fantasy_name__icontains=search_value) | Q(company_name__icontains=search_value)).order_by("-id")
-
+    print(suppliers)
     paginator = Paginator(suppliers, 2)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     context = {
-        "suppliers": page_obj
+        "page_obj": page_obj
     }
     
     return render(request, "suppliers/index.html", context)
