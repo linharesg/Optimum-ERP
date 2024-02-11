@@ -20,32 +20,24 @@
     {% endblock  %}
 </head>
 <body>
+      <div class="toast-container top-0 end-0 p-3">
+        <!-- Then put toasts within -->
+        {% for message in messages %}
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <strong class="me-auto">Optimum ERP</strong>
+            <small class="text-body-secondary">Agora mesmo</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+        {% endfor %}
+    </div>
     <main>
         {% block content %}
         {% endblock  %}
     </main>
-    <header class="main-container">
-        <div class="header">
-          <div class="login-text">Faça seu login</div>
-          <div class="image-wrapper">
-            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/8471be0e7cf50144ae34772d06a3f62c543cd97178e6778ebd52f8b0a0d0648f?apiKey=54882ed816c3481ca3e40fefd244f902&" class="login-img" />
-          </div>
-          <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d9d67629d9fbb4888cfff6d057b9d49cd4ccae1678af3811ddd36ac8fefd9a6d?apiKey=54882ed816c3481ca3e40fefd244f902&" class="main-img" />
-          <div class="login-button">ENTRAR</div>
-        </div>
-      </header>
-      
-      <form class="login-form">
-        <!-- Input element with corresponding label -->
-        <label for="email" aria-label="Email" class="label">Email</label>
-        <input id="email" type="text" class="input" />
-      
-        <!-- Input element with corresponding label -->
-        <label for="password" aria-label="Password" class="label">Password</label>
-        <input id="password" type="password" class="input" />
-      
-        <!-- Button element -->
-        <button type="submit" class="button">Submit</button>
-      </form>
 </body>
 </html>

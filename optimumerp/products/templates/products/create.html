@@ -28,10 +28,13 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     {{ form.unit_of_measurement|as_crispy_field }}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    {{ form.minimum_stock|as_crispy_field }}
+                </div>
+                <div class="col-md-3">
                     {{ form.cst|as_crispy_field }}
                 </div>
             </div>
