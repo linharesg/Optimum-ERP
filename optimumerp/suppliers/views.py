@@ -19,7 +19,7 @@ def index(request):
     page_obj = paginator.get_page(page_number)
     
     context = {
-        "suppliers": page_obj
+        "page_obj": page_obj
     }
     
     return render(request, "suppliers/index.html", context)

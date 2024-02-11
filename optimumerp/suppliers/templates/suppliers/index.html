@@ -43,7 +43,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for supplier in suppliers %}
+      {% for supplier in page_obj %}
         <tr>
           <td>{{ supplier.id }}</td>
           <td>{{ supplier.company_name|title }}</td>
@@ -69,24 +69,7 @@
       {% endfor %}
     </tbody>
   </table>
-  {% if suppliers.paginator.num_pages > 1 %}
-    <nav aria-label="Paginação da página">
-      <ul class="pagination justify-content-end">
-        {% if suppliers.has_previous %}
-          <li class="page-item">
-            <a href="?page={{ suppliers.previous_page_number }}&q={{ request.GET.q }}" class="page-link" aria-label="Anterior">&laquo;</a>
-          </li>
-        {% endif %}
-        <li class="page-item active">
-          <span class="page-link">{{ suppliers.number }}</span>
-        </li>
-        {% if suppliers.has_next %}
-          <li class="page-item">
-            <a href="?page={{ suppliers.next_page_number }}&q={{ request.GET.q }}" class="page-link" aria-label="Próximo">&raquo;</a>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
-  {% endif %}
+
+  {% include "partials/_paginator.html" %}
 </div>
 {% endblock  %}
