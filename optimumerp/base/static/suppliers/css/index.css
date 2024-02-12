@@ -1,0 +1,55 @@
+.new-supplier {
+    background-color: #079416 ;
+    padding-inline: 30px;
+}
+
+.new-supplier:hover {
+    background-color: #057711;
+}
+
+.filter-table {
+    padding-block: 10px;
+    width: calc(100vw - 100px);
+}
+
+.filter {
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+    width: 40%;
+}
+
+.filter-title {
+    font-size: 27px;
+    margin-bottom: 20px;
+}
+
+.bi-funnel {
+    position: relative;
+    top: -3px;
+    font-size: 25px;
+    margin-right: 5px;
+}
+
+.filter-input {
+    margin-bottom: 15px;
+}
+
+.btn-filter-group {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.btn-filter {
+    width: fit-content;
+}
+
+.table-suppliers {
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100vw;
+}

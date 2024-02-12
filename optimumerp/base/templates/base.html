@@ -49,7 +49,7 @@
           <hr />
           <ul class="nav nav-pills flex-column flex-grow-1">
             <li class="nav-item">
-              <a href="{% url 'suppliers:index' %}" class="nav-link link-light">
+              <a href="#" class="nav-link link-light">
                 <i class="bi bi-person menu-icons"></i>
                 <p class="link-name">Recursos Humanos</p>
               </a>
@@ -67,9 +67,9 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link link-light">
-                <i class="bi bi-calculator-fill menu-icons"></i>
-                <p class="link-name">Contábil</p>
+              <a href="{% url 'suppliers:index' %}" class="nav-link link-light">
+                <i class="bi bi-person-gear menu-icons"></i>
+                <p class="link-name">Fornecedores</p>
               </a>
             </li>
             <li class="nav-item">
@@ -114,10 +114,13 @@
               {% endblock %}
             </h1>
             <div class="d-flex">
-              <form class="d-flex" role="search" method="get">
+              {% block search %}
+
+              {% endblock %}
+              {% comment %} <form class="d-flex" role="search" method="get">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                 <button class="btn btn-outline-success" type="submit">Search</button>
-              </form>
+              </form> {% endcomment %}
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" id="dropdown-menu" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></a>
@@ -129,8 +132,7 @@
                       <a class="dropdown-item" href="#">Action 2</a>
                     </li>
                     <li>
-                      <hr class="dropdown-divider-dark
-                      " />
+                      <hr class="dropdown-divider-dark" />
                     </li>
                     <li>
                       <a class="dropdown-item" href="#">Sair</a>
@@ -142,8 +144,8 @@
           </div>
         </nav>
 
-        <main class="col-md-9 col-lg-10 ml-sm-auto overflow-auto d-flex main">
-          <div class="container mt-4">
+        <main class="d-flex main">
+          <div class="container mt-4 main-container">
             {% block content %}
 
             {% endblock %}
