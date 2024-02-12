@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Suppliers',
+            name='Clients',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('company_name', models.CharField(max_length=255)),
@@ -31,8 +31,8 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'verbose_name': 'Fornecedor',
-                'verbose_name_plural': 'Fornecedores',
+                'verbose_name': 'Cliente',
+                'verbose_name_plural': 'Clientes',
             },
         ),
     ]

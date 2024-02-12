@@ -2,8 +2,8 @@ from django.db import models
 from django.utils.text import slugify
 from suppliers.models import Suppliers
 
-class InternalCode(models.Model):
-    code = models.CharField(max_length=255, unique=True)
+# Create your models here.
+
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
@@ -26,6 +26,7 @@ class Product(models.Model):
         "Litro": "Litro",
         "Unidade": "Unidade"
     }
+
     CST_CHOICES = {
         "200": "200",
         "210": "210",
@@ -116,18 +117,16 @@ class Product(models.Model):
         "970": "970",
         "990": "990"
     }
+
     name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, blank=True, null=True)
-    slug = models.SlugField(unique=True, blank=True)
-    minimum_stock = models.DecimalField(max_digits=255, decimal_places=2)
-    maximum_stock = models.DecimalField(max_digits=255, decimal_places=2)
-    internal_code = models.ForeignKey(InternalCode, on_delete=models.DO_NOTHING)
-    sale_price = models.FloatField()
-    is_perishable = models.BooleanField()
-    expiration_date = models.DateField(null=True, blank=True)
+    sale_price = models.DecimalField(max_digits=255, decimal_places=2)
+    cst = models.CharField(max_length=255, choices=CST_CHOICES)
+    minimum_stock = models.DecimalField(max_digits=255, decimal_places=2, default=1)
     unit_of_measurement = models.CharField(max_length=7, choices=MEASUREMENT_CHOICES)
-    cst = models.CharField(max_length=3, choices=CST_CHOICES)
+    expiration_date = models.DateField(null=True, blank=True)
     enabled = models.BooleanField(default=True)
 
     def __str__(self):

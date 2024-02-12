@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from .forms import SuppliersForm
 from .models import Suppliers
@@ -8,6 +8,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.views.generic import UpdateView
 
 def index(request):
     suppliers = Suppliers.objects.order_by("-id")
@@ -18,25 +19,41 @@ def index(request):
     page_obj = paginator.get_page(page_number)
     
     context = {
-        "suppliers": page_obj
+        "page_obj": page_obj
     }
     
     return render(request, "suppliers/index.html", context)
 
+class SupplierUpdateView(UpdateView):
+    model = Suppliers
+    template_name = "suppliers/update.html"
+    form_class = SuppliersForm
+    success_url = reverse_lazy("suppliers:index")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Fornecedor atualizado com sucesso!")
+        return response
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        messages.success(self.request, "Erro ao atualizar o fornecedor!")
+        return response
+
 def search(request):
     search_value = request.GET.get("q").strip()
-
+    
     if not search_value:
         return redirect("suppliers:index")
     
     suppliers = Suppliers.objects.filter(Q(fantasy_name__icontains=search_value) | Q(company_name__icontains=search_value)).order_by("-id")
-
+    print(suppliers)
     paginator = Paginator(suppliers, 2)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     context = {
-        "suppliers": page_obj
+        "page_obj": page_obj
     }
     
     return render(request, "suppliers/index.html", context)
@@ -68,10 +85,9 @@ def create(request):
         if form.is_valid():
             form.save()
 
-            # messages.success(request, "Fornecedor cadastrado com sucesso!")
-            print("oi")
+            messages.success(request, "Fornecedor cadastrado com sucesso!")
             return redirect("suppliers:index")
-            print("oi1")
+
 
         messages.error(request, "Falha ao cadastrar o fornecedor. Verifique o preenchimento dos campos")
         context = { "form": form, "form_action": form_action}        

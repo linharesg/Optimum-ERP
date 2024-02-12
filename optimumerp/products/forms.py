@@ -10,12 +10,13 @@ class ProductForm(forms.ModelForm):
         labels = {
             "name": "Nome",
             "description": "Descrição",
+            "category": "Categoria",
             "sale_price": "Preço de venda",
-            "expiration_date": "Data de expiração",
-            "unit_of_measurement": "Unidade de medida",
             "cst": "Código de situação tributária (CST)",
-            "enabled": "Ativo",
-            "category": "Categoria"
+            "minimum_stock": "Estoque mínimo",
+            "unit_of_measurement": "Unidade de medida",
+            "expiration_date": "Data de expiração",
+            "enabled": "Ativo"
         }
 
         error_messages = {

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product, SupplierProduct
+from .models import Product, SupplierProduct, ProductInventory
 from django.db.models import Q 
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
@@ -8,10 +8,12 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib import messages
 from .forms import ProductForm
+from .forms import ProductInventoryFormSet, SupplierProductFormSet
 
 # Create your views here.
 def index(request):
     products = Product.objects.order_by("-id")
+    product_inventory = ProductInventory.objects.order_by("-id")
 
     # Aplicando a paginação
     paginator = Paginator(products, 100)
@@ -21,6 +23,7 @@ def index(request):
 
     context = {
         "products": page_obj,
+        "product_inventory": product_inventory
         }
     
     return render(request, "products/index.html", context)
@@ -51,26 +54,59 @@ def create(request):
     form_action = reverse("products:create")
     # POST
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        
+        form = ProductForm(request.POST)
+        print(form)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Produto cadastrado com sucesso!")
-            
-            return redirect("products:index")
+                print("123")
+                product = form.save()
                 
-        messages.error(request, "Falha ao cadastrar o produto. Verifique o preenchimento dos campos.")
-        
-        context = { "form": form, "form_action": form_action }
-        
-        return render(request, "products/create.html", context)
+                supplier_product_formset = SupplierProductFormSet(request.POST, instance=product)
+                product_inventory_formset = ProductInventoryFormSet(request.POST, instance=product)
+                
+                if not supplier_product_formset.is_valid():                      
+                    messages.error(request, "Falha ao cadastrar os fornecedores do produto")
+                    product.delete()
+                    
+                    supplier_product_formset = SupplierProductFormSet(request.POST)
+                    product_inventory_formset = ProductInventoryFormSet(request.POST, instance=product)
+            
+                    context = { 
+                        "form": form, 
+                        "supplier_product_formset": supplier_product_formset, 
+                        "form_action": form_action,
+                        "product_inventory_formset": product_inventory_formset}
+                    
+                    return render(request, "products/create.html", context)
+                
+                if product_inventory_formset.is_valid():
+                    messages.success(request, "O produto foi cadastrado com sucesso!")
+                    supplier_product_formset.save()
+                    product_inventory_formset.save()
+                else:
+                    messages.error(request, "Falha ao cadastrar o estoque do produto")
+                    product.delete()
+                    supplier_product_formset = SupplierProductFormSet(request.POST)
+                    product_inventory_formset = ProductInventoryFormSet(request.POST, instance=product)
+            
+                    context = { 
+                        "form": form, 
+                        "supplier_product_formset": supplier_product_formset, 
+                        "product_inventory_formset": product_inventory_formset}
+                    
+                    return render(request, "products/create.html", context)
+                
+                return redirect("products:index")
 
     # GET
     form = ProductForm()
+    product_inventory_formset = ProductInventoryFormSet()
+    supplier_product_formset = SupplierProductFormSet()
 
     context = {
         "form": form, 
         "form_action": form_action,
+        "product_inventory_formset": product_inventory_formset,
+        "supplier_product_formset": supplier_product_formset
         }
 
     return render(request, "products/create.html", context)
@@ -81,7 +117,7 @@ def update(request, slug):
 
     # POST
     if request.method == "POST":
-        form = ProductForm(request.POST, request.FILES, instance=product)
+        form = ProductForm(request.POST, instance=product)
         if form.is_valid():
             messages.success(request, "Produto atualizado com sucesso!")
             return redirect("products:index")
@@ -95,10 +131,13 @@ def update(request, slug):
     
     # GET
     form =  ProductForm(instance=product)
-
+    product_inventory_formset = ProductInventoryFormSet(instance=product)
+    supplier_product_formset = SupplierProductFormSet(instance=product)
     context = {
         "form_action": form_action,
         "form": form,
+        "product_inventory_formset": product_inventory_formset,
+        "supplier_product_formset": supplier_product_formset,
     }
 
     return render(request, "products/create.html", context)

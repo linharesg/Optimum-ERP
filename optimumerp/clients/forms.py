@@ -1,11 +1,12 @@
+
 import re
 from django import forms
-from .models import Suppliers
+from .models import Clients
 
-class SuppliersForm(forms.ModelForm):
+class ClientsForm(forms.ModelForm):
        
     class Meta:
-        model = Suppliers
+        model = Clients
         exclude = ["slug"]
         
         labels = {
@@ -19,7 +20,8 @@ class SuppliersForm(forms.ModelForm):
             "number": "Número",
             "city": "Cidade",
             "state": "Estado",
-            "phone": "Contato"
+            "phone": "Contato",
+            "enabled": "Ativo"
 
         }
         
