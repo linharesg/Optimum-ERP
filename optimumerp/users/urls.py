@@ -1,9 +1,14 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views
+from django.views.generic import RedirectView
+from . import views
 
 app_name = 'users'
 urlpatterns = [
-    # path('', views.index, name="index"),
-    path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name="login"),
-    path('logout/', auth_views.LogoutView.as_view(), name="logout"),
+    path("", RedirectView.as_view(url="/login/", permanent=True)),
+    path('usuarios/', views.index, name="index"),
+    path("usuarios/cadastro/", views.create, name="create"),
+    path('login/', views.login, name="login"), 
+    path('usuarios/<str:username>/', views.update, name="update"),
+    path('usuarios/<int:id>/delete', views.delete, name="delete"),
+    path('logout/', views.logout, name="logout"),
 ]
