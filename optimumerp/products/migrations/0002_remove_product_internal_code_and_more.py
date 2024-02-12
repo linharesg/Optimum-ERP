@@ -12,10 +12,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RemoveField(
             model_name='product',
-            name='internal_code',
-        ),
-        migrations.RemoveField(
-            model_name='product',
             name='is_perishable',
         ),
         migrations.AlterField(
@@ -27,8 +23,5 @@ class Migration(migrations.Migration):
             model_name='product',
             name='sale_price',
             field=models.DecimalField(decimal_places=2, max_digits=255),
-        ),
-        migrations.DeleteModel(
-            name='InternalCode',
         ),
     ]

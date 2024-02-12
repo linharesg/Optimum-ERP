@@ -10,13 +10,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='product',
-            name='maximum_stock',
-        ),
-        migrations.AlterField(
-            model_name='product',
-            name='minimum_stock',
-            field=models.DecimalField(decimal_places=2, default=0, max_digits=255),
-        ),
     ]

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Cadastro de estoques{% endblock  %}
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+{% endblock  %}
+{% block content %}
+    {% with create_url="/produtos/estoques/cadastro" %}
+        <h2 class="mb-3">
+            {% if form_action == create_url %}
+            Cadastro de estoque
+          {% else %}
+            Edição de estoque
+          {% endif %}</h2>
+        <form action="{{ form_action }}" method="POST">
+            {% csrf_token %}
+
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.name|as_crispy_field }}
+                </div>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
+            </div>
+        </form>
+    {% endwith %}
+{% endblock  %}
