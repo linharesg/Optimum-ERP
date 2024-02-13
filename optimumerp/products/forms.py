@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, SupplierProduct, ProductInventory
+from .models import Product, SupplierProduct, ProductInventory, Inventory
 from crispy_forms.helper import FormHelper
 
 class ProductForm(forms.ModelForm):
@@ -42,6 +42,10 @@ class ProductForm(forms.ModelForm):
             "expiration_date": forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
         }
 
+class InventoryForm(forms.ModelForm):
+    class Meta:
+        model = Inventory
+        exclude = ["date"]
 class SupplierProductForm(forms.ModelForm):
     class Meta:
         model = SupplierProduct
@@ -70,7 +74,6 @@ class ProductInventoryForm(forms.ModelForm):
         exclude = ["product"]
         widgets = {
             "quantity": forms.NumberInput(attrs={"placeholder": "Quantidade"}),
-            "local": forms.TextInput(attrs={"placeholder": "Local"})
         }
 
     def __init__(self, *args, **kwargs):

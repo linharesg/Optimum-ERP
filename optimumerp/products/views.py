@@ -1,13 +1,13 @@
 from django.shortcuts import render
-from .models import Product, SupplierProduct, ProductInventory
-from django.db.models import Q 
+from .models import Product, SupplierProduct, ProductInventory, Inventory
+from django.db.models import Q, Sum, F
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib import messages
-from .forms import ProductForm
+from .forms import ProductForm, InventoryForm
 from .forms import ProductInventoryFormSet, SupplierProductFormSet
 
 # Create your views here.
@@ -141,6 +141,75 @@ def update(request, slug):
     }
 
     return render(request, "products/create.html", context)
+
+def inventory_index(request):
+    inventories = Inventory.objects.order_by("-id")
+    supplierproducts = SupplierProduct.objects.all()
+    value_sum = ProductInventory.objects.values('inventory').annotate(total=Sum('quantity'))
+    medium_cost = SupplierProduct.objects.values('product').annotate(total=Sum('cost_price'))
+
+    response = []
+
+    for inventory in inventories:
+        total_quantity = ProductInventory.objects.filter(inventory = inventory).aggregate(Sum("quantity"))["quantity__sum"] or 0
+        total_cost = ProductInventory.objects.filter(product__productinventory__inventory = inventory).annotate(product_total=F("product__supplierproduct__cost_price")*F("product__productinventory__quantity"))\
+            .aggregate(total_cost=Sum("product_total"))["total_cost"] or 0
+        response.append({
+            "id": inventory.id,
+            "name": inventory.name,
+            "total_quantity": total_quantity,
+            "total_cost": total_cost
+        })
+
+    context = {
+        "inventories": response,
+    }
+
+    return render(request, "inventories/index.html", context)
+
+def inventory_create(request):
+    form_action = reverse("products:inventory_create")
+    # POST
+    if request.method == 'POST':
+        form = InventoryForm(request.POST)
+        print(form)
+        if form.is_valid():
+                product = form.save()
+                messages.success(request, "O estoque foi cadastrado com sucesso!")
+                
+                return redirect("products:inventory_index")
+
+    # GET
+    form = InventoryForm()
+
+    context = {
+        "form": form, 
+        "form_action": form_action,
+        }
+
+    return render(request, "inventories/create.html", context)
+
+def inventory_search(request):
+    # Obtendo o valor da requisição (Formulário)
+    search_value = request.GET.get("q").strip()
+
+    # Verificando se algo foi digitado
+    if not search_value:
+        return redirect("products:inventory_index")
+    
+    # Filtrando os produtos
+    #  O Q é usado para combinar filtros (& ou |)
+    inventories = Inventory.objects\
+        .filter(Q(name__icontains=search_value))\
+        .order_by("-id")
+
+    paginator = Paginator(inventories, 100)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = { "inventories": page_obj}
+
+    return render(request, "inventories/index.html", context)
 
 @require_POST
 def delete(request, id):
