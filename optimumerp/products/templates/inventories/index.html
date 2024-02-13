@@ -8,7 +8,7 @@
 {% endblock  %}
 {% block title %}Estoques{% endblock  %}
 {% block content %}
-    <h2 class="mb-3">Estoques</h2>
+    {% block page_name %}Estoques{% endblock  %}
 
     <!-- Modal -->
     <div class="modal fade" id="suppliersModal" tabindex="-1" aria-labelledby="inventoriesModalLabel" aria-hidden="true">
@@ -73,7 +73,7 @@
 
                 {% empty %}
                 <tr>
-                    <td colspan="3" class="text=center">Nenhum estoque cadastrado</td>
+                    <td colspan="4" class="text=center">Nenhum estoque cadastrado</td>
                 </tr>
                 {% endfor %}
             </tbody>

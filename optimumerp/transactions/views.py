@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .models import Transaction
-from products.models import ProductInventory
 from .forms import TransactionsForm
 from django.core.paginator import Paginator
 from django.contrib import messages
@@ -8,7 +7,6 @@ from django.db.models import Q
 
 def index(request):
     transactions = Transaction.objects.order_by("-id")
-    product_inventory = ProductInventory.objects.all()
 
     paginator = Paginator(transactions, 2)
 
@@ -17,7 +15,6 @@ def index(request):
     
     context = {
         "transactions": page_obj,
-        "product_inventory": product_inventory
     }
     
     return render(request, "transactions/index.html", context)

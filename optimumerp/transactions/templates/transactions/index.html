@@ -36,11 +36,6 @@
                     <tr>
                         <td>{{ transaction.id }}</td>
                         <td>{{ transaction.product }}</td>
-                        <td>{% for product in product_inventory %}
-                            {% if product.product.id == transaction.product.id %}
-                            {{ product.local }}
-                            {% endif %}
-                            {% endfor %}</td>
                         <td>{{ transaction.quantity }}</td>
                         <td>
                             {% if transaction.type == "IN" %}

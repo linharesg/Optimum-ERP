@@ -7,7 +7,6 @@ urlpatterns = [
     path("search", views.search, name="search"),
     path("cadastro", views.create, name="create"),
     path("estoques", views.inventory_index, name="inventory_index"),
-    path("estoques/cadastro", views.inventory_create, name="inventory_create"),
     path("inventory_search", views.inventory_search, name="inventory_search"),
     path("<slug:slug>", views.update, name="update"),
     path("<int:id>/toggle_enabled", views.toggle_enabled, name="toggle_enabled"),
