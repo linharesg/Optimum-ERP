@@ -4,7 +4,7 @@
 {% block title %}Novo pedido de venda{% endblock  %}
 {% block head %}
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-    {% comment %} <script src="{% static 'products/js/createUpdate.js' %}"></script> {% endcomment %}
+    <script src="{% static 'sales_order/js/createUpdate.js' %}"></script>
 {% endblock  %}
 {% block content %}
         <form action="{% url "sales_order:create" %}" method="POST">
@@ -72,34 +72,12 @@
                     </div>
                 </div>
                 {% endfor %}
+                
             </div>
-
-            {% comment %} <h3>Estoque</h3>
-            <div id="productInventoryFormset">
-                {{ product_inventory_formset.management_form }}
-                {% for product in product_inventory_formset %}
-                <div class="row mb-3">
-                    {{ form.id }}
-                    <div class="col-md-5">
-                        {{ product.quantity|as_crispy_field }}
-                    </div>
-                    <div class="col-md-5">
-                        {{ product.local|as_crispy_field }}
-                    </div>
-                    <div class="col-md-2">
-                        <div class="d-grid">
-                            <button type="button" class="btn btn-danger remove-btn">
-                                <i class="bi bi-x"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div> {% endcomment %}
-
-            {% comment %} <div class="d-grid mb-3">
-                <button type="button" id="addSupplierButton" class="btn btn-outline-secondary">Adicionar fornecedor</button>
-            </div> {% endcomment %}
+            
+            <div class="d-grid mb-3">
+                <button type="button" id="addSaleOrderButton" class="btn btn-outline-secondary">Adicionar produto</button>
+            </div>
 
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
