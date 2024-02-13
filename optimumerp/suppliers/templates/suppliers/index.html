@@ -52,22 +52,26 @@
   </div>
 
   <div class="table-responsive table-suppliers">
-    <table class="table table-striped table-sm">
-      <thead>
+    <table class="table table-borderless table-hover table-sm table-color">
+      <thead class="table-border">
         <tr>
+          <th>Ações</th>
           <th>ID</th>
+          <th>Data de Cadastro</th>
           <th>Razão Social</th>
           <th>Nome Fantasia</th>
-          <th>Representante</th>
-          <th>Email</th>
-          <th>Telefone</th>
-          <th>Ativo</th>
-          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
         {% for supplier in page_obj %}
           <tr>
+            <td class="d-flex gap-1">
+              <a href="{% url 'suppliers:update' supplier.slug %}" class="btn btn-warning btn-sm" title="editar fornecedor"><i class="bi bi-pencil"></i></a>
+              <form method="post" action="{% url 'suppliers:delete' supplier.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm" title="remover fornecedor"><i class="bi bi-trash"></i></button>
+              </form>
+            </td>
             <td>{{ supplier.id }}</td>
             <td>{{ supplier.company_name|title }}</td>
             <td>{{ supplier.fantasy_name|title }}</td>
@@ -76,13 +80,6 @@
             <td>{{ supplier.phone|format_phone }}</td>
             <td>
               <input {% if supplier.enabled %}checked{% endif %} data-url="{% url 'suppliers:toggle_enabled' supplier.id %}" type="checkbox" class="form-check-input" />
-            </td>
-            <td class="d-flex gap-1">
-              <a href="{% url 'suppliers:update' supplier.slug %}" class="btn btn-warning btn-sm" title="editar fornecedor"><i class="bi bi-pencil"></i></a>
-              <form method="post" action="{% url 'suppliers:delete' supplier.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger btn-sm" title="remover fornecedor"><i class="bi bi-trash"></i></button>
-              </form>
             </td>
           </tr>
           {% empty %}

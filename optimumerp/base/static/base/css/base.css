@@ -86,7 +86,7 @@ h1 {
 
 .titlebar {
   width: calc(100vmax - 80px);
-  height: fit-content;
+  height: 56px !important;
   margin-left: 80px;
   position: fixed;
 }
