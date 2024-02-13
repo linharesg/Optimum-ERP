@@ -15,7 +15,7 @@ class SalesOrder(models.Model):
     }
     
     status = models.CharField(choices=STATUS_CHOICES, max_length=10)
-    delivery_date = models.DateTimeField()
+    delivery_date = models.DateField(null=True, blank=True)
     total_value = models.DecimalField(max_digits=12, decimal_places=2)
     discount = models.DecimalField(max_digits=3, decimal_places=0, default=Decimal(0), validators=PERCENTAGE_VALIDATOR)
     installments = models.IntegerField(validators = [MinValueValidator(1), MaxValueValidator(36)])
@@ -35,6 +35,10 @@ class SalesOrder(models.Model):
 
     def __str__(self):
         return f"{self.id}"
+    
+    def save(self, *args, **kwargs):
+        self.status = "Confirmado"
+        super(SalesOrder, self).save(*args, **kwargs)
         
 class SalesOrderProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

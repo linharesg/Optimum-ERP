@@ -4,7 +4,9 @@ from . import views
 app_name = "sales_order"
 
 urlpatterns= [
-    path("", views.index, name="index"),
+    path("", views.SalesOrderListView.as_view(), name="index"),
+    # path("cadastro/", views.SalesOrderCreateView.as_view(), name="create"),
+    path("cadastro/", views.create, name="create"),
     # path("", views.index, name="index"),
     # path("search", views.search, name="search"),
     # path("<int:id>/toggle_enabled", views.toggle_enabled, name="toggle_enabled"),
