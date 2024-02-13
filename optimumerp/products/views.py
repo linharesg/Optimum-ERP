@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Product, SupplierProduct, ProductInventory, Inventory
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, F
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.http import require_POST, require_GET
@@ -144,11 +144,25 @@ def update(request, slug):
 
 def inventory_index(request):
     inventories = Inventory.objects.order_by("-id")
-    soma_valores = ProductInventory.objects.values('inventory').annotate(total=Sum('quantity'))
+    supplierproducts = SupplierProduct.objects.all()
+    value_sum = ProductInventory.objects.values('inventory').annotate(total=Sum('quantity'))
+    medium_cost = SupplierProduct.objects.values('product').annotate(total=Sum('cost_price'))
+
+    response = []
+
+    for inventory in inventories:
+        total_quantity = ProductInventory.objects.filter(inventory = inventory).aggregate(Sum("quantity"))["quantity__sum"] or 0
+        total_cost = ProductInventory.objects.filter(product__productinventory__inventory = inventory).annotate(product_total=F("product__supplierproduct__cost_price")*F("product__productinventory__quantity"))\
+            .aggregate(total_cost=Sum("product_total"))["total_cost"] or 0
+        response.append({
+            "id": inventory.id,
+            "name": inventory.name,
+            "total_quantity": total_quantity,
+            "total_cost": total_cost
+        })
 
     context = {
-        "inventories": inventories,
-        "soma_valores": soma_valores
+        "inventories": response,
     }
 
     return render(request, "inventories/index.html", context)

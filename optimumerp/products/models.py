@@ -128,9 +128,16 @@ class Product(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, blank=True, null=True)
+    suppliers = models.ManyToManyField(
+        Suppliers,
+        through="SupplierProduct",
+        through_fields=("product", "supplier"),
+        blank=True
+    )
     sale_price = models.DecimalField(max_digits=255, decimal_places=2)
     cst = models.CharField(max_length=255, choices=CST_CHOICES)
     minimum_stock = models.DecimalField(max_digits=255, decimal_places=2, default=1)
+    inventory = models.ManyToManyField(Inventory, through="ProductInventory", through_fields=("product", "inventory"), blank=True)
     unit_of_measurement = models.CharField(max_length=7, choices=MEASUREMENT_CHOICES)
     expiration_date = models.DateField(null=True, blank=True)
     enabled = models.BooleanField(default=True)
@@ -147,9 +154,9 @@ class Product(models.Model):
         verbose_name_plural = "Produtos"
 
 class ProductInventory(models.Model):
+    inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.DecimalField(max_digits=8, decimal_places=2)
-    inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Produto: {self.product.name} | Quantidade: {self.quantity}"

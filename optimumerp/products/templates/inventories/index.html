@@ -56,6 +56,7 @@
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Quantidade total</th>
+                    <th>Custo total</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,11 +65,12 @@
                     <td>{{ inventory.id }}</td>
                     <td title="{{ inventory.name }}">{{ inventory.name|title|truncatechars:20 }}</td>
                     <td>
-                        {% for item in soma_valores %}
-                        {% if item.inventory == inventory.id %}
-                        {{ item.total }}
-                        {% endif %}
-                        {% endfor %}</td>
+                        {{ inventory.total_quantity }}
+                    </td>
+                    <td>
+                        {{ inventory.total_cost }}
+                    </td>
+
                 {% empty %}
                 <tr>
                     <td colspan="3" class="text=center">Nenhum estoque cadastrado</td>
