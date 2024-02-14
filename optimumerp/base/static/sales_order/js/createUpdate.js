@@ -5,7 +5,7 @@ jQuery(function() {
     const $productsContainer = $("#productFormset");
     const $totalProducts = $("#id_salesorderproduct_set-TOTAL_FORMS");
     const $originalProduct = $productsContainer.children(".row:first").clone(true);
-
+    //  TENTAR FAZER O .ONCLICK EM $productsContainer.children(".row")
     $addButton.on("click", function() {
         const $newRow = $originalProduct.clone(true);
         const index = parseInt($totalProducts.val());
@@ -29,6 +29,23 @@ jQuery(function() {
                 alert('Este produto já consta no pedido de venda!');
                 $(this).val('');
             }
+            
+            alert("oi")
+            var productId = $(this).val();
+            $.ajax({
+                url: 'get_sale_value/',  // URL to fetch sale value
+                data: {
+                    'product_id': productId
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $('#sale_value_display').text(data.sale_price);
+                    $('#div_id_salesorderproduct_set-0-unit_value').text(data.sale_price);
+                    console.log(data.sale_price)  // Update sale value display
+                }
+            });
+            
+
         });
 
         $totalProducts.val(index + 1);
