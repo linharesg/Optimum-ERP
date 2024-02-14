@@ -1,4 +1,6 @@
 jQuery(function() {
+    const $form = $("#sales_order_form");
+    const $submitButton = $("#submitButton");
     const $addButton = $("#addSaleOrderButton");
     const $productsContainer = $("#productFormset");
     const $totalProducts = $("#id_salesorderproduct_set-TOTAL_FORMS");
@@ -50,4 +52,63 @@ jQuery(function() {
             .catch(console.error)
         }
     })
+
+    $form.validate({
+        errorElement: "div", // Elemento que será criado
+        errorClass: "invalid-feedback", // Classe que será aplicada
+        // Como os campos com erro irão se comportar
+        highlight: (element, _, validClass) => {
+            $(element).addClass("is-invalid");
+        },
+        // Como os campos sem erro irão se comportar
+        unhighlight: (element) => {
+            $(element).removeClass("is-invalid");
+        },
+        // Onde a mensagem de erro será adicionada
+        errorPlacement: (error, element) => {
+            error.addClass("invalid-feedback");
+            error.insertAfter(element);
+        },
+        // Validações que serão aplicadas
+        rules: {
+
+            installments: {
+                required: true,
+                max: 36,
+            },
+            discount: {
+                min: 0,
+                max: 99,
+            },
+            total_value: {
+                required: true,
+            },
+        },
+        // Mensagens que serão exibidas de acordo com os erros
+        messages: {
+
+            installments: "Informe um valor válido.",
+            client: "Por favor, informe o cliente.",
+            discount: "Por favor, informe um valor válido.",
+            total_value: "Por favor, informe um valor válido.",
+
+        },
+    });
+
+    $submitButton.on("click", function() {
+
+        const productSelects = document.querySelectorAll('select[name^="salesorderproduct_set"]');
+
+        for (let select of productSelects) {
+            if (select.value !== "") {
+                return
+            }
+        }
+
+        event.preventDefault()
+        alert('Informe ao menos um produto!')
+        return
+
+        });
+
 })

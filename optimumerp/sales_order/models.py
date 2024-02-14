@@ -32,6 +32,7 @@ class SalesOrder(models.Model):
     class Meta:
         verbose_name = "Pedido de venda"
         verbose_name_plural = "Pedidos de venda"
+        
 
     def __str__(self):
         return f"{self.id}"
@@ -44,9 +45,9 @@ class SalesOrderProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     ######## ESTOQUE: CRIAR RELAÇÃO COM OS LOCAIS DE ESTOQUE ######################################
     sale_order = models.ForeignKey(SalesOrder, on_delete=models.CASCADE)
-    unit_value = models.DecimalField(max_digits=8, decimal_places=2)
-    amount = models.DecimalField(max_digits=8, decimal_places=2)
-    total_value = models.DecimalField(max_digits=10, decimal_places=2)
+    unit_value = models.DecimalField(max_digits=8, decimal_places=2, validators=[MinValueValidator(0.01, message='Informe um valor válido')])
+    amount = models.DecimalField(max_digits=8, decimal_places=2, validators=[MinValueValidator(0.01, message='Informe um valor válido')])
+    total_value_product = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01, message='Informe um valor válido')])
     
     class Meta:
         verbose_name = "Produto do pedido de venda"

@@ -5,7 +5,7 @@ from .models import SalesOrder, SalesOrderProduct
 @admin.register(SalesOrder)
 class SalesOrderAdmin(admin.ModelAdmin):
     list_display = ["id","status", "created_at"]
-    ordering = ["id"]
+    ordering = ["-id"]
     list_filter = ["id", "created_at"]
     search_fields = ["id"]
     list_display_links = ["id"]

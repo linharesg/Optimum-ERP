@@ -3,11 +3,12 @@
 {% load crispy_forms_tags %}
 {% block title %}Novo pedido de venda{% endblock  %}
 {% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="{% static 'sales_order/js/createUpdate.js' %}"></script>
 {% endblock  %}
 {% block content %}
-        <form action="{% url "sales_order:create" %}" method="POST">
+        <form id="sales_order_form" action="{% url "sales_order:create" %}" method="POST">
             {% csrf_token %}
             <div class="row mb-3">
                 <div class="col">
@@ -56,7 +57,7 @@
                         {{ product.amount|as_crispy_field }}
                     </div>
                     <div class="col-md-2">
-                        {{ product.total_value|as_crispy_field }}
+                        {{ product.total_value_product|as_crispy_field }}
                     </div>
 
                     <div class="col-md-2">
@@ -80,7 +81,7 @@
             </div>
 
             <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
+                <button id="submitButton" type="submit" class="btn btn-primary btn-lg">Salvar</button>
             </div>
         </form>
 
