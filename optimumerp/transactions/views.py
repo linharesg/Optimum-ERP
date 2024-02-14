@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Transaction
+from .models import Transaction, Inventory
 from .forms import TransactionsForm
 from django.core.paginator import Paginator
 from django.contrib import messages
@@ -22,7 +22,7 @@ def index(request):
 def create(request):
     if request.method == 'POST':
         form = TransactionsForm(request.POST)
-        
+
         if form.is_valid():
             form.save()
             messages.success(request, "Transação cadastrada com sucesso!")
@@ -61,3 +61,12 @@ def search(request):
     }
     
     return render(request, "transactions/index.html", context)
+
+def inventory_index(request):
+    inventory = Inventory.objects.all()
+
+    context = {
+        "inventory": inventory
+    }
+
+    return render(request, "inventory/index.html", context)

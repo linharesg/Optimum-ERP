@@ -4,11 +4,11 @@
 {% block head %}
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="{% static 'base/js/index.js' %}"></script>
-    <script src="{% static 'inventories/js/index.js' %}"></script>
+    <script src="{% static 'products/js/index.js' %}"></script>
 {% endblock  %}
-{% block title %}Estoques{% endblock  %}
+{% block title %}Estoque{% endblock  %}
 {% block content %}
-    {% block page_name %}Estoques{% endblock  %}
+    {% block page_name %}Estoque{% endblock  %}
 
     <!-- Modal -->
     <div class="modal fade" id="suppliersModal" tabindex="-1" aria-labelledby="inventoriesModalLabel" aria-hidden="true">
@@ -37,13 +37,6 @@
         </div>
         </div>
     </div>
-    
-    <a 
-    href="{% url 'products:inventory_create' %}"
-    title="Cadastrar novo estoque"
-    class="btn btn-primary btn-sticky-bottom">
-    <i class="bi bi-plus"></i>
-    </a>
 
     {% comment %} Filtro {% endcomment %}
     {% include "partials/_search_filter.html" with search_value="products:inventory_search" %}
@@ -56,19 +49,15 @@
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Quantidade total</th>
-                    <th>Custo total</th>
                 </tr>
             </thead>
             <tbody>
-                {% for inventory in inventories %}
+                {% for product in inventory %}
                 <tr>
-                    <td>{{ inventory.id }}</td>
-                    <td title="{{ inventory.name }}">{{ inventory.name|title|truncatechars:20 }}</td>
+                    <td>{{ product.id }}</td>
+                    <td title="{{ product.product.name }}">{{ product.product.name|title|truncatechars:20 }}</td>
                     <td>
-                        {{ inventory.total_quantity }}
-                    </td>
-                    <td>
-                        {{ inventory.total_cost }}
+                        {{ product.quantity }}
                     </td>
 
                 {% empty %}

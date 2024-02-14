@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Product, SupplierProduct
+from transactions.models import Inventory
 from django.db.models import Q, Sum, F
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
@@ -13,6 +14,7 @@ from .forms import SupplierProductFormSet
 # Create your views here.
 def index(request):
     products = Product.objects.order_by("-id")
+    inventory_quantity = Inventory.objects.all()
 
     # Aplicando a paginação
     paginator = Paginator(products, 100)
@@ -22,6 +24,7 @@ def index(request):
 
     context = {
         "products": page_obj,
+        "inventory_quantity": inventory_quantity
         }
     
     return render(request, "products/index.html", context)
@@ -107,7 +110,6 @@ def update(request, slug):
     
     # GET
     form =  ProductForm(instance=product)
-    product_inventory_formset = ProductInventoryFormSet(instance=product)
     supplier_product_formset = SupplierProductFormSet(instance=product)
     context = {
         "form_action": form_action,
@@ -116,15 +118,6 @@ def update(request, slug):
     }
 
     return render(request, "products/create.html", context)
-
-def inventory_index(request):
-    ...
-
-def inventory_create(request):
-    ...
-
-def inventory_search(request):
-    ...
 
 @require_POST
 def delete(request, id):

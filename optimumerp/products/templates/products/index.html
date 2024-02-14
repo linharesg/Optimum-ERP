@@ -70,9 +70,9 @@
                     <td title="{{ product.name }}">{{ product.name|title|truncatechars:20 }}</td>
                     <td title="{{ product.description }}">{{ product.description|truncatechars:20 }}</td>
                     <td>
-                        {% for inventory in product_inventory %}
-                        {% if product == inventory.product %}
-                        {{ inventory.quantity|format_quantity }}
+                        {% for inventory_product in inventory_quantity %}
+                        {% if inventory_product.product == product %}
+                        {{ inventory_product.quantity }}
                         {% endif %}
                         {% endfor %}
                     </td>

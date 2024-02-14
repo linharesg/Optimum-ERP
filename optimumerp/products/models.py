@@ -2,7 +2,6 @@ from django.db import models
 from django.utils.text import slugify
 from suppliers.models import Suppliers
 
-# Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
