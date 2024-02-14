@@ -15,6 +15,20 @@ jQuery(function() {
             $(this).attr({name, id}).val("");
         });
 
+        $newRow.find('select').on('change', function() {
+            const selectedProductId = $(this).val();
+            const $allSelects = $productsContainer.find('select');
+
+            const duplicate = $allSelects.filter(function() {
+                return $(this).val() === selectedProductId;
+            }).length > 1;
+
+            if (duplicate) {
+                alert('Este produto já consta no pedido de venda!');
+                $(this).val('');
+            }
+        });
+
         $totalProducts.val(index + 1);
         $productsContainer.append($newRow);
     });
