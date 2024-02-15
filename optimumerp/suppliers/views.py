@@ -95,6 +95,6 @@ def create(request):
     
     #GET
     form = SuppliersForm()
-    context = {"form": form}
+    context = {"form": form, "form_action": form_action }
     return render(request, "suppliers/create.html", context)
 
