@@ -5,11 +5,52 @@ jQuery(function() {
     const $productsContainer = $("#productFormset");
     const $totalProducts = $("#id_salesorderproduct_set-TOTAL_FORMS");
     const $originalProduct = $productsContainer.children(".row:first").clone(true);
+    var $productRow = $(".productRow")
+
+
+
+
+    const onProductChange = function() {
+        const selectedProductId = $(this).val();
+        const $allSelects = $productsContainer.find('select');
+
+        const duplicate = $allSelects.filter(function() {
+            return $(this).val() === selectedProductId;
+        }).length > 1;
+
+        if (duplicate) {
+            alert('Este produto já consta no pedido de venda!');
+            $(this).val('');
+        }
+    
+    
+        alert("oi")
+        var productId = $(this).val();
+        $.ajax({
+            url: 'get_sale_value/',  // URL to fetch sale value
+            data: {
+                'product_id': productId
+            },
+            dataType: 'json',
+            success: function(data) {
+                $('#sale_value_display').text(data.sale_price);
+                $('#div_id_salesorderproduct_set-0-unit_value').text(data.sale_price);
+                console.log(data.sale_price)  // Update sale value display
+            }
+        });
+
+    }
+
+
+    $productRow.find('select').on('change', onProductChange);
+
+
+
     //  TENTAR FAZER O .ONCLICK EM $productsContainer.children(".row")
     $addButton.on("click", function() {
         const $newRow = $originalProduct.clone(true);
         const index = parseInt($totalProducts.val());
-
+        $productRow = $(".productRow")
         $newRow.find(":input[name]").each(function() {
             const name = $(this).attr("name").replace("-0-", `-${index}-`);
             const id = "id_" + name;
@@ -17,40 +58,33 @@ jQuery(function() {
             $(this).attr({name, id}).val("");
         });
 
-        $newRow.find('select').on('change', function() {
-            const selectedProductId = $(this).val();
-            const $allSelects = $productsContainer.find('select');
-
-            const duplicate = $allSelects.filter(function() {
-                return $(this).val() === selectedProductId;
-            }).length > 1;
-
-            if (duplicate) {
-                alert('Este produto já consta no pedido de venda!');
-                $(this).val('');
-            }
-            
-            alert("oi")
-            var productId = $(this).val();
-            $.ajax({
-                url: 'get_sale_value/',  // URL to fetch sale value
-                data: {
-                    'product_id': productId
-                },
-                dataType: 'json',
-                success: function(data) {
-                    $('#sale_value_display').text(data.sale_price);
-                    $('#div_id_salesorderproduct_set-0-unit_value').text(data.sale_price);
-                    console.log(data.sale_price)  // Update sale value display
-                }
-            });
-            
-
-        });
+        $newRow.find('select').on('change', onProductChange);
 
         $totalProducts.val(index + 1);
         $productsContainer.append($newRow);
     });
+
+    // $productRow.each(function () {N
+    //     // alert("oi")
+    //     $(this).find('select').on('change', function () {
+    //         alert("oi")
+    //         var productId = $(this).val();
+    //         $.ajax({
+    //             url: 'get_sale_value/',  // URL to fetch sale value
+    //             data: {
+    //                 'product_id': productId
+    //             },
+    //             dataType: 'json',
+    //             success: function (data) {
+    //                 $('#sale_value_display').text(data.sale_price);
+    //                 $('#div_id_salesorderproduct_set-0-unit_value').text(data.sale_price);
+    //                 console.log(data.sale_price)  // Update sale value display
+    //             }
+    //         });
+    //     })});
+        // }));
+
+
 
     $productsContainer.on("click", ".remove-btn", function(){
         const $button = $(this);
