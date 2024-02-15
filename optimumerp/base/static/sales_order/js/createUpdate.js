@@ -10,8 +10,7 @@ jQuery(function() {
     const onProductChange = function() {
         const selectedProductId = $(this).val();
         const $allSelects = $productsContainer.find('select');
-        const $productUnitValue = $(this).closest('.productRow').find('.productUnitValue');
-
+        const $currentProductRow = $(this).closest('.productRow');
         const duplicate = $allSelects.filter(function() {
             return $(this).val() === selectedProductId;
         }).length > 1;
@@ -23,14 +22,13 @@ jQuery(function() {
     
         var productId = $(this).val();
         $.ajax({
-            url: 'get_sale_value/',  // URL to fetch sale value
+            url: 'get_sale_value/',
             data: {
                 'product_id': productId
             },
             dataType: 'json',
             success: function(data) {
-                $productUnitValue.text(data.sale_price);
-                console.log(data.sale_price)  // Update sale value display
+                $currentProductRow.find('.productUnitValue input').val(data.sale_price);
             }
         });
 
