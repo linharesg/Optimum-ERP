@@ -35,7 +35,21 @@ jQuery(function() {
     }
 
 
+    const onAmountChange = function() {
+
+        const $currentProductRow = $(this).closest('.productRow');        
+        const $productTotalValue = $currentProductRow.find('.productTotalValue input')
+
+        const $productUnitValue = $currentProductRow.find('.productUnitValue input').val();
+        const $productAmount = $currentProductRow.find('.productAmount input').val();
+        
+        const total = $productUnitValue * $productAmount;
+        $productTotalValue.val(total);
+    }
+
     $productRow.find('select').on('change', onProductChange);
+    $productRow.find('.productAmount').on('change', onAmountChange);
+    $productRow.find('.productUnitValue').on('change', onAmountChange);
 
     $addButton.on("click", function() {
         const $newRow = $originalProduct.clone(true);
@@ -49,6 +63,8 @@ jQuery(function() {
         });
 
         $newRow.find('select').on('change', onProductChange);
+        $newRow.find('.productAmount').on('change', onAmountChange);
+        $newRow.find('.productUnitValue').on('change', onAmountChange);
 
         $totalProducts.val(index + 1);
         $productsContainer.append($newRow);
