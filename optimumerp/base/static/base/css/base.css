@@ -1,3 +1,7 @@
+body {
+  background-color: #F4F4F4;
+}
+
 main {
   height: 100vh;
 }
@@ -37,9 +41,16 @@ hr {
 }
 
 .main {
-  padding: 10px;
-  margin-top: 61px;
+  padding: 0;
+  margin-top: 54px;
   margin-left: 80px;
+  height: calc(100vh - 54px);
+  width: calc(100vw - 80px);
+}
+
+.main-container {
+  padding: 0;
+  margin: 10px !important;
 }
 
 .menu-icons {
@@ -74,8 +85,8 @@ h1 {
 }
 
 .titlebar {
-  width: calc(100vmax - 85px);
-  height: fit-content;
+  width: calc(100vmax - 80px);
+  height: 56px !important;
   margin-left: 80px;
   position: fixed;
 }
@@ -94,4 +105,5 @@ h1 {
   height: 20px;
   margin-left: 15px;
   padding: 0 !important;
+  justify-content: sp;
 }

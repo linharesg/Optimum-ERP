@@ -5,8 +5,9 @@ jQuery(function() {
 
     $.each($menuItems, (_, menu) => {
         const $menu = $(menu);
+        const href = $menu.attr("href");
 
-        if ($menu.attr("href") === currentLocation) {
+        if (currentLocation.startsWith(href)) {
             $menu.attr("class", "nav-link active");
         } else {
             $menu.attr("class", "nav-link link-light");

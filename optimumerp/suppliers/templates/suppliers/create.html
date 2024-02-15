@@ -4,23 +4,31 @@
   Cadastro de Fornecedores
 {% endblock %}
 {% block head %}
+  <link rel="stylesheet" href="{% static 'suppliers/css/createUpdate.css' %}" />
+
   <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="{% static 'suppliers/js/createUpdate.js' %}"></script>
 {% endblock %}
-{% block content %}
 
-<form action="{{form_action}}" method="post" novalidate enctype="multipart/form-data">
+{% block page_name %}
+    Cadastro de Fornecedor
+{% endblock %}
+
+{% block search %}
+  {% comment %}Sem search{% endcomment %}
+  <div style="height: 38px;"></div>
+{% endblock %}
+
+{% block content %}
+  <form method="post" novalidate enctype="multipart/form-data">
     {% csrf_token %}
 
-    {% include "partials/_supplier_form.html" %}
-
-    <div class="d-grid">
-      <button class="btn btn-primary btn-lg">
-        Salvar
-      </button>
+    <div class="d-flex create-supplier m-3">
+      {% include 'partials/_supplier_form.html' %}
+      <div class="d-grid">
+        <button class="btn btn-primary btn-lg">Salvar</button>
+      </div>
     </div>
-
-</form>
-
+  </form>
 {% endblock %}
