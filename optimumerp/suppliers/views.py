@@ -77,8 +77,6 @@ def delete(request, id):
 def create(request):
     
     #POST
-    form_action = reverse("suppliers:create")
-
     if request.method == "POST":
         form = SuppliersForm(request.POST)
         
@@ -90,11 +88,11 @@ def create(request):
 
 
         messages.error(request, "Falha ao cadastrar o fornecedor. Verifique o preenchimento dos campos")
-        context = { "form": form, "form_action": form_action}        
+        context = { "form": form }        
         return render(request, "suppliers/create.html", context)
     
     #GET
     form = SuppliersForm()
-    context = {"form": form, "form_action": form_action }
+    context = { "form": form }
     return render(request, "suppliers/create.html", context)
 
