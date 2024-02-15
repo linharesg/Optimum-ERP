@@ -47,16 +47,16 @@
                 {% for product in sale_order_product_formset %}
                 <div class="row mb-3 productRow">
                     {{ form.id }}
-                    <div class="col-md-4">
+                    <div class="col-md-4 productInput">
                         {{ product.product|as_crispy_field }}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 productUnitValue">
                         {{ product.unit_value|as_crispy_field }}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 productAmount">
                         {{ product.amount|as_crispy_field }}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 productTotalValue">
                         {{ product.total_value_product|as_crispy_field }}
                     </div>
 

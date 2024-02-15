@@ -7,12 +7,10 @@ jQuery(function() {
     const $originalProduct = $productsContainer.children(".row:first").clone(true);
     var $productRow = $(".productRow")
 
-
-
-
     const onProductChange = function() {
         const selectedProductId = $(this).val();
         const $allSelects = $productsContainer.find('select');
+        const $productUnitValue = $(this).closest('.productRow').find('.productUnitValue');
 
         const duplicate = $allSelects.filter(function() {
             return $(this).val() === selectedProductId;
@@ -23,8 +21,6 @@ jQuery(function() {
             $(this).val('');
         }
     
-    
-        alert("oi")
         var productId = $(this).val();
         $.ajax({
             url: 'get_sale_value/',  // URL to fetch sale value
@@ -33,8 +29,7 @@ jQuery(function() {
             },
             dataType: 'json',
             success: function(data) {
-                $('#sale_value_display').text(data.sale_price);
-                $('#div_id_salesorderproduct_set-0-unit_value').text(data.sale_price);
+                $productUnitValue.text(data.sale_price);
                 console.log(data.sale_price)  // Update sale value display
             }
         });
@@ -44,9 +39,6 @@ jQuery(function() {
 
     $productRow.find('select').on('change', onProductChange);
 
-
-
-    //  TENTAR FAZER O .ONCLICK EM $productsContainer.children(".row")
     $addButton.on("click", function() {
         const $newRow = $originalProduct.clone(true);
         const index = parseInt($totalProducts.val());
@@ -63,28 +55,6 @@ jQuery(function() {
         $totalProducts.val(index + 1);
         $productsContainer.append($newRow);
     });
-
-    // $productRow.each(function () {N
-    //     // alert("oi")
-    //     $(this).find('select').on('change', function () {
-    //         alert("oi")
-    //         var productId = $(this).val();
-    //         $.ajax({
-    //             url: 'get_sale_value/',  // URL to fetch sale value
-    //             data: {
-    //                 'product_id': productId
-    //             },
-    //             dataType: 'json',
-    //             success: function (data) {
-    //                 $('#sale_value_display').text(data.sale_price);
-    //                 $('#div_id_salesorderproduct_set-0-unit_value').text(data.sale_price);
-    //                 console.log(data.sale_price)  // Update sale value display
-    //             }
-    //         });
-    //     })});
-        // }));
-
-
 
     $productsContainer.on("click", ".remove-btn", function(){
         const $button = $(this);
