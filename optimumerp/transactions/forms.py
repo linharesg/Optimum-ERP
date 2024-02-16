@@ -1,6 +1,6 @@
 from django import forms
-from .models import Transaction
-from products.models import ProductInventory, Product
+from .models import Transaction, Inventory
+from products.models import Product
 from crispy_forms.helper import FormHelper
 
 class TransactionsForm(forms.ModelForm):
@@ -22,25 +22,22 @@ class TransactionsForm(forms.ModelForm):
             }
         }
 
-class ProductInventoryForm(forms.ModelForm):
+class InventoryForm(forms.ModelForm):
+
     class Meta:
-        model = ProductInventory
-        exclude = ["product"]
-        widgets = {
-            "quantity": forms.NumberInput(attrs={"placeholder": "Quantidade"}),
-            "local": forms.TextInput(attrs={"placeholder": "Local"})
+        model = Inventory
+        fields = "__all__"
+        labels = {
+            "product": "Produto",
+            "quantity": "Quantidade",
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_show_labels = False
-
-ProductInventoryFormSet = forms.inlineformset_factory(
-    Product,
-    ProductInventory,
-    form=ProductInventoryForm,
-    extra=1,
-    can_delete=False,
-    max_num = 1
-)
+        error_messages = {
+            "product": {
+                "unique": "Este produto já está cadastrado no inventário",
+                "required": "O campo nome é obrigatório"
+            },
+            "description": {
+                "required": "O campo descrição é obrigatório"
+            }
+        }

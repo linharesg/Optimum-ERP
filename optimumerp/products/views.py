@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from .models import Product, SupplierProduct, ProductInventory, Inventory
+from .models import Product, SupplierProduct
+from transactions.models import Inventory
 from django.db.models import Q, Sum, F
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
@@ -7,13 +8,13 @@ from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib import messages
-from .forms import ProductForm, InventoryForm
-from .forms import ProductInventoryFormSet, SupplierProductFormSet
+from .forms import ProductForm
+from .forms import SupplierProductFormSet
 
 # Create your views here.
 def index(request):
     products = Product.objects.order_by("-id")
-    product_inventory = ProductInventory.objects.order_by("-id")
+    inventory_quantity = Inventory.objects.all()
 
     # Aplicando a paginação
     paginator = Paginator(products, 100)
@@ -23,7 +24,7 @@ def index(request):
 
     context = {
         "products": page_obj,
-        "product_inventory": product_inventory
+        "inventory_quantity": inventory_quantity
         }
     
     return render(request, "products/index.html", context)
@@ -55,43 +56,36 @@ def create(request):
     # POST
     if request.method == 'POST':
         form = ProductForm(request.POST)
-        print(form)
         if form.is_valid():
-                print("123")
-                product = form.save()
+                product = form.save() # Salva o produto no banco de dados
+                try:
+                    Inventory.objects.create(product=product, quantity=0) # Cria um registro na tabela Inventory
+                except:
+                    messages.error(request, "Falha ao cadastrar o produto no estoque")
+                    product.delete() # Deleta o produto caso não crie o registro na tabela Inventory
+
+                    context = { 
+                        "form": form, 
+                        "supplier_product_formset": supplier_product_formset, 
+                        "form_action": form_action,
+                        }
+                    
+                    return render(request, "products/create.html", context)
                 
                 supplier_product_formset = SupplierProductFormSet(request.POST, instance=product)
-                product_inventory_formset = ProductInventoryFormSet(request.POST, instance=product)
                 
                 if not supplier_product_formset.is_valid():                      
                     messages.error(request, "Falha ao cadastrar os fornecedores do produto")
                     product.delete()
                     
                     supplier_product_formset = SupplierProductFormSet(request.POST)
-                    product_inventory_formset = ProductInventoryFormSet(request.POST, instance=product)
+
             
                     context = { 
                         "form": form, 
                         "supplier_product_formset": supplier_product_formset, 
                         "form_action": form_action,
-                        "product_inventory_formset": product_inventory_formset}
-                    
-                    return render(request, "products/create.html", context)
-                
-                if product_inventory_formset.is_valid():
-                    messages.success(request, "O produto foi cadastrado com sucesso!")
-                    supplier_product_formset.save()
-                    product_inventory_formset.save()
-                else:
-                    messages.error(request, "Falha ao cadastrar o estoque do produto")
-                    product.delete()
-                    supplier_product_formset = SupplierProductFormSet(request.POST)
-                    product_inventory_formset = ProductInventoryFormSet(request.POST, instance=product)
-            
-                    context = { 
-                        "form": form, 
-                        "supplier_product_formset": supplier_product_formset, 
-                        "product_inventory_formset": product_inventory_formset}
+                        }
                     
                     return render(request, "products/create.html", context)
                 
@@ -99,13 +93,11 @@ def create(request):
 
     # GET
     form = ProductForm()
-    product_inventory_formset = ProductInventoryFormSet()
     supplier_product_formset = SupplierProductFormSet()
 
     context = {
         "form": form, 
         "form_action": form_action,
-        "product_inventory_formset": product_inventory_formset,
         "supplier_product_formset": supplier_product_formset
         }
 
@@ -131,85 +123,14 @@ def update(request, slug):
     
     # GET
     form =  ProductForm(instance=product)
-    product_inventory_formset = ProductInventoryFormSet(instance=product)
     supplier_product_formset = SupplierProductFormSet(instance=product)
     context = {
         "form_action": form_action,
         "form": form,
-        "product_inventory_formset": product_inventory_formset,
         "supplier_product_formset": supplier_product_formset,
     }
 
     return render(request, "products/create.html", context)
-
-def inventory_index(request):
-    inventories = Inventory.objects.order_by("-id")
-    supplierproducts = SupplierProduct.objects.all()
-    value_sum = ProductInventory.objects.values('inventory').annotate(total=Sum('quantity'))
-    medium_cost = SupplierProduct.objects.values('product').annotate(total=Sum('cost_price'))
-
-    response = []
-
-    for inventory in inventories:
-        total_quantity = ProductInventory.objects.filter(inventory = inventory).aggregate(Sum("quantity"))["quantity__sum"] or 0
-        total_cost = ProductInventory.objects.filter(product__productinventory__inventory = inventory).annotate(product_total=F("product__supplierproduct__cost_price")*F("product__productinventory__quantity"))\
-            .aggregate(total_cost=Sum("product_total"))["total_cost"] or 0
-        response.append({
-            "id": inventory.id,
-            "name": inventory.name,
-            "total_quantity": total_quantity,
-            "total_cost": total_cost
-        })
-
-    context = {
-        "inventories": response,
-    }
-
-    return render(request, "inventories/index.html", context)
-
-def inventory_create(request):
-    form_action = reverse("products:inventory_create")
-    # POST
-    if request.method == 'POST':
-        form = InventoryForm(request.POST)
-        print(form)
-        if form.is_valid():
-                product = form.save()
-                messages.success(request, "O estoque foi cadastrado com sucesso!")
-                
-                return redirect("products:inventory_index")
-
-    # GET
-    form = InventoryForm()
-
-    context = {
-        "form": form, 
-        "form_action": form_action,
-        }
-
-    return render(request, "inventories/create.html", context)
-
-def inventory_search(request):
-    # Obtendo o valor da requisição (Formulário)
-    search_value = request.GET.get("q").strip()
-
-    # Verificando se algo foi digitado
-    if not search_value:
-        return redirect("products:inventory_index")
-    
-    # Filtrando os produtos
-    #  O Q é usado para combinar filtros (& ou |)
-    inventories = Inventory.objects\
-        .filter(Q(name__icontains=search_value))\
-        .order_by("-id")
-
-    paginator = Paginator(inventories, 100)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    context = { "inventories": page_obj}
-
-    return render(request, "inventories/index.html", context)
 
 @require_POST
 def delete(request, id):
