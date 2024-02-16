@@ -20,14 +20,12 @@ class SalesOrderForm(forms.ModelForm):
         }
 
         widgets = {
-            "delivery_date": forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
+            "delivery_date": forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d"),
+            'status': forms.TextInput(attrs={'readonly': 'readonly'}),
+            'total_value': forms.TextInput(attrs={'readonly': 'readonly'})
         }
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['status'].widget.attrs['disabled'] = True
 
-        
 class SalesOrderProductForm(forms.ModelForm):
     class Meta:
         model = SalesOrderProduct
@@ -36,7 +34,7 @@ class SalesOrderProductForm(forms.ModelForm):
         widgets = {
             "unit_value": forms.NumberInput(attrs={"placeholder": "Preço de custo"}),
             "amount": forms.NumberInput(attrs={"placeholder": "Quantidade"}),
-            "total_value": forms.NumberInput(attrs={"placeholder": "Total"}),
+            "total_value_product": forms.NumberInput(attrs={"placeholder": "Total", 'readonly': 'readonly'}),
         }
 
     def __init__(self, *args, **kwargs):
