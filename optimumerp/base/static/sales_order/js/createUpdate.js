@@ -5,7 +5,36 @@ jQuery(function() {
     const $productsContainer = $("#productFormset");
     const $totalProducts = $("#id_salesorderproduct_set-TOTAL_FORMS");
     const $originalProduct = $productsContainer.children(".row:first").clone(true);
+    const $totalOrderValue = $("#id_total_value")
+    const $removeProductButton = $(".removeProductButton")
     var $productRow = $(".productRow")
+
+    const updateTotalValue = function() {
+
+        const totalValueElements = document.querySelectorAll('.productTotalValue input[type="number"]');
+        
+        let sum = 0;
+        totalValueElements.forEach(element => {
+            sum += parseFloat(element.value || 0);
+        });
+
+        $totalOrderValue.val(sum)
+        console.log("OK")
+    };
+
+    const removeProduct = function(){
+        const $button = $(this);
+        
+        $button.closest(".row").remove();
+        $totalProducts.val(parseInt($totalProducts.val()) - 1);
+        updateTotalValue();
+    
+    };
+
+    const removeButtons = document.querySelectorAll('.removeProductButton');
+    removeButtons.forEach(button => {
+    button.addEventListener('click', updateTotalValue);
+    });
 
     const onProductChange = function() {
         const selectedProductId = $(this).val();
@@ -32,8 +61,7 @@ jQuery(function() {
             }
         });
 
-    }
-
+    };
 
     const onAmountChange = function() {
 
@@ -45,16 +73,19 @@ jQuery(function() {
         
         const total = $productUnitValue * $productAmount;
         $productTotalValue.val(total);
+        
+        updateTotalValue();
     }
 
     $productRow.find('select').on('change', onProductChange);
     $productRow.find('.productAmount').on('change', onAmountChange);
     $productRow.find('.productUnitValue').on('change', onAmountChange);
+    $productRow.find('.select').on('change', onAmountChange);
 
     $addButton.on("click", function() {
         const $newRow = $originalProduct.clone(true);
         const index = parseInt($totalProducts.val());
-        $productRow = $(".productRow")
+ 
         $newRow.find(":input[name]").each(function() {
             const name = $(this).attr("name").replace("-0-", `-${index}-`);
             const id = "id_" + name;
@@ -65,28 +96,13 @@ jQuery(function() {
         $newRow.find('select').on('change', onProductChange);
         $newRow.find('.productAmount').on('change', onAmountChange);
         $newRow.find('.productUnitValue').on('change', onAmountChange);
+        $newRow.find('.select').on('change', onAmountChange);
 
         $totalProducts.val(index + 1);
         $productsContainer.append($newRow);
     });
 
-    $productsContainer.on("click", ".remove-btn", function(){
-        const $button = $(this);
-
-        $button.closest(".row").remove();
-        $totalProducts.val(parseInt($totalProducts.val()) - 1);
-
-        const url = $button.data("url");
-        if (url) {
-            fetch(url, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken")
-                }
-            })
-            .catch(console.error)
-        }
-    })
+    $productsContainer.on("click", ".remove-btn", removeProduct)
 
     $form.validate({
         errorElement: "div", // Elemento que será criado
