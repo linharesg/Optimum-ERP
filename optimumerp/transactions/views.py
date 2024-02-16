@@ -5,6 +5,8 @@ from .forms import TransactionsForm
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.db.models import Q
+from django.db import transaction
+from .exceptions import TransactionQuantityError
 
 def index(request):
     transactions = Transaction.objects.order_by("-id")
@@ -24,30 +26,36 @@ def create(request):
         form = TransactionsForm(request.POST)
         if form.is_valid():
             inventory = Inventory.objects.get(product__id=request.POST.get("product"))
-            print(inventory)
             type = request.POST.get("type")
             quantity = decimal.Decimal(request.POST.get("quantity"))
+
             if not inventory:
                 messages.error(request, "Não foi possível realizar a transação, verifique se o produto está cadastrado no estoque.")
                 context = { "form": form}
         
                 return render(request, "transactions/create.html", context)
 
-            if type == "OUT":
-                if inventory.quantity - quantity < 0:
-                    messages.error(request, "Não foi possível realizar a transação, quantidade indisponível.")
-                    context = { "form": form}
-        
-                    return render(request, "transactions/create.html", context)
-                else:
-                    inventory.quantity -= quantity
-                    inventory.save()
+            try:
+                with transaction.atomic():
+                    if type == "OUT":
+                        if inventory.quantity - quantity < 0:
+                            transaction_error = TransactionQuantityError("Quantidade indisponível no estoque")
+                            print(transaction_error)
+                            raise transaction_error
+                        else:
+                            inventory.quantity -= quantity
+                            inventory.save()
 
-            elif type == "IN":
-                inventory.quantity += quantity
-                print(quantity)
-                print(inventory.quantity)
-                inventory.save()
+                    elif type == "IN":
+                        inventory.quantity += quantity
+                        print(quantity)
+                        print(inventory.quantity)
+                        inventory.save()
+            except:
+                messages.error(request, "Não foi possível realizar a transação.")
+                context = { "form": form}
+    
+                return render(request, "transactions/create.html", context)
 
             form.save()
             messages.success(request, "Transação cadastrada com sucesso!")
@@ -55,7 +63,6 @@ def create(request):
             return redirect("transactions:index")
                 
         messages.error(request, "Falha ao cadastrar a transação. Verifique o preenchimento dos campos.")
-        
         context = { "form": form}
         
         return render(request, "transactions/create.html", context)
