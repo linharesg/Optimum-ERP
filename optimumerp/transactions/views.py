@@ -40,7 +40,7 @@ def create(request):
         
                     return render(request, "transactions/create.html", context)
                 else:
-                    inventory.quantity - quantity
+                    inventory.quantity -= quantity
                     inventory.save()
 
             elif type == "IN":
