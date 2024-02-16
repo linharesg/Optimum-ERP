@@ -1,3 +1,4 @@
+import decimal
 from django.shortcuts import render, redirect
 from .models import Transaction, Inventory
 from .forms import TransactionsForm
@@ -7,7 +8,6 @@ from django.db.models import Q
 
 def index(request):
     transactions = Transaction.objects.order_by("-id")
-
     paginator = Paginator(transactions, 2)
 
     page_number = request.GET.get("page")
@@ -22,8 +22,33 @@ def index(request):
 def create(request):
     if request.method == 'POST':
         form = TransactionsForm(request.POST)
-
         if form.is_valid():
+            inventory = Inventory.objects.get(product__id=request.POST.get("product"))
+            print(inventory)
+            type = request.POST.get("type")
+            quantity = decimal.Decimal(request.POST.get("quantity"))
+            if not inventory:
+                messages.error(request, "Não foi possível realizar a transação, verifique se o produto está cadastrado no estoque.")
+                context = { "form": form}
+        
+                return render(request, "transactions/create.html", context)
+
+            if type == "OUT":
+                if inventory.quantity - quantity < 0:
+                    messages.error(request, "Não foi possível realizar a transação, quantidade indisponível.")
+                    context = { "form": form}
+        
+                    return render(request, "transactions/create.html", context)
+                else:
+                    inventory.quantity - quantity
+                    inventory.save()
+
+            elif type == "IN":
+                inventory.quantity += quantity
+                print(quantity)
+                print(inventory.quantity)
+                inventory.save()
+
             form.save()
             messages.success(request, "Transação cadastrada com sucesso!")
             
@@ -65,6 +90,23 @@ def search(request):
 def inventory_index(request):
     inventory = Inventory.objects.all()
 
+    context = {
+        "inventory": inventory
+    }
+
+    return render(request, "inventory/index.html", context)
+
+def inventory_search(request):
+    search_value = request.GET.get("q").strip()
+
+
+    if not search_value:
+        return redirect("inventory:index")
+    
+    inventory = Inventory.objects\
+        .filter(Q(product__icontains=search_value) | Q(quantity__icontains=search_value))\
+        .order_by("-product")
+    
     context = {
         "inventory": inventory
     }

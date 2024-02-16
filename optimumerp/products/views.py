@@ -57,7 +57,20 @@ def create(request):
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
-                product = form.save()
+                product = form.save() # Salva o produto no banco de dados
+                try:
+                    Inventory.objects.create(product=product, quantity=0) # Cria um registro na tabela Inventory
+                except:
+                    messages.error(request, "Falha ao cadastrar o produto no estoque")
+                    product.delete() # Deleta o produto caso não crie o registro na tabela Inventory
+
+                    context = { 
+                        "form": form, 
+                        "supplier_product_formset": supplier_product_formset, 
+                        "form_action": form_action,
+                        }
+                    
+                    return render(request, "products/create.html", context)
                 
                 supplier_product_formset = SupplierProductFormSet(request.POST, instance=product)
                 
