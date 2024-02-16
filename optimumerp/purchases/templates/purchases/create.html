@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Novo pedido de compra{% endblock  %}
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="{% static 'purchases/js/createUpdate.js' %}"></script>
+{% endblock  %}
+{% block content %}
+        <form action="{% url "purchases:create" %}" method="POST">
+            {% csrf_token %}
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.status|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.supplier|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.installments|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.discount|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.delivery_date|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.total_value|as_crispy_field }}
+                </div>
+            </div>
+           
+            <h3>Produtos</h3>
+            <div id="productFormset">
+                {{ purchase_product_formset.management_form }}
+                {% for product in purchase_product_formset %}
+                
+                <div class="row mb-3">
+                    {{ form.id }}
+                    <div class="col-md-4">
+                        {{ product.products|as_crispy_field }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ product.unit_value|as_crispy_field }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ product.amount|as_crispy_field }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ product.total_value|as_crispy_field }}
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="d-grid">
+                            <button 
+                            {% comment %} {% if supplier.id.value %}data-url="{% url "products:delete_supplier" supplier.id.value %}"{% endif %} {% endcomment %}
+                            {% if supplier.id.value %}data-url="#"{% endif %}
+                            type="button" 
+                            class="btn btn-danger remove-btn">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="d-grid mb-3">
+                <button type="button" id="addPurchaseButton" class="btn btn-outline-secondary">Adicionar produto</button>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
+            </div>
+        </form>
+
+{% endblock  %}
