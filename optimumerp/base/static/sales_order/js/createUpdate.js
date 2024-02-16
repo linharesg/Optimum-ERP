@@ -6,20 +6,18 @@ jQuery(function() {
     const $totalProducts = $("#id_salesorderproduct_set-TOTAL_FORMS");
     const $originalProduct = $productsContainer.children(".row:first").clone(true);
     const $totalOrderValue = $("#id_total_value")
-    const $removeProductButton = $(".removeProductButton")
+    const $discount = $('#id_discount')
     var $productRow = $(".productRow")
 
     const updateTotalValue = function() {
-
         const totalValueElements = document.querySelectorAll('.productTotalValue input[type="number"]');
         
         let sum = 0;
         totalValueElements.forEach(element => {
             sum += parseFloat(element.value || 0);
         });
-
-        $totalOrderValue.val(sum)
-        console.log("OK")
+        const $discount = $('#id_discount').val()
+        $totalOrderValue.val((sum * (100 - $discount))/100)
     };
 
     const removeProduct = function(){
@@ -81,6 +79,7 @@ jQuery(function() {
     $productRow.find('.productAmount').on('change', onAmountChange);
     $productRow.find('.productUnitValue').on('change', onAmountChange);
     $productRow.find('.select').on('change', onAmountChange);
+    $discount.on('change', onAmountChange);
 
     $addButton.on("click", function() {
         const $newRow = $originalProduct.clone(true);
