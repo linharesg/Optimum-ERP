@@ -76,15 +76,11 @@ def create(request):
     return render(request, "sales_order/create.html", context)
 
 def get_sale_value(request):
-    print("oioi")
+
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest' and request.method == 'GET':
-        print("teste")
         product_id = request.GET.get('product_id')
-        print(product_id)
         product = Product.objects.get(id=product_id)
         sale_price = product.sale_price
         return JsonResponse({'sale_price': sale_price})
     else:
-        print("af")
-        return
         return JsonResponse({'error': 'Invalid request'})
