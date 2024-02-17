@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'suppliers.apps.SuppliersConfig',
     'products.apps.ProductsConfig',
+    'users.apps.UsersConfig',,
     'transactions.apps.TransactionsConfig',
     'clients.apps.ClientsConfig',
 ]
@@ -62,7 +63,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'base' / 'templates',
-            BASE_DIR / 'transactions' / 'templates'
+            BASE_DIR / 'transactions' / 'templates',
+            BASE_DIR / 'users' / 'templates'
             ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -144,4 +146,4 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# LOGIN_URL = "/login/"
+LOGIN_URL = "/login/"
