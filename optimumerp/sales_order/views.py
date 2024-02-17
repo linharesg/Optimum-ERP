@@ -2,11 +2,12 @@ from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from .models import SalesOrder
+from .models import SalesOrder, SalesOrderProduct
 from django.views.generic import ListView, CreateView
 from .forms import SalesOrderForm, SalesOrderProductFormSet
 from django.contrib import messages
 from products.models import Product
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
@@ -129,10 +130,17 @@ def update(request, id):
 
     form = SalesOrderForm(instance=sale_order)
     sale_order_product_formset = SalesOrderProductFormSet(instance=sale_order)
-    
+
     context = {
         "form": form,
         "sale_order_product_formset": sale_order_product_formset
     }
 
     return render(request, "sales_order/update.html", context)
+
+@require_POST
+def delete_product_from_sale_order(request, id):
+    supplier_product = get_object_or_404(SalesOrderProduct, pk=id)
+    supplier_product.delete()
+
+    return JsonResponse({ "message": "success"})

@@ -27,6 +27,17 @@ jQuery(function() {
         $totalProducts.val(parseInt($totalProducts.val()) - 1);
         updateTotalValue();
     
+        const url = $button.data("url");
+        if (url) {
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": Cookies.get("csrftoken")
+                }
+            })
+            .catch(console.error);
+        }
+
     };
 
     const removeButtons = document.querySelectorAll('.removeProductButton');

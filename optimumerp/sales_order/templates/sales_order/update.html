@@ -70,7 +70,7 @@
                     <div class="col-md-2">
                         <div class="d-grid">
                             <button
-                            {% comment %} {% if supplier.id.value %}data-url="{% url "products:delete_supplier" supplier.id.value %}"{% endif %} {% endcomment %}
+                            {% if product.id.value %}data-url="{% url "sales_order:delete_product" product.id.value %}"{% endif %}
                             {% comment %} {% if supplier.id.value %}data-url="#"{% endif %} {% endcomment %}
                             type="button" 
                             class="btn btn-danger remove-btn removeProductButton">
