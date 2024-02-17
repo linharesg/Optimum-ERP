@@ -1,5 +1,6 @@
+from django.db import IntegrityError
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from .models import SalesOrder
 from django.views.generic import ListView, CreateView
@@ -84,3 +85,54 @@ def get_sale_value(request):
         return JsonResponse({'sale_price': sale_price})
     else:
         return JsonResponse({'error': 'Invalid request'})
+
+def update(request, id):
+    print("oi")
+    sale_order = get_object_or_404(SalesOrder, pk=id)
+
+    if request.method == "POST":
+        form = SalesOrderForm(request.POST, instance=sale_order)
+        sale_order_product_formset = SalesOrderProductFormSet(
+            request.POST, instance=sale_order)
+
+        if form.is_valid():
+            try:
+                # if form.cleaned_data["photo"] is False:
+                #     product.thumbnail.delete(save=False)
+
+                form.save()
+                print(sale_order_product_formset)
+                if sale_order_product_formset.is_valid():
+                    sale_order_product_formset.save()
+                    messages.success(request, "Pedido atualizado com sucesso!")
+                    return redirect("sales_order:index")
+                else:
+                    messages.error(
+                        request, "Falha ao atualizar o pedido. Verifique os produtos do pedido.")
+
+            except IntegrityError:
+                messages.error(
+                    request, "Falha ao atualizar o pedido: Não é possível ter o mesmo produto mais de uma vez em um único produto.")
+        else:
+            messages.error(
+                request, "Falha ao atualizar o pedido: formulário inválido.")
+        
+        
+        sale_order_product_formset = SalesOrderProductFormSet(instance=sale_order)
+        context = {
+            "form": form,
+            "sale_order_product_formset": sale_order_product_formset
+        }
+        
+        return render(request, "sales_order/update.html", context)
+
+
+    form = SalesOrderForm(instance=sale_order)
+    sale_order_product_formset = SalesOrderProductFormSet(instance=sale_order)
+    
+    context = {
+        "form": form,
+        "sale_order_product_formset": sale_order_product_formset
+    }
+
+    return render(request, "sales_order/update.html", context)

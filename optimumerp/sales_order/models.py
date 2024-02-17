@@ -40,7 +40,6 @@ class SalesOrder(models.Model):
         
 class SalesOrderProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    ######## ESTOQUE: CRIAR RELAÇÃO COM OS LOCAIS DE ESTOQUE ######################################
     sale_order = models.ForeignKey(SalesOrder, on_delete=models.CASCADE)
     unit_value = models.DecimalField(max_digits=8, decimal_places=2, validators=[MinValueValidator(0.01, message='Informe um valor válido')])
     amount = models.DecimalField(max_digits=8, decimal_places=2, validators=[MinValueValidator(0.01, message='Informe um valor válido')])

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% block title %}Novo pedido de venda{% endblock  %}
+{% block title %}Editar pedido de venda{% endblock  %}
 {% block head %}
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
@@ -11,10 +11,11 @@
 {% block content %}
         <div class="row mb-3">
             <div class="col">
-                <h3>Novo pedido de vendas</h3>
+                <h3>Editar pedido de vendas</h3>
             </div>
         </div>
-        <form id="sales_order_form" action="{% url "sales_order:create" %}" method="POST">
+        {% comment %} <form id="sales_order_form" action="{% url 'sales_order:update' id %}" method="POST"> {% endcomment %}
+        <form id="sales_order_form" method="POST">
             {% csrf_token %}
             <div class="row mb-3">
                 <div class="col">
@@ -52,7 +53,7 @@
                 {{ sale_order_product_formset.management_form }}
                 {% for product in sale_order_product_formset %}
                 <div class="row mb-3 productRow">
-                    {{ form.id }}
+                    {{ product.id }}
                     <div class="col-md-4 productInput">
                         {{ product.product|as_crispy_field }}
                     </div>
@@ -70,7 +71,7 @@
                         <div class="d-grid">
                             <button
                             {% comment %} {% if supplier.id.value %}data-url="{% url "products:delete_supplier" supplier.id.value %}"{% endif %} {% endcomment %}
-                            {% if supplier.id.value %}data-url="#"{% endif %}
+                            {% comment %} {% if supplier.id.value %}data-url="#"{% endif %} {% endcomment %}
                             type="button" 
                             class="btn btn-danger remove-btn removeProductButton">
                                 <i class="bi bi-x"></i>
