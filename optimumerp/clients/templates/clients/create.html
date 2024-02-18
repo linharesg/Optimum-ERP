@@ -24,7 +24,7 @@
   <form method="post" novalidate enctype="multipart/form-data">
     {% csrf_token %}
 
-    <div class="d-flex create-client m-3 row">
+    <div class="d-flex create-client p-3 flex-column">
       {% include 'partials/_client_form.html' %}
       <div class="d-grid">
         <button class="btn btn-primary btn-lg">Salvar</button>

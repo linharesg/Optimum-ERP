@@ -3,8 +3,6 @@ body {
 }
 
 .create-clients {
-    display: flex;
-    flex-direction: column;
     width: calc(100vw - 140px);
 }
 

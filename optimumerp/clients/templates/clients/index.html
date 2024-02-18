@@ -37,34 +37,32 @@
     <table class="table table-borderless table-hover table-sm table-color">
       <thead class="table-border">
         <tr>
+          <th>Ações</th>
           <th>ID</th>
           <th>Razão Social</th>
           <th>Nome Fantasia</th>
           <th>Representante</th>
-          <th>Email</th>
           <th>Telefone</th>
           <th>Ativo</th>
-          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
         {% for client in page_obj %}
           <tr>
-            <td>{{ client.id }}</td>
-            <td>{{ client.company_name|title }}</td>
-            <td>{{ client.fantasy_name|title }}</td>
-            <td>{{ client.representative|title }}</td>
-            <td>{{ client.email }}</td>
-            <td>{{ client.phone|format_phone }}</td>
-            <td>
-              <input {% if client.enabled %}checked{% endif %} data-url="{% url 'clients:toggle_enabled' client.id %}" type="checkbox" class="form-check-input" />
-            </td>
             <td class="d-flex gap-1">
               <a href="{% url 'clients:update' client.slug %}" class="btn btn-warning btn-sm" title="editar cliente"><i class="bi bi-pencil"></i></a>
               <form method="post" action="{% url 'clients:delete' client.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger btn-sm" title="remover cliente"><i class="bi bi-trash"></i></button>
               </form>
+            </td>
+            <td>{{ client.id }}</td>
+            <td>{{ client.company_name|title }}</td>
+            <td>{{ client.fantasy_name|title }}</td>
+            <td>{{ client.representative|title }}</td>
+            <td>{{ client.phone|format_phone }}</td>
+            <td>
+              <input {% if client.enabled %}checked{% endif %} data-url="{% url 'clients:toggle_enabled' client.id %}" type="checkbox" class="form-check-input" />
             </td>
           </tr>
           {% empty %}

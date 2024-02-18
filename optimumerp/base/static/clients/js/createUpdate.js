@@ -7,8 +7,10 @@ jQuery(function () {
     const $stateInput = $("#id_state");
     const $cnpjInput = $("#id_cnpj");
     const $phoneInput = $("#id_phone");
-    const $zipcodeInput = $("#id_zipcode");
+    const $zipcodeInput = $("#zipcodeInput");
     const $zipcodeIcon = $("#zipcodeIcon");
+
+    console.log("funcionou")
 
     $zipcodeInput.mask("00000-000");
     $cnpjInput.mask("00.000.000/0000-00");
