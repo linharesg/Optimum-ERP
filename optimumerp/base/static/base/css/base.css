@@ -42,9 +42,9 @@ hr {
 
 .main {
   padding: 0;
-  margin-top: 54px;
+  margin-top: 56px;
   margin-left: 80px;
-  height: calc(100vh - 54px);
+  height: calc(100vh - 56px);
   width: calc(100vw - 80px);
 }
 
@@ -76,7 +76,7 @@ hr {
   height: 100vh !important;
   overflow: hidden;
   position: fixed;
-  z-index: 3;
+  z-index: 5 !important;
 }
 
 h1 {

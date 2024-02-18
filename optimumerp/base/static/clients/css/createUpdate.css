@@ -2,8 +2,7 @@ body {
     width: calc(100vw - 90px) !important;
 }
 
-.create-supplier {
-    flex-direction: column;
+.create-clients {
     width: calc(100vw - 140px);
 }
 

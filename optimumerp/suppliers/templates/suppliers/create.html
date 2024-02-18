@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block page_name %}
-    Cadastro de Fornecedor
+  Cadastro de Fornecedor
 {% endblock %}
 
 {% block search %}
@@ -24,7 +24,7 @@
   <form method="post" novalidate enctype="multipart/form-data">
     {% csrf_token %}
 
-    <div class="d-flex create-supplier m-3">
+    <div class="d-flex create-supplier p-3">
       {% include 'partials/_supplier_form.html' %}
       <div class="d-grid">
         <button class="btn btn-primary btn-lg">Salvar</button>

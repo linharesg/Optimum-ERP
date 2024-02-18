@@ -5,65 +5,75 @@
 {% block title %}Clientes{% endblock  %}
 
 {% block head %}
+<link rel="stylesheet" href="{% static 'clients/css/index.css' %}">
+
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 <script src="{% static 'base/js/index.js' %}"></script>
 {% endblock  %}
 
+{% block page_name %}Clientes{% endblock %}
+
+{% block search %}{% include "partials/_search_filter.html" with search_value="clients:search" %}{% endblock %}
+
 {% block content %}
 
-<h2 class="mb-3">Clientes</h2>
+<div class="row">
+  <div class="col-md-2">
+    <a 
+      href="{% url "clients:create" %}" title="Cadastrar novo cliente"
+      class="btn btn-success">
+      <i class="bi bi-plus"></i>
+      Novo
+    </a>
+  </div>
+</div>
 
-<a 
-  href="{% url "clients:create" %}" title="Cadastrar novo cliente"
-  class="btn btn-primary btn-sticky-bottom">
-  <i class="bi bi-plus"></i>
-</a>
+<div class="row filter-table d-flex mt-2">
+  <div class="col-md-3">
+    {% include "partials/_filter.html" %}
+  </div>
 
-{% include "partials/_search_filter.html" with search_value="clients:search"%}
-
-
-<div class="table-responsive">
-  <table class="table table-striped table-sm">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Razão Social</th>
-        <th>Nome Fantasia</th>
-        <th>Representante</th>
-        <th>Email</th>
-        <th>Telefone</th>
-        <th>Ativo</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for client in page_obj %}
+  <div class="table-responsive bg-white p-2 col-md-9 rounded">
+    <table class="table table-borderless table-hover table-sm table-color">
+      <thead class="table-border">
         <tr>
-          <td>{{ client.id }}</td>
-          <td>{{ client.company_name|title }}</td>
-          <td>{{ client.fantasy_name|title }}</td>
-          <td>{{ client.representative|title }}</td>
-          <td>{{ client.email }}</td>
-          <td>{{ client.phone|format_phone }}</td>
-          <td>
-            <input {% if client.enabled %}checked{% endif %} data-url="{% url 'clients:toggle_enabled' client.id %}" type="checkbox" class="form-check-input" />
-          </td>
-          <td class="d-flex gap-1">
-            <a href="{% url 'clients:update' client.slug %}" class="btn btn-warning btn-sm" title="editar cliente"><i class="bi bi-pencil"></i></a>
-            <form method="post" action="{% url 'clients:delete' client.id %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-danger btn-sm" title="remover cliente"><i class="bi bi-trash"></i></button>
-            </form>
-          </td>
+          <th>Ações</th>
+          <th>ID</th>
+          <th>Razão Social</th>
+          <th>Nome Fantasia</th>
+          <th>Representante</th>
+          <th>Telefone</th>
+          <th>Ativo</th>
         </tr>
-        {% empty %}
-        <tr>
-          <td colspan="8" class="text-center">Nenhum cliente cadastrado</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for client in page_obj %}
+          <tr>
+            <td class="d-flex gap-1">
+              <a href="{% url 'clients:update' client.slug %}" class="btn btn-warning btn-sm" title="editar cliente"><i class="bi bi-pencil"></i></a>
+              <form method="post" action="{% url 'clients:delete' client.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm" title="remover cliente"><i class="bi bi-trash"></i></button>
+              </form>
+            </td>
+            <td>{{ client.id }}</td>
+            <td>{{ client.company_name|title }}</td>
+            <td>{{ client.fantasy_name|title }}</td>
+            <td>{{ client.representative|title }}</td>
+            <td>{{ client.phone|format_phone }}</td>
+            <td>
+              <input {% if client.enabled %}checked{% endif %} data-url="{% url 'clients:toggle_enabled' client.id %}" type="checkbox" class="form-check-input" />
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="8" class="text-center">Nenhum cliente cadastrado</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
-  {% include "partials/_paginator.html" %}
+    {% include "partials/_paginator.html" %}
+  </div>
 </div>
 {% endblock  %}
