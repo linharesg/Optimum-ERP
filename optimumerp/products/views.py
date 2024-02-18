@@ -5,11 +5,14 @@ from django.db.models import Q, Sum, F
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.http import require_POST, require_GET
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.contrib import messages
 from .forms import ProductForm
 from .forms import SupplierProductFormSet
+from sales_order.models import SalesOrderProduct
+from transactions.models import Inventory
+from django.db.models import Count
 
 # Create your views here.
 def index(request):
@@ -135,9 +138,20 @@ def update(request, slug):
 @require_POST
 def delete(request, id):
     product = get_object_or_404(Product, pk=id)
+
+    sales_order_count = SalesOrderProduct.objects.filter(product=product).aggregate(count=Count('id'))['count']
+    if sales_order_count > 0:
+        messages.error(request, f"Não é possível excluir um produto que está associado a um pedido de vendas.")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
+    transactions_count = Inventory.objects.filter(product=product).aggregate(count=Count('id'))['count']
+    if transactions_count > 0:
+        messages.error(request, f"Não foi possível excluir o produto, pois o mesmo já possui transações. Considere inativá-lo.")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
     product.delete()
 
-    return redirect("products:index")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @require_POST
 def toggle_enabled(request, id):

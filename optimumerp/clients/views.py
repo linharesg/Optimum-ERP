@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 
@@ -9,6 +9,8 @@ from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.views.generic import UpdateView
+from sales_order.models import SalesOrder
+from django.db.models import Count
 
 def index(request):
     clients = Clients.objects.order_by("-id")
@@ -70,9 +72,16 @@ def toggle_enabled(request, id):
 @require_POST
 def delete(request, id):
     client = get_object_or_404(Clients, pk=id)
+    
+    sale_order_count = SalesOrder.objects.filter(client=client).aggregate(count=Count('id'))['count']
+    if sale_order_count > 0:
+        messages.error(request, f"Não foi possível excluir o cliente, pois o mesmo já está associado a um pedido de vendas. Considere inativá-lo.")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
     client.delete()
 
-    return redirect("clients:index")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
 
 def create(request):
     
