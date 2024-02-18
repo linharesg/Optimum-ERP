@@ -1,6 +1,6 @@
 from django import forms
 from django.db import IntegrityError
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from .models import SalesOrder, SalesOrderProduct
@@ -94,11 +94,11 @@ def update(request, id):
 
     if sale_order.status == "Cancelado":
         messages.error(request, f"Erro ao editar o pedido {sale_order.id}: Não é possível editar um pedido cancelado.")
-        return redirect("sales_order:index")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     
     if sale_order.status == "Confirmado":
         messages.error(request, f"Erro ao cancelar pedido {sale_order.id}: Não é possível editar um pedido que já foi confirmado.")
-        return redirect("sales_order:index")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
     if request.method == "POST":
         form = SalesOrderForm(request.POST, instance=sale_order)
@@ -152,17 +152,17 @@ def cancel(request, id):
 
     if sale_order.status == "Cancelado":
         messages.error(request, f"Erro ao cancelar pedido: o pedido {sale_order.id} já está cancelado!")
-        return redirect("sales_order:index")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
     if sale_order.status == "Confirmado":
         messages.error(request, f"Erro ao cancelar pedido {sale_order.id}: Você não pode cancelar um pedido que já foi confirmado!")
-        return redirect("sales_order:index")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     
     if sale_order.status == "Pendente":
         sale_order.status = "Cancelado"
         sale_order.save()
         messages.success(request, f"O pedido {sale_order.id} foi cancelado.")
-        return redirect("sales_order:index")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @require_POST
 def delete_product_from_sale_order(request, id):
