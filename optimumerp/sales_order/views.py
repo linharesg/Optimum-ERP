@@ -42,7 +42,8 @@ def create(request):
 
             if sale_order_product_formset.is_valid():
                 messages.success(request, "O pedido de venda foi emitido com sucesso!")
-                form.save()
+                sale_order.user = request.user
+                sale_order.save()
                 sale_order_product_formset.save()
                 return redirect("sales_order:index")
             else:
@@ -137,6 +138,7 @@ def update(request, id):
       
     form = SalesOrderForm(instance=sale_order)
     form.fields['client'].widget.attrs['readonly'] = 'readonly'
+    form.fields['user'].widget.attrs['readonly'] = 'readonly'
     sale_order_product_formset = SalesOrderProductFormSet(instance=sale_order)
 
     context = {

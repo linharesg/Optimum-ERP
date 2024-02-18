@@ -3,8 +3,9 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from clients.models import Clients
 from products.models import Product
-PERCENTAGE_VALIDATOR = [MinValueValidator(0), MaxValueValidator(100)]
+from users.forms import User
 
+PERCENTAGE_VALIDATOR = [MinValueValidator(0), MaxValueValidator(100)]
 
 class SalesOrder(models.Model):
     
@@ -19,7 +20,7 @@ class SalesOrder(models.Model):
     total_value = models.DecimalField(max_digits=12, decimal_places=2)
     discount = models.DecimalField(max_digits=3, decimal_places=0, default=Decimal(0), validators=PERCENTAGE_VALIDATOR)
     installments = models.IntegerField(validators = [MinValueValidator(1), MaxValueValidator(36)])
-    ############# USUARIO: CRIAR RELAÇÃO COM O USUARIO QUE EMITIU O PEDIDO #########################
+    user = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     client = models.ForeignKey(Clients, on_delete=models.PROTECT)
     products = models.ManyToManyField(

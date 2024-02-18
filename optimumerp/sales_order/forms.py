@@ -16,13 +16,15 @@ class SalesOrderForm(forms.ModelForm):
             "installments": "Parcelas",
             "created_at": "Data de emissão",
             "client": "Cliente",
-            "products": "Produtos"
+            "products": "Produtos",
+            "user": "Usuário solicitante"
         }
 
         widgets = {
             "delivery_date": forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d"),
             'status': forms.TextInput(attrs={'readonly': 'readonly'}),
-            'total_value': forms.TextInput(attrs={'readonly': 'readonly'})
+            'total_value': forms.TextInput(attrs={'readonly': 'readonly'}),
+            # 'user': forms.TextInput(attrs={'readonly': 'readonly'})
         }
 
 
