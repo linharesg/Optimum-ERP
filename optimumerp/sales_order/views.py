@@ -88,8 +88,16 @@ def get_sale_value(request):
         return JsonResponse({'error': 'Invalid request'})
 
 def update(request, id):
-    print("oi")
+
     sale_order = get_object_or_404(SalesOrder, pk=id)
+
+    if sale_order.status == "Cancelado":
+        messages.error(request, f"Erro ao editar o pedido {sale_order.id}: Não é possível editar um pedido cancelado.")
+        return redirect("sales_order:index")
+    
+    if sale_order.status == "Confirmado":
+        messages.error(request, f"Erro ao cancelar pedido {sale_order.id}: Não é possível editar um pedido que já foi confirmado.")
+        return redirect("sales_order:index")
 
     if request.method == "POST":
         form = SalesOrderForm(request.POST, instance=sale_order)
@@ -98,11 +106,8 @@ def update(request, id):
 
         if form.is_valid():
             try:
-                # if form.cleaned_data["photo"] is False:
-                #     product.thumbnail.delete(save=False)
-
                 form.save()
-                print(sale_order_product_formset)
+
                 if sale_order_product_formset.is_valid():
                     sale_order_product_formset.save()
                     messages.success(request, "Pedido atualizado com sucesso!")
@@ -127,7 +132,7 @@ def update(request, id):
         
         return render(request, "sales_order/update.html", context)
 
-
+      
     form = SalesOrderForm(instance=sale_order)
     sale_order_product_formset = SalesOrderProductFormSet(instance=sale_order)
 
