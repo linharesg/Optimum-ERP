@@ -1,11 +1,44 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %} Pedidos de venda{% endblock  %}
 {% block page_name %}
 Pedidos de venda
 {% endblock %}
 
+{% block head %}
+<script src="{% static "base/js/jquery-3.7.1.min.js" %}"></script>
+<script src="{% static 'sales_order/js/index.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 
+<div class="modal fade" id="productsModal" tabindex="-1" aria-labelledby="productsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="productsModalLabel">Produtos</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="productsTableBody">
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <a 
   href="{% url "sales_order:create" %}" title="Novo pedido de venda"
@@ -37,17 +70,16 @@ Pedidos de venda
           <td>{{ sale_order.created_at }}</td>
           <td>{{ sale_order.delivery_date }}</td>
           <td>{{ sale_order.total_value }}</td>
-          {% comment %} <td>{{ sale_order.phone|format_phone }}</td> {% endcomment %}
-          {% comment %} <td>
-            <input {% if sale_order.enabled %}checked{% endif %} data-url="{% url 'suppliers:toggle_enabled' supplier.id %}" type="checkbox" class="form-check-input" />
-          </td>
           <td class="d-flex gap-1">
-            <a href="{% url 'suppliers:update' supplier.slug %}" class="btn btn-warning btn-sm" title="editar fornecedor"><i class="bi bi-pencil"></i></a>
-            <form method="post" action="{% url 'suppliers:delete' supplier.id %}">
+            <button data-url="{% url 'sales_order:products' sale_order.id %}" title="Produtos do pedido" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#productsModal">
+              <i class="bi bi-dice-3"></i>
+            </button>
+            <a href="{% url 'sales_order:update' sale_order.id %}" class="btn btn-warning btn-sm" title="Editar fornecedor"><i class="bi bi-pencil"></i></a>
+            {% comment %} <form method="post" action="{% url 'suppliers:delete' supplier.id %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-danger btn-sm" title="remover fornecedor"><i class="bi bi-trash"></i></button>
-            </form>
-          </td> {% endcomment %}
+            </form> {% endcomment %}
+          </td>
         </tr>
         {% empty %}
         <tr>

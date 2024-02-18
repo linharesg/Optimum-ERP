@@ -7,7 +7,7 @@ from django.views.generic import ListView, CreateView
 from .forms import SalesOrderForm, SalesOrderProductFormSet
 from django.contrib import messages
 from products.models import Product
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 
 # Create your views here.
 
@@ -144,3 +144,16 @@ def delete_product_from_sale_order(request, id):
     supplier_product.delete()
 
     return JsonResponse({ "message": "success"})
+
+@require_GET
+def get_products_from_sale_order(request, id):
+    products = SalesOrderProduct.objects.filter(sale_order__id=id).order_by("-id")
+    print(products)
+    # Serialização
+    products_serialized = [{
+        "name": SalesOrderProduct.product.name,
+        "amount": SalesOrderProduct.amount,
+        "total_value": SalesOrderProduct.total_value_product,
+    } for SalesOrderProduct in products]
+
+    return JsonResponse(products_serialized, safe = False)
