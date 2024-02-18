@@ -19,40 +19,24 @@
 
 {% block content %}
 
-<a 
-  href="{% url "suppliers:create" %}" title="Cadastrar novo fornecedor"
-  class="btn btn-primary new-supplier">
-  <i class="bi bi-plus"></i>
-  Novo
-</a>
+<div class="row">
+  <div class="col-md-2">
+    <a 
+      href="{% url "suppliers:create" %}" title="Cadastrar novo fornecedor"
+      class="btn btn-success">
+      <i class="bi bi-plus"></i>
+      Novo
+    </a>
+  </div>
+</div>
 
-<div class="filter-table d-flex">
+<div class="row filter-table d-flex mt-2">
 
-  <div class="filter">
-    <div class="d-flex">
-      <i class="bi bi-funnel"></i><h3 class="filter-title">Filtros</h3>
-    </div>
-    <form action="">
-      <div class="filter-input">
-        <input type="text" class="form-control" placeholder="Nome Fantasia">
-      </div>
-      <div class="filter-input">
-        <input type="number" class="form-control" placeholder="Código">
-      </div>
-      <div class="filter-input">
-        <input type="date" class="form-control" placeholder="Data de Cadastro">
-      </div>
-      <div class="filter-input">
-        <input type="number" class="form-control" placeholder="CNPJ">
-      </div>
-      <div class="btn-filter-group">
-        <button class="btn btn-outline-danger btn-filter" type="reset">Limpar filtros</button>
-        <button class="btn btn-outline-success btn-filter" type="submit">Aplicar filtros</button>
-      </div>
-    </form>
+  <div class="col-md-3">
+    {% include "partials/_filter.html" %}
   </div>
 
-  <div class="table-responsive table-suppliers">
+  <div class="table-responsive bg-white p-2 col-md-9 rounded">
     <table class="table table-borderless table-hover table-sm table-color">
       <thead class="table-border">
         <tr>
