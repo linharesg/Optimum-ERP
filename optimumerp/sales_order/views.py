@@ -138,6 +138,7 @@ def update(request, id):
 
     return render(request, "sales_order/update.html", context)
 
+@require_POST
 def cancel(request, id):
     sale_order = get_object_or_404(SalesOrder, pk=id)
 
