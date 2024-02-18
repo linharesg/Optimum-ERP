@@ -40,6 +40,27 @@ Pedidos de venda
   </div>
 </div>
 
+<div class="modal" tabindex="-2" id="cancelOrderModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cancelar pedido</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Deseja confirmar a exclusão do pedido? Esta ação não poderá ser desfeita.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abortar</button>
+        <form id="cancelOrderForm" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Cancelar pedido</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <a 
   href="{% url "sales_order:create" %}" title="Novo pedido de venda"
   class="btn btn-primary btn-sticky-bottom">
@@ -75,10 +96,7 @@ Pedidos de venda
               <i class="bi bi-dice-3"></i>
             </button>
             <a href="{% url 'sales_order:update' sale_order.id %}" class="btn btn-warning btn-sm" title="Editar fornecedor"><i class="bi bi-pencil"></i></a>
-            {% comment %} <form method="post" action="{% url 'suppliers:delete' supplier.id %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-danger btn-sm" title="remover fornecedor"><i class="bi bi-trash"></i></button>
-            </form> {% endcomment %}
+            <button data-order-id="{% url 'sales_order:cancel' sale_order.id %}" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" type="submit" class="btn btn-danger btn-sm cancel-order-btn" title="Cancelar pedido"><i class="bi bi-trash"></i></button>
           </td>
         </tr>
         {% empty %}

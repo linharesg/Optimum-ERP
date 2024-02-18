@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST, require_GET
 class SalesOrderListView(ListView):
     model = SalesOrder
     template_name = "sales_order/index.html"
-    paginate_by = 1
+    paginate_by = 10
     ordering = "-id"
 
 
@@ -138,6 +138,23 @@ def update(request, id):
 
     return render(request, "sales_order/update.html", context)
 
+def cancel(request, id):
+    sale_order = get_object_or_404(SalesOrder, pk=id)
+
+    if sale_order.status == "Cancelado":
+        messages.error(request, f"Erro ao cancelar pedido: o pedido {sale_order.id} já está cancelado!")
+        return redirect("sales_order:index")
+
+    if sale_order.status == "Confirmado":
+        messages.error(request, f"Erro ao cancelar pedido {sale_order.id}: Você não pode cancelar um pedido que já foi confirmado!")
+        return redirect("sales_order:index")
+    
+    if sale_order.status == "Pendente":
+        sale_order.status = "Cancelado"
+        sale_order.save()
+        messages.success(request, f"O pedido {sale_order.id} foi cancelado.")
+        return redirect("sales_order:index")
+
 @require_POST
 def delete_product_from_sale_order(request, id):
     supplier_product = get_object_or_404(SalesOrderProduct, pk=id)
@@ -148,7 +165,7 @@ def delete_product_from_sale_order(request, id):
 @require_GET
 def get_products_from_sale_order(request, id):
     products = SalesOrderProduct.objects.filter(sale_order__id=id).order_by("-id")
-    print(products)
+
     # Serialização
     products_serialized = [{
         "name": SalesOrderProduct.product.name,
@@ -157,3 +174,4 @@ def get_products_from_sale_order(request, id):
     } for SalesOrderProduct in products]
 
     return JsonResponse(products_serialized, safe = False)
+

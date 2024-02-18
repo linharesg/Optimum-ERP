@@ -1,7 +1,7 @@
 jQuery(function() {
-    const $modal = $("#productsModal");
+    const $productsModal = $("#productsModal");
 
-    $modal.on("show.bs.modal", function(e) {
+    $productsModal.on("show.bs.modal", function(e) {
         const $button = $(e.relatedTarget);
 
         const url = $button.data("url");
@@ -22,4 +22,14 @@ jQuery(function() {
             })
             .catch(console.error)
     });
+
+    const $cancelOrderModal = $("#cancelOrderModal");
+
+    $cancelOrderModal.on("show.bs.modal", function(e) {
+        const $button = $(e.relatedTarget);
+        const orderId = $button.data("order-id");
+
+        $('#cancelOrderForm').attr('action', orderId);
+    });
+
 });
