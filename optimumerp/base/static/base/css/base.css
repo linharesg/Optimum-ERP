@@ -76,7 +76,7 @@ hr {
   height: 100vh !important;
   overflow: hidden;
   position: fixed;
-  z-index: 3;
+  z-index: 5 !important;
 }
 
 h1 {

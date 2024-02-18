@@ -1,17 +1,26 @@
 jQuery(function () {
     const $form = $("form");
-    const $zipcodeInput = $("#id_zipcode");
+    const $emailInput = $("#id_email");
     const $streetInput = $("#id_street");
     const $numberInput = $("#id_number");
     const $cityInput = $("#id_city");
     const $stateInput = $("#id_state");
     const $cnpjInput = $("#id_cnpj");
     const $phoneInput = $("#id_phone");
+    const $zipcodeInput = $("#id_zipcode");
     const $zipcodeIcon = $("#zipcodeIcon");
 
     $zipcodeInput.mask("00000-000");
     $cnpjInput.mask("00.000.000/0000-00");
     $phoneInput.mask("(00) 0 0000-0000");
+
+    // Placeholder Style
+    $cnpjInput.addClass("placeholderStyle");
+    $cnpjInput.attr("placeholder", "00.000.000/0000-00")
+    $emailInput.addClass("placeholderStyle");
+    $emailInput.attr("placeholder", "exemple@email.com")
+    $phoneInput.addClass("placeholderStyle");
+    $phoneInput.attr("placeholder", "(99) 9 9999-9999")
 
     // Adicionando o manipulador do evento "blur" para o input de CEP
     $zipcodeInput.on("blur", function () {
@@ -121,7 +130,9 @@ jQuery(function () {
                 required: "Por favor, insira um CNPJ",
                 minlength: "CNPJ inválido."
             },
-            email: "",
+            email: {
+                required: "Por favor, insira o E-mail"
+            },
             zipcode: {
                 required: "Por favor, insira um CEP válido",
                 minlength: "Informe um CEP Válido"
