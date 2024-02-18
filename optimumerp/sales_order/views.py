@@ -29,7 +29,7 @@ def create(request):
             sale_order_product_formset = SalesOrderProductFormSet(request.POST, instance=sale_order)
             
             if not sale_order_product_formset.is_valid():                      
-                messages.error(request, "Falha ao cadastrar os produtos do pedido de venda")
+                messages.error(request, "Falha ao cadastrar os produtos do pedido de venda.")
                 
                 sale_order_product_formset = SalesOrderProductFormSet(request.POST)
 
@@ -41,13 +41,13 @@ def create(request):
                 return render(request, "sales_order/create.html", context)
 
             if sale_order_product_formset.is_valid():
-                messages.success(request, "O produto foi cadastrado com sucesso!")
+                messages.success(request, "O pedido de venda foi emitido com sucesso!")
                 form.save()
                 sale_order_product_formset.save()
                 return redirect("sales_order:index")
             else:
     
-                messages.error(request, "Falha ao cadastrar o estoque do produto")
+                messages.error(request, "Falha ao cadastrar o pedido.")
                 sale_order.delete()
                 sale_order_product_formset = sale_order_product_formset(request.POST)
 
