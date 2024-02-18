@@ -1,3 +1,4 @@
+from django import forms
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -101,6 +102,7 @@ def update(request, id):
 
     if request.method == "POST":
         form = SalesOrderForm(request.POST, instance=sale_order)
+        form.fields['client'].widget.attrs['readonly'] = 'readonly'
         sale_order_product_formset = SalesOrderProductFormSet(
             request.POST, instance=sale_order)
 
@@ -134,6 +136,7 @@ def update(request, id):
 
       
     form = SalesOrderForm(instance=sale_order)
+    form.fields['client'].widget.attrs['readonly'] = 'readonly'
     sale_order_product_formset = SalesOrderProductFormSet(instance=sale_order)
 
     context = {
