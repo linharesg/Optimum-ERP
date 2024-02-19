@@ -26,6 +26,10 @@ def index(request):
     
     return render(request, "clients/index.html", context)
 
+from django.http import JsonResponse
+from django.db.models import Count
+from django.contrib import messages
+
 class ClientsUpdateView(UpdateView):
     model = Clients
     template_name = "clients/update.html"
@@ -33,14 +37,21 @@ class ClientsUpdateView(UpdateView):
     success_url = reverse_lazy("clients:index")
 
     def form_valid(self, form):
+        client = form.instance
+        pending_sale_order = SalesOrder.objects.filter(client=client, status="Pendente").aggregate(count=Count('id'))['count']
+        if pending_sale_order > 0 and not client.enabled:
+            messages.error(self.request, f"Não foi possível inativar o cliente, pois o mesmo está associado a um pedido de vendas pendente.")
+            return super().form_invalid(form)
+
         response = super().form_valid(form)
         messages.success(self.request, "Cliente atualizado com sucesso!")
         return response
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
-        messages.success(self.request, "Erro ao atualizar o cliente!")
+        messages.error(self.request, "Erro ao atualizar o cliente!")
         return response
+
 
 def search(request):
     search_value = request.GET.get("q").strip()
