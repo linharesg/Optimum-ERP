@@ -28,8 +28,8 @@ def create(request):
         if form.is_valid():
             try:
                 Transaction.create(product=request.POST.get("product"), quantity=decimal.Decimal(request.POST.get("quantity")), type=request.POST.get("type"))
-            except:
-                messages.error(request, "Não foi possível realizar a transação.")
+            except TransactionQuantityError:
+                messages.error(request, "Não foi possível realizar a transação, quantidade insuficiente no estoque.")
                 context = { "form": form}
     
                 return render(request, "transactions/create.html", context)
