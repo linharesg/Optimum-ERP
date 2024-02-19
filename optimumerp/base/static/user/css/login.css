@@ -1,0 +1,43 @@
+.bg-login {
+    background: linear-gradient(144deg, rgba(61,108,229,1) 0%, rgba(61,108,229,0.3299584482230392) 100%);
+    height: calc(100vh - 200px);
+}
+
+.img {
+    display: flex;
+    justify-content: center;
+}
+
+.bi {
+    color: #3DE2E5;
+    font-size: 17x;
+}
+
+.bi-person {
+    position: relative;
+    top: 54px;
+    left: 9px;
+}
+
+.bi-lock {
+    position: relative;
+    top: 117px;
+    right: 7px;
+}
+
+.bi-eye-slash {
+    position: relative;
+    top: 117px;
+    left: 240px;
+}
+
+.input {
+    padding-left: 30px;
+}
+
+.btn-submit {
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px;
+    width: 297px;
+    height: 38px;
+}
