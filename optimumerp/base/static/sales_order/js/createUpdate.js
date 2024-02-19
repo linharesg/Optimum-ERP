@@ -56,6 +56,7 @@ jQuery(function() {
         if (duplicate) {
             alert('Este produto já consta no pedido de venda!');
             $(this).val('');
+            return;
         }
     
         var productId = $(this).val();
