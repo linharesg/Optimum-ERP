@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Product, SupplierProduct
-from transactions.models import Inventory
+from inventory.models import Inventory
 from django.db.models import Q, Sum, F
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
@@ -11,7 +11,7 @@ from django.contrib import messages
 from .forms import ProductForm
 from .forms import SupplierProductFormSet
 from sales_order.models import SalesOrderProduct
-from transactions.models import Inventory
+from inventory.models import Inventory
 from django.db.models import Count
 
 # Create your views here.

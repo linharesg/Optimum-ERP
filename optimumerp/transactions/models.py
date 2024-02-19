@@ -1,7 +1,5 @@
 from django.db import models
 from products.models import Product
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.contrib import messages
 class Transaction(models.Model):
     TRANSACTION_TYPE_CHOICES = {
@@ -20,12 +18,3 @@ class Transaction(models.Model):
     class Meta:
         verbose_name = "Transação"
         verbose_name_plural = "Transações"
-
-
-class Inventory(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    quantity = models.DecimalField(max_digits=255, decimal_places=2)
-
-    class Meta:
-        verbose_name = "Estoque"
-        verbose_name_plural = "Estoques"

@@ -1,6 +1,7 @@
 import decimal
 from django.shortcuts import render, redirect
-from .models import Transaction, Inventory
+from .models import Transaction
+from inventory.models import Inventory
 from .forms import TransactionsForm
 from django.core.paginator import Paginator
 from django.contrib import messages
@@ -93,29 +94,3 @@ def search(request):
     }
     
     return render(request, "transactions/index.html", context)
-
-def inventory_index(request):
-    inventory = Inventory.objects.all()
-
-    context = {
-        "inventory": inventory
-    }
-
-    return render(request, "inventory/index.html", context)
-
-def inventory_search(request):
-    search_value = request.GET.get("q").strip()
-
-
-    if not search_value:
-        return redirect("inventory:index")
-    
-    inventory = Inventory.objects\
-        .filter(Q(product__icontains=search_value) | Q(quantity__icontains=search_value))\
-        .order_by("-product")
-    
-    context = {
-        "inventory": inventory
-    }
-
-    return render(request, "inventory/index.html", context)
