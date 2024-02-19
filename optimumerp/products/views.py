@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Product, SupplierProduct
 from inventory.models import Inventory
 from django.db.models import Q, Sum, F
+from django.db import IntegrityError
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.http import require_POST, require_GET
@@ -92,6 +93,8 @@ def create(request):
                     
                     return render(request, "products/create.html", context)
                 
+                supplier_product_formset.save()
+
                 return redirect("products:index")
 
     # GET
@@ -113,10 +116,29 @@ def update(request, slug):
     # POST
     if request.method == "POST":
         form = ProductForm(request.POST, instance=product)
+        supplier_product_formset = SupplierProductFormSet(request.POST, instance=product)
         if form.is_valid():
-            messages.success(request, "Produto atualizado com sucesso!")
+            if supplier_product_formset.is_valid():
+                try:
+                    supplier_product_formset.save()
+                    messages.success(request, "Produto atualizado com sucesso!")
+
+                except IntegrityError:
+                    messages.error(request, "Existem fornecedores duplicados.")
+                    context = {
+                        "form_action": form_action,
+                        "supplier_product_formset": supplier_product_formset,
+                        "form": form
+                    }
+
+                    return render(request, "products/create.html", context)
+            
+            form.save()
+            print(supplier_product_formset)
+            # messages.success(request, "Produto atualizado com sucesso!")
             return redirect("products:index")
         
+        messages.error(request, "Não foi possível atualizar o produto.")
         context = {
             "form_action": form_action,
             "form": form
@@ -161,7 +183,6 @@ def toggle_enabled(request, id):
     if pending_sale_order > 0:
         messages.error(request, f"Não é possível inativar um produto que contém um pedido de vendas pendente.")
         return JsonResponse({ "message": "error" })
-
     product.enabled = not product.enabled
     product.save()
     
