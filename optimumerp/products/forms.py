@@ -1,6 +1,6 @@
 from django import forms
 from .models import Product, SupplierProduct
-from transactions.models import Inventory
+from inventory.models import Inventory
 from crispy_forms.helper import FormHelper
 
 class ProductForm(forms.ModelForm):
