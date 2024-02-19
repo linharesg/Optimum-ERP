@@ -156,6 +156,11 @@ def delete(request, id):
 @require_POST
 def toggle_enabled(request, id):
     product = get_object_or_404(Product, pk=id)
+    
+    pending_sale_order = SalesOrderProduct.objects.filter(product=product, sale_order__status="Pendente").aggregate(count=Count('id'))['count']
+    if pending_sale_order > 0:
+        messages.error(request, f"Não é possível inativar um produto que contém um pedido de vendas pendente.")
+        return JsonResponse({ "message": "error" })
 
     product.enabled = not product.enabled
     product.save()
