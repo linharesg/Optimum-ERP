@@ -1,7 +1,7 @@
 from django import forms
 from .models import SalesOrder, SalesOrderProduct
 from crispy_forms.helper import FormHelper
-
+from products.models import Product
 class SalesOrderForm(forms.ModelForm):
 
     class Meta:
@@ -42,6 +42,7 @@ class SalesOrderProductForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.fields["product"].queryset = Product.objects.filter(enabled=True)
         self.helper.form_show_labels = False
 
 SalesOrderProductFormSet = forms.inlineformset_factory(
