@@ -2,6 +2,7 @@ from django import forms
 from .models import SalesOrder, SalesOrderProduct
 from crispy_forms.helper import FormHelper
 from products.models import Product
+from clients.models import Clients
 class SalesOrderForm(forms.ModelForm):
 
     class Meta:
@@ -26,6 +27,10 @@ class SalesOrderForm(forms.ModelForm):
             'total_value': forms.TextInput(attrs={'readonly': 'readonly'}),
             # 'user': forms.TextInput(attrs={'readonly': 'readonly'})
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["client"].queryset = Clients.objects.filter(enabled=True)
 
 
 class SalesOrderProductForm(forms.ModelForm):
