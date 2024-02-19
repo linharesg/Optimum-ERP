@@ -64,6 +64,11 @@ def search(request):
 def toggle_enabled(request, id):
     client = get_object_or_404(Clients, pk=id)
 
+    pending_sale_order = SalesOrder.objects.filter(client=client, status="Pendente").aggregate(count=Count('id'))['count']
+    if pending_sale_order > 0:
+        messages.error(request, f"Não foi possível inativar o cliente, pois o mesmo stá associado a um pedido de vendas pendente.")
+        return JsonResponse({ "message": "error" })
+
     client.enabled = not client.enabled
     client.save()
 
