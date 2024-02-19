@@ -26,32 +26,8 @@ def create(request):
     if request.method == 'POST':
         form = TransactionsForm(request.POST)
         if form.is_valid():
-            inventory = Inventory.objects.get(product__id=request.POST.get("product"))
-            type = request.POST.get("type")
-            quantity = decimal.Decimal(request.POST.get("quantity"))
-
-            if not inventory:
-                messages.error(request, "Não foi possível realizar a transação, verifique se o produto está cadastrado no estoque.")
-                context = { "form": form}
-        
-                return render(request, "transactions/create.html", context)
-
             try:
-                with transaction.atomic():
-                    if type == "OUT":
-                        if inventory.quantity - quantity < 0:
-                            transaction_error = TransactionQuantityError("Quantidade indisponível no estoque")
-                            print(transaction_error)
-                            raise transaction_error
-                        else:
-                            inventory.quantity -= quantity
-                            inventory.save()
-
-                    elif type == "IN":
-                        inventory.quantity += quantity
-                        print(quantity)
-                        print(inventory.quantity)
-                        inventory.save()
+                Transaction.create(product=request.POST.get("product"), quantity=decimal.Decimal(request.POST.get("quantity")), type=request.POST.get("type"))
             except:
                 messages.error(request, "Não foi possível realizar a transação.")
                 context = { "form": form}
