@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'transactions.apps.TransactionsConfig',
     'clients.apps.ClientsConfig',
     'sales_order.apps.SalesOrderConfig',
-    'inventory.apps.InventoryConfig'
+    'inventory.apps.InventoryConfig',
+    'invoices.apps.InvoicesConfig'
 ]
 
 MIDDLEWARE = [
@@ -67,7 +68,8 @@ TEMPLATES = [
             BASE_DIR / 'base' / 'templates',
             BASE_DIR / 'transactions' / 'templates',
             BASE_DIR / 'inventory' / 'templates',
-            BASE_DIR / 'users' / 'templates'
+            BASE_DIR / 'users' / 'templates',
+            BASE_DIR / 'invoices' / 'templates'
             ],
         'APP_DIRS': True,
         'OPTIONS': {
