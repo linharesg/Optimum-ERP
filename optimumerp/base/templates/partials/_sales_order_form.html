@@ -1,0 +1,48 @@
+{% load crispy_forms_tags %}
+
+<div class="row">
+  <div class="col">{{ form.status|as_crispy_field }}</div>
+</div>
+<div class="row">
+  <div class="col-8">{{ form.client|as_crispy_field }}</div>
+  <div class="col">{{ form.delivery_date|as_crispy_field }}</div>
+</div>
+<div class="row">
+  <div class="col">{{ form.installments|as_crispy_field }}</div>
+  <div class="col">{{ form.discount|as_crispy_field }}</div>
+  <div class="col">{{ form.total_value|as_crispy_field }}</div>
+</div>
+<h4>Produtos</h4>
+<div id="productFormset">
+    {{ sale_order_product_formset.management_form }}
+    {% for product in sale_order_product_formset %}
+    <div class="row productRow">
+        {{ form.id }}
+        <div class="col-md-4 productInput">
+            {{ product.product|as_crispy_field }}
+        </div>
+        <div class="col-md-2 productUnitValue">
+            {{ product.unit_value|as_crispy_field }}
+        </div>
+        <div class="col-md-2 productAmount">
+            {{ product.amount|as_crispy_field }}
+        </div>
+        <div class="col-md-2 productTotalValue">
+            {{ product.total_value_product|as_crispy_field }}
+        </div>
+
+        <div class="col-md-2">
+            <div class="d-grid">
+                <button
+                {% comment %} {% if supplier.id.value %}data-url="{% url "products:delete_supplier" supplier.id.value %}"{% endif %} {% endcomment %}
+                {% if supplier.id.value %}data-url="#"{% endif %}
+                type="button" 
+                class="btn btn-danger remove-btn removeProductButton">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+</div>

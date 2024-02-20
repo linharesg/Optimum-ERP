@@ -7,7 +7,7 @@ jQuery(function() {
     const $originalProduct = $productsContainer.children(".row:first").clone(true);
     const $totalOrderValue = $("#id_total_value")
     const $discount = $('#id_discount')
-    var $productRow = $(".productRow")
+    let $productRow = $(".productRow")
 
     const updateTotalValue = function() {
         const totalValueElements = document.querySelectorAll('.productTotalValue input[type="number"]');
