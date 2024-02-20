@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.db.models import Q
 
 # Create your models here.
 
@@ -59,7 +60,7 @@ class Suppliers(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.fantasy_name)
         super(Suppliers, self).save(*args, **kwargs)
-    
+  
     class Meta:
         verbose_name = "Fornecedor"
         verbose_name_plural = "Fornecedores"

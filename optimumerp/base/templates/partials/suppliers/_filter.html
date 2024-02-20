@@ -1,0 +1,32 @@
+<div class="filter d-flex flex-column p-2 me-2 bg-white rounded">
+  <div class="d-flex">
+    <i class="bi bi-funnel me-1 fs-4"></i><h3 class="filter-title mb-3 fs-3">Filtros</h3>
+  </div>
+  <form id="filter-supplier" method="get" action="{% url search_value %}">
+    <div class="mb-3">
+      <input id="filter-fantasy-company-name" type="text" class="form-control" placeholder="Razão social / Nome fantasia" name="fantasy-company-name" />
+    </div>
+    <div class="mb-3">
+      <input id="filter-email" type="text" class="form-control" placeholder="E-mail" name="email" />
+    </div>
+    <div class="mb-3">
+      <input id="filter-address" type="text" class="form-control" placeholder="Endereço (UF/Cidade)" name="address" />
+    </div>
+    <div class="mb-3">
+      <input id="filter-cnpj" type="text" class="form-control" placeholder="CNPJ" name="cnpj" />
+    </div>
+
+    <div class="mb-3">
+      <select class="select form-select" id="filter-status" placeholder="Status" name="status">
+        <option value="">Status</option>
+        <option value="Ativo">Ativo</option>
+        <option value="Inativo">Inativo</option>
+      </select>
+    </div>
+
+    <div class="btn-filter-group d-flex justify-content-evenly">
+        <button class="btn btn-outline-danger btn-filter" type="reset">Limpar filtros</button>
+      <button class="btn btn-outline-success btn-filter" type="submit">Aplicar filtros</button>
+    </div>
+  </form>
+</div>
