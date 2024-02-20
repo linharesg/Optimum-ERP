@@ -1,13 +1,16 @@
 from django.urls import path
-from .views import PurchasesListView, PurchasesCreateView
+from . import views
+from .views import PurchasesListView
 
 app_name = "purchases"
 
 urlpatterns = [
     path("", PurchasesListView.as_view(), name="index"),
-    path("cadastrar/", PurchasesCreateView.as_view(), name="create"),
-    # path("search", views.search, name="search"),
-    # path("<int:id>/toggle_enabled", views.toggle_enabled, name="toggle_enabled"),
-    # path("<int:id>/delete/", views.delete, name="delete"),
-    # path("<slug:slug>/", views.ClientsUpdateView.as_view(), name="update"),
+    path("novo/get_sale_value/", views.get_sale_value_create, name="get_sale_value_create"),
+    path("editar/<int:id>/get_sale_value/", views.get_sale_value_update, name="get_sale_value_update"),
+    path("novo/", views.create, name="create"),
+    path("editar/<int:id>/", views.update, name="update"),
+    path("<int:id>/delete_product", views.delete_product_from_purchase, name="delete_product"),
+    path("<int:id>/products/", views.get_products_from_purchase, name="products"),
+    path("<int:id>/cancel/", views.cancel, name="cancel"),
 ]
