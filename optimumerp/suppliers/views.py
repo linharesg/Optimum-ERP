@@ -17,9 +17,12 @@ def index(request):
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+
+    state_choices = Suppliers.STATE_CHOICES
     
     context = {
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "state_choices": state_choices
     }
     
     return render(request, "suppliers/index.html", context)
@@ -46,13 +49,19 @@ def clean_cnpj(value):
     return cnpj
 
 def search(request):
-    # search_value = request.GET.get("q")
+    
+    state_choices = Suppliers.STATE_CHOICES
+    
     fantasy_company_name = request.GET.get("fantasy-company-name", "").strip()
     email = request.GET.get("email", "").strip()
-    address = request.GET.get("address", "").strip()
+    city = request.GET.get("city", "").strip()
+    state_uf = request.GET.get("state", "").strip()
     cnpj = clean_cnpj(request.GET.get("cnpj", "").strip())
     status = request.GET.get("status", "").strip()
-    print(f"status: {status}")
+
+    state_name = state_choices.get(state_uf)
+    print(f"test: {state_name}")
+
     
     suppliers = Suppliers.objects.all()
 
@@ -63,19 +72,20 @@ def search(request):
     if email:
         suppliers = suppliers.filter(Q(email__icontains=email))
     
-    if address:
-        suppliers = suppliers.filter(Q(city__icontains=address) | Q(state__icontains=address))
+    if city:
+        suppliers = suppliers.filter(Q(city__icontains=city))
+
+    if state_uf:
+        suppliers = suppliers.filter(Q(state=state_uf))
 
     if cnpj:
-        print(cnpj)
         suppliers = suppliers.filter(cnpj=cnpj)
     
     if status == "Ativo":
-        print("ffff")
-        suppliers = suppliers.filter(enabled='1')
+        suppliers = suppliers.filter(enabled=1)
         
     if status == "Inativo":
-        suppliers = suppliers.filter(enabled='0')
+        suppliers = suppliers.filter(enabled=0)
 
 
     paginator = Paginator(suppliers, 10)
@@ -83,7 +93,16 @@ def search(request):
     page_obj = paginator.get_page(page_number)
 
     context = {
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "state_choices": state_choices,
+        "fantasy_company_name": fantasy_company_name,
+        "email": email,
+        "cnpj": cnpj,
+        "city": city,
+        "state_name": state_name,
+        "status": status,
+        "state_uf": state_uf,
+
     }
     
     return render(request, "suppliers/index.html", context)

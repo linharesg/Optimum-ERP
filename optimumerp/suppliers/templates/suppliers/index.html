@@ -35,7 +35,7 @@
 <div class="row filter-table d-flex mt-2">
 
   <div class="col-md-3">
-    {% include "partials/suppliers/_filter.html" with search_value="suppliers:search" clean_filter="suppliers:index" %}
+    {% include "partials/suppliers/_filter.html" with search_value="suppliers:search" clean_filter="suppliers:index" state_choices=state_choices %}
   </div>
 
   <div class="table-responsive bg-white p-2 col-md-9 rounded">

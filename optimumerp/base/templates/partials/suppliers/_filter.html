@@ -4,21 +4,29 @@
   </div>
   <form id="filter-supplier" method="get" action="{% url search_value %}">
     <div class="mb-3">
-      <input id="filter-fantasy-company-name" type="text" class="form-control" placeholder="Razão social / Nome fantasia" name="fantasy-company-name" />
+      <input value="{{fantasy_company_name}}" id="filter-fantasy-company-name" type="text" class="form-control" placeholder="Razão social / Nome fantasia" name="fantasy-company-name" />
     </div>
     <div class="mb-3">
-      <input id="filter-email" type="text" class="form-control" placeholder="E-mail" name="email" />
+      <input value="{{email}}" id="filter-email" type="text" class="form-control" placeholder="E-mail" name="email" />
     </div>
     <div class="mb-3">
-      <input id="filter-address" type="text" class="form-control" placeholder="Endereço (UF/Cidade)" name="address" />
+      <input value="{{cnpj}}" id="filter-cnpj" type="text" class="form-control" placeholder="CNPJ" name="cnpj" />
     </div>
     <div class="mb-3">
-      <input id="filter-cnpj" type="text" class="form-control" placeholder="CNPJ" name="cnpj" />
+      <input value="{{city}}" id="filter-city" type="text" class="form-control" placeholder="Cidade" name="city" />
     </div>
 
     <div class="mb-3">
+      <select class="select form-select" id="filter-state" name="state">
+        <option value="{{state_uf}}" selected>{% if state_name %}{{state_name}}{% else %}Estado{% endif %}</option>
+        {% for key, value in state_choices.items %}
+        <option value="{{ key }}">{{ value }}</option>
+        {% endfor %}
+    </select>
+    </div>
+    <div class="mb-3">
       <select class="select form-select" id="filter-status" placeholder="Status" name="status">
-        <option value="">Status</option>
+        <option value="{{status}}" selected>{{status}}</option>
         <option value="Ativo">Ativo</option>
         <option value="Inativo">Inativo</option>
       </select>
