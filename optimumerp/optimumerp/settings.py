@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'clients.apps.ClientsConfig',
     'sales_order.apps.SalesOrderConfig',
     'inventory.apps.InventoryConfig',
-    'invoices.apps.InvoicesConfig'
+    'invoices.apps.InvoicesConfig',
     'purchases.apps.PurchasesConfig',
 ]
 
