@@ -1,3 +1,4 @@
+{% load static %}
 {% load cnpj_filter %}
 {% load zipcode_format %}
 <!DOCTYPE html>
@@ -20,7 +21,7 @@
                 page-break-after: always;
             }
         }
-    
+
         * {
             margin: 0;
         }
@@ -106,7 +107,11 @@
             border-color: #000;
             border-radius: 5px;
         }
-    
+
+        .client_logo {
+            background-color: #808080;
+        }
+
         .nfeArea .no-top {
             margin-top: -1px;
         }
@@ -378,7 +383,7 @@
                 <tbody>
                     <tr>
                         <td rowspan="3" style="width: 30mm">
-                            <img class="client_logo" src="[url_logo]" alt="" onerror=""/>
+                            <img class="client_logo" src="{% static 'base/img/logo_sem_fundo.png' %}" alt="" onerror=""/>
                         </td>
                         <td rowspan="3" style="width: 46mm; font-size: 7pt;" class="txt-center">
                             <span class="mb2 bold block">Optimum ERP</span>
@@ -424,13 +429,13 @@
                         </td>
                         <td class="txt-upper" style="width: 85mm;">
                             <span class="nf-label">Controle do Fisco</span>
-                            <span style="font-family: 'Libre Barcode 39 Extended Text'; font-size: 55px;" class="codigo">{{ barcode }}</span>
+                            <span style="font-family: 'Libre Barcode 39 Extended Text'; font-size: 55px;" class="codigo">{{ invoice.barcode }}</span>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <span class="nf-label">CHAVE DE ACESSO</span>
-                            <span class="bold block txt-center info">{{ access_key }}</span>
+                            <span class="bold block txt-center info">{{ invoice.access_key }}</span>
                         </td>
                     </tr>
                     <tr>
@@ -487,11 +492,11 @@
                                     <tr>
                                         <td>
                                             <span class="nf-label">NOME/RAZÃO SOCIAL</span>
-                                            <span class="info">{{ sales_order.client.company_name }}</span>
+                                            <span class="info">{{ sale_order.client.company_name }}</span>
                                         </td>
                                         <td style="width: 40mm">
                                             <span class="nf-label">CNPJ/CPF</span>
-                                            <span class="info">{{ sales_order.client.cnpj|format_cnpj }}</span>
+                                            <span class="info">{{ sale_order.client.cnpj|format_cnpj }}</span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -509,7 +514,7 @@
                                     <tr>
                                         <td>
                                             <span class="nf-label">ENDEREÇO</span>
-                                            <span class="info">{{ sales_order.client.street }}</span>
+                                            <span class="info">{{ sale_order.client.street }}</span>
                                         </td>
                                         <td style="width: 47mm;">
                                             <span class="nf-label">BAIRRO/DISTRITO</span>
@@ -517,7 +522,7 @@
                                         </td>
                                         <td style="width: 37.2 mm">
                                             <span class="nf-label">CEP</span>
-                                            <span class="info">{{ sales_order.client.zipcode|format_zipcode }}</span>
+                                            <span class="info">{{ sale_order.client.zipcode|format_zipcode }}</span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -535,7 +540,7 @@
                                     <tr>
                                         <td>
                                             <span class="nf-label">MUNICÍPIO</span>
-                                            <span class="info">{{ sales_order.client.city }}</span>
+                                            <span class="info">{{ sale_order.client.city }}</span>
                                         </td>
                                         <td style="width: 34mm">
                                             <span class="nf-label">FONE/FAX</span>
@@ -543,7 +548,7 @@
                                         </td>
                                         <td style="width: 28mm">
                                             <span class="nf-label">UF</span>
-                                            <span class="info">{{ sales_order.client.state }}</span>
+                                            <span class="info">{{ sale_order.client.state }}</span>
                                         </td>
                                         <td style="width: 51mm">
                                             <span class="nf-label">INSCRIÇÃO ESTADUAL</span>
@@ -609,7 +614,7 @@
                             </td>
                             <td>
                                 <span class="nf-label label-small">V. TOTAL DE PRODUTOS</span>
-                                <span class="info">R$ {{ sales_order.total_value }}</span>
+                                <span class="info">R$ {{ sale_order.total_value }}</span>
                             </td>
                         </tr>
                         <tr>
@@ -623,7 +628,7 @@
                             </td>
                             <td>
                                 <span class="nf-label">DESCONTO</span>
-                                <span class="info">{{ sales_order.discount }}</span>
+                                <span class="info">{{ sale_order.discount }}</span>
                             </td>
                             <td>
                                 <span class="nf-label">OUTRAS DESP.</span>
@@ -647,7 +652,7 @@
                             </td>
                             <td>
                                 <span class="nf-label label-small">V. TOTAL DA NOTA</span>
-                                <span class="info">{{ sales_order.total_value }}</span>
+                                <span class="info">{{ sale_order.total_value }}</span>
                             </td>
                         </tr>
                     </tbody>
@@ -765,20 +770,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <th class="cod" style="width: 15.5mm">Teste</th>
-                        <th class="descrit" style="width: 66.1mm">Teste</th>
-                        <th class="ncmsh">Teste</th>
-                        <th class="cst">Teste</th>
-                        <th class="cfop">Teste</th>
-                        <th class="un">Teste</th>
-                        <th class="amount">Teste</th>
-                        <th class="valUnit">Teste</th>
-                        <th class="valTotal">Teste</th>
-                        <th class="bcIcms">Teste</th>
-                        <th class="valIcms">Teste</th>
-                        <th class="valIpi">Teste</th>
-                        <th class="aliqIcms">Teste</th>
-                        <th class="aliqIpi">Teste</th>
+                        {% for product in sale_order_products %}
+                        <tr>
+                            <th class="cod" style="width: 15.5mm">Código</th>
+                            <th class="descrit" style="width: 66.1mm">{{ product.product.name }}</th>
+                            <th class="ncmsh">NCM</th>
+                            <th class="cst">{{ product.product.cst }}</th>
+                            <th class="cfop">5.101</th>
+                            <th class="un">{{ product.product.unit_of_measurement }}</th>
+                            <th class="amount">{{ product.amount }}</th>
+                            <th class="valUnit">{{ product.unit_value }}</th>
+                            <th class="valTotal">{{ product.total_value_product }}</th>
+                            <th class="bcIcms">0,00</th>
+                            <th class="valIcms">0,00</th>
+                            <th class="valIpi">0,00</th>
+                            <th class="aliqIcms">0,00</th>
+                            <th class="aliqIpi">0,00</th>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

@@ -99,6 +99,7 @@ Pedidos de venda
             </button>
             <a href="{% url 'sales_order:update' sale_order.id %}" class="btn btn-warning btn-sm" title="Editar fornecedor"><i class="bi bi-pencil"></i></a>
             <button data-order-id="{% url 'sales_order:cancel' sale_order.id %}" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" type="submit" class="btn btn-danger btn-sm cancel-order-btn" title="Cancelar pedido"><i class="bi bi-trash"></i></button>
+            <a href="{% url 'invoices:create_invoice' sale_order.id %}" class="btn btn-success btn-sm"><i class="bi bi-receipt-cutoff"></i></a>
           </td>
         </tr>
         {% empty %}
