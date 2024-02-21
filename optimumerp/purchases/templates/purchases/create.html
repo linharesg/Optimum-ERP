@@ -50,12 +50,12 @@
         <h4>Produtos</h4>
         <div id="productFormset">
             {{ purchase_product_formset.management_form }}
-            {% for product in purchase_product_formset %}
+            {% for product  in purchases_product_formset %}
             
             <div class="row mb-3 productRow">
                 {{ form.id }}
                 <div class="col-md-4 productInput">
-                    {{ product.products|as_crispy_field }}
+                    {{ product.product|as_crispy_field }}
                 </div>
                 <div class="col-md-2 productUnitValue">
                     {{ product.unit_value|as_crispy_field }}
@@ -64,16 +64,12 @@
                     {{ product.amount|as_crispy_field }}
                 </div>
                 <div class="col-md-2 productTotalValue">
-                    {{ product.total_value|as_crispy_field }}
+                    {{ product.total_value_product|as_crispy_field }}
                 </div>
 
                 <div class="col-md-2">
                     <div class="d-grid">
-                        <button 
-                        {% comment %} {% if supplier.id.value %}data-url="{% url "products:delete_supplier" supplier.id.value %}"{% endif %} {% endcomment %}
-                        {% if supplier.id.value %}data-url="#"{% endif %}
-                        type="button" 
-                        class="btn btn-danger remove-btn">
+                        <button type="button" class="btn btn-danger remove-btn">
                             <i class="bi bi-x"></i>
                         </button>
                     </div>

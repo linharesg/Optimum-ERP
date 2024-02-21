@@ -19,7 +19,7 @@ class PurchasesForm(forms.ModelForm):
             "created_at": "Data de emissão",
             "supplier": "Fornecedor",
             "products": "Produtos",
-            "user": "Usuário solicitante"
+            #"user": "Usuário solicitante"
         }
 
         widgets = {
