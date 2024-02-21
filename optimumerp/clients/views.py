@@ -21,7 +21,7 @@ def index(request):
     clients = Clients.objects.order_by("-id")
     client_filter = ClientsFilter(request.GET, queryset=clients)
 
-    paginator = Paginator(client_filter.qs, 10)
+    paginator = Paginator(client_filter.qs, 1)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -56,24 +56,6 @@ class ClientsUpdateView(UpdateView):
         messages.error(self.request, "Erro ao atualizar o cliente!")
         return response
 
-
-def search(request):
-    search_value = request.GET.get("q").strip()
-    
-    if not search_value:
-        return redirect("clients:index")
-    
-    clients = Clients.objects.filter(Q(fantasy_name__icontains=search_value) | Q(company_name__icontains=search_value)).order_by("-id")
-    print(clients)
-    paginator = Paginator(clients, 2)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        "page_obj": page_obj
-    }
-    
-    return render(request, "clients/index.html", context)
 
 @require_POST
 def toggle_enabled(request, id):
@@ -127,9 +109,3 @@ def create(request):
     context = { "form": form, "form_action": form_action }
     return render(request, "clients/create.html", context)
 
-def search_teste(request):
-    client_list = Clients.objects.all()
-    print(client_list)
-    client_filter = ClientsFilter(request.GET, queryset=client_list)
-    # return render(request, 'clients/client_list.html', {'filter': client_filter})
-    return render(request, 'clients/index.html', {'filter': client_filter})

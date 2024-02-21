@@ -30,13 +30,11 @@
 </div>
 
 <div class="row filter-table d-flex mt-2">
+  
   <div class="col-md-3">
-    <form method="get">
-      {{ filter.form|crispy }}
-      <button class="btn btn-outline-success btn-filter" type="submit">Search</button>
-      <button class="btn btn-outline-danger btn-filter" type="reset">Limpar filtros</button>
-    </form>
+    {% include "partials/_filter.html" with main_page="clients:index" %}
   </div>
+
 
   <div class="table-responsive bg-white p-2 col-md-9 rounded">
     <table class="table table-borderless table-hover table-sm table-color">
