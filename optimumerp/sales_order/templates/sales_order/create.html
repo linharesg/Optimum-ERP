@@ -1,94 +1,37 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
-{% block title %}Novo pedido de venda{% endblock  %}
+{% block title %}
+  Novo pedido de venda
+{% endblock %}
 {% block head %}
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-    <script src="{% static 'sales_order/js/createUpdate.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'sales_order/css/style.css' %}">
-{% endblock  %}
+  <link rel="stylesheet" href="{% static 'sales_order/css/createUpdate.css' %}" />
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script src="{% static 'sales_order/js/createUpdate.js' %}"></script>
+{% endblock %}
+
+{% block page_name %}
+  Novo pedido de venda
+{% endblock %}
+
+{% block search %}
+  {% comment %}Sem search{% endcomment %}
+  <div style="height: 38px;"></div>
+{% endblock %}
+
 {% block content %}
-        <div class="row mb-3">
-            <div class="col">
-                <h3>Novo pedido de vendas</h3>
-            </div>
-        </div>
-        <form id="sales_order_form" action="{% url "sales_order:create" %}" method="POST">
-            {% csrf_token %}
-            <div class="row mb-3">
-                <div class="col">
-                    {{ form.status|as_crispy_field }}
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    {{ form.client|as_crispy_field }}
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    {{ form.installments|as_crispy_field }}
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    {{ form.discount|as_crispy_field }}
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    {{ form.delivery_date|as_crispy_field }}
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    {{ form.total_value|as_crispy_field }}
-                </div>
-            </div>
-           
-            <h4>Produtos</h4>
-            <div id="productFormset">
-                {{ sale_order_product_formset.management_form }}
-                {% for product in sale_order_product_formset %}
-                <div class="row mb-3 productRow">
-                    {{ form.id }}
-                    <div class="col-md-4 productInput">
-                        {{ product.product|as_crispy_field }}
-                    </div>
-                    <div class="col-md-2 productUnitValue">
-                        {{ product.unit_value|as_crispy_field }}
-                    </div>
-                    <div class="col-md-2 productAmount">
-                        {{ product.amount|as_crispy_field }}
-                    </div>
-                    <div class="col-md-2 productTotalValue">
-                        {{ product.total_value_product|as_crispy_field }}
-                    </div>
+  <form id="sales_order_form" action="{% url 'sales_order:create' %}" method="POST">
+    {% csrf_token %}
 
-                    <div class="col-md-2">
-                        <div class="d-grid">
-                            <button
-                            {% comment %} {% if supplier.id.value %}data-url="{% url "products:delete_supplier" supplier.id.value %}"{% endif %} {% endcomment %}
-                            {% if supplier.id.value %}data-url="#"{% endif %}
-                            type="button" 
-                            class="btn btn-danger remove-btn removeProductButton">
-                                <i class="bi bi-x"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                
-            </div>
-            
-            <div class="d-grid mb-3">
-                <button type="button" id="addSaleOrderButton" class="btn btn-outline-secondary">Adicionar produto</button>
-            </div>
-
-            <div class="d-grid">
-                <button id="submitButton" type="submit" class="btn btn-primary btn-lg">Salvar</button>
-            </div>
-        </form>
-
-{% endblock  %}
+    <div class="d-flex create-sales-order p-3">
+      {% include 'partials/_sales_order_form.html' %}
+      <div class="d-grid mb-3">
+        <button type="button" id="addSaleOrderButton" class="btn btn-outline-secondary">Adicionar produto</button>
+      </div>
+      <div class="d-grid">
+        <button id="submitButton" type="submit" class="btn btn-primary btn-lg">Salvar</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}

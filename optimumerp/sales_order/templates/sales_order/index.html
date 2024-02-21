@@ -1,118 +1,130 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
-{% block title %} Pedidos de venda{% endblock  %}
-{% block page_name %}
-Pedidos de venda
+{% block title %}
+  Pedidos de venda
 {% endblock %}
 
 {% block head %}
-<script src="{% static "base/js/jquery-3.7.1.min.js" %}"></script>
-<script src="{% static 'sales_order/js/index.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'sales_order/css/index.css' %}" />
+
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script src="{% static 'base/js/index.js' %}"></script>
+  <script src="{% static 'sales_order/js/index.js' %}"></script>
+{% endblock %}
+
+{% block page_name %}
+  Pedidos de venda
+{% endblock %}
+
+{% block search %}
+  {% comment %}Sem search{% endcomment %}
+  <div style="height: 38px;"></div>
 {% endblock %}
 
 {% block content %}
-
-<div class="modal fade" id="productsModal" tabindex="-1" aria-labelledby="productsModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="productsModalLabel">Produtos</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal fade" id="productsModal" tabindex="-1" aria-labelledby="productsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="productsModalLabel">Produtos</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody"></tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
       </div>
-      <div class="modal-body">
-        <table class="table table-bordered">
-          <thead>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-2" id="cancelOrderModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Cancelar pedido</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Deseja confirmar a exclusão do pedido? Esta ação não poderá ser desfeita.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abortar</button>
+          <form id="cancelOrderForm" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Cancelar pedido</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2">
+      <a href="{% url 'sales_order:create' %}" title="Novo pedido de venda" class="btn btn-success">
+        <i class="bi bi-plus"></i>
+        Novo
+      </a>
+    </div>
+  </div>
+
+  <div class="row d-flex mt-2">
+    <div class="col-md-3">
+      {% include 'partials/_filter.html' %}
+    </div>
+    <div class="table-responsive bg-white p-2 col-md-9 rounded">
+      <table class="table table-borderless table-hover table-sm table-color">
+        <thead class="table-border">
+          <tr>
+            <th>Ações</th>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Cliente</th>
+            <th>Data de emissão</th>
+            <th>Emitido por</th>
+            <th>Data de entrega</th>
+            <th>Valor total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sale_order in page_obj %}
             <tr>
-              <th>Produto</th>
-              <th>Quantidade</th>
-              <th>Total</th>
+              <td class="d-flex gap-1">
+                <button data-url="{% url 'sales_order:products' sale_order.id %}" title="Produtos do pedido" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#productsModal"><i class="bi bi-dice-3"></i></button>
+                <a href="{% url 'sales_order:update' sale_order.id %}" class="btn btn-warning btn-sm" title="Editar fornecedor"><i class="bi bi-pencil"></i></a>
+                <button data-order-id="{% url 'sales_order:cancel' sale_order.id %}" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" type="submit" class="btn btn-danger btn-sm cancel-order-btn" title="Cancelar pedido"><i class="bi bi-trash"></i></button>
+              </td>
+              <td>{{ sale_order.id }}</td>
+              <td>{{ sale_order.status }}</td>
+              <td>{{ sale_order.client|title }}</td>
+              <td>{{ sale_order.created_at|date:'SHORT_DATE_FORMAT' }}</td>
+              <td>{{ sale_order.user }}</td>
+              <td>{{ sale_order.delivery_date|date:'SHORT_DATE_FORMAT' }}</td>
+              <td>R${{ sale_order.total_value }}</td>
             </tr>
-          </thead>
-          <tbody id="productsTableBody">
-
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-      </div>
+            {% empty %}
+            <tr>
+              <td colspan="8" class="text-center">Nenhum pedido de venda cadastrado</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
-</div>
 
-<div class="modal" tabindex="-2" id="cancelOrderModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Cancelar pedido</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Deseja confirmar a exclusão do pedido? Esta ação não poderá ser desfeita.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abortar</button>
-        <form id="cancelOrderForm" method="post">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary">Cancelar pedido</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+  {% include 'partials/_paginator.html' %}
 
-<a 
-  href="{% url "sales_order:create" %}" title="Novo pedido de venda"
-  class="btn btn-primary btn-sticky-bottom">
-  <i class="bi bi-plus"></i>
-</a>
-
-{% comment %} {% include "partials/_search_filter.html" with search_value="suppliers:search"%} {% endcomment %}
-{% comment %} {% include "partials/_search_filter.html" %} {% endcomment %}
-
-<div class="table-responsive">
-  <table class="table table-striped table-sm">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Status</th>
-        <th>Cliente</th>
-        <th>Data de emissão</th>
-        <th>Emitido por</th>
-        <th>Data de entrega</th>
-        <th>Valor total</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for sale_order in page_obj %}
-        <tr>
-          <td>{{ sale_order.id }}</td>
-          <td>{{ sale_order.status }}</td>
-          <td>{{ sale_order.client }}</td>
-          <td>{{ sale_order.created_at }}</td>
-          <td>{{ sale_order.user }}</td>
-          <td>{{ sale_order.delivery_date }}</td>
-          <td>{{ sale_order.total_value }}</td>
-          <td class="d-flex gap-1">
-            <button data-url="{% url 'sales_order:products' sale_order.id %}" title="Produtos do pedido" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#productsModal">
-              <i class="bi bi-dice-3"></i>
-            </button>
-            <a href="{% url 'sales_order:update' sale_order.id %}" class="btn btn-warning btn-sm" title="Editar fornecedor"><i class="bi bi-pencil"></i></a>
-            <button data-order-id="{% url 'sales_order:cancel' sale_order.id %}" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" type="submit" class="btn btn-danger btn-sm cancel-order-btn" title="Cancelar pedido"><i class="bi bi-trash"></i></button>
-            <a href="{% url 'invoices:create_invoice' sale_order.id %}" class="btn btn-success btn-sm"><i class="bi bi-receipt-cutoff"></i></a>
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="8" class="text-center">Nenhum pedido de venda cadastrado</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  {% include "partials/_paginator.html" %}
-
-{% for order in orders %}
-{{order.client}}
-{% endfor %}
-{% endblock  %}
+  {% for order in orders %}
+    {{ order.client }}
+  {% endfor %}
+{% endblock %}

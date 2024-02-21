@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% load phone_filter_suppliers %}
-{% load date_filter_suppliers %}
 
 {% block title %}Fornecedores{% endblock  %}
 
@@ -30,7 +29,7 @@
   </div>
 </div>
 
-<div class="row filter-table d-flex mt-2">
+<div class="row d-flex mt-2">
 
   <div class="col-md-3">
     {% include "partials/_filter.html" %}

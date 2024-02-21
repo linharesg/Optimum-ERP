@@ -13,7 +13,7 @@ class SalesOrderForm(forms.ModelForm):
             "status": "Status",
             "delivery_date": "Data de entrega",
             "total_value": "Valor total",
-            "discount": "Desconto",
+            "discount": "Desconto(%)",
             "installments": "Parcelas",
             "created_at": "Data de emissão",
             "client": "Cliente",

@@ -126,6 +126,7 @@ class Product(models.Model):
         through_fields=("product", "supplier"),
         blank=True
     )
+    
     sale_price = models.DecimalField(max_digits=255, decimal_places=2)
     cst = models.CharField(max_length=255, choices=CST_CHOICES)
     minimum_stock = models.DecimalField(max_digits=255, decimal_places=2, default=1)

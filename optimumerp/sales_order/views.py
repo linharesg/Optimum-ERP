@@ -187,6 +187,7 @@ def get_products_from_sale_order(request, id):
     # Serialização
     products_serialized = [{
         "name": SalesOrderProduct.product.name,
+        "unit_of_measurement": SalesOrderProduct.product.unit_of_measurement,
         "amount": SalesOrderProduct.amount,
         "total_value": SalesOrderProduct.total_value_product,
     } for SalesOrderProduct in products]
