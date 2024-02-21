@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load phone_filter %}
-
+{% load crispy_forms_tags %}
 {% block title %}Clientes{% endblock  %}
 
 {% block head %}
@@ -13,7 +13,8 @@
 
 {% block page_name %}Clientes{% endblock %}
 
-{% block search %}{% include "partials/_search_filter.html" with search_value="clients:search" %}{% endblock %}
+{% comment %}  FILTRO AO LADO DO USUARIO {% endcomment %}
+{% comment %} {% block search %}{% include "partials/_search_filter.html" with search_value="clients:search" %}{% endblock %} {% endcomment %}
 
 {% block content %}
 
@@ -30,7 +31,11 @@
 
 <div class="row filter-table d-flex mt-2">
   <div class="col-md-3">
-    {% include "partials/_filter.html" %}
+    <form method="get">
+      {{ filter.form|crispy }}
+      <button class="btn btn-outline-success btn-filter" type="submit">Search</button>
+      <button class="btn btn-outline-danger btn-filter" type="reset">Limpar filtros</button>
+    </form>
   </div>
 
   <div class="table-responsive bg-white p-2 col-md-9 rounded">

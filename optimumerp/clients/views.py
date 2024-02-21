@@ -11,24 +11,28 @@ from django.contrib import messages
 from django.views.generic import UpdateView
 from sales_order.models import SalesOrder
 from django.db.models import Count
+from django.http import JsonResponse
+from django.db.models import Count
+from django.contrib import messages
+
+from .filters import ClientsFilter
 
 def index(request):
     clients = Clients.objects.order_by("-id")
+    client_filter = ClientsFilter(request.GET, queryset=clients)
 
-    paginator = Paginator(clients, 2)
+    paginator = Paginator(client_filter.qs, 10)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     
     context = {
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        'filter': client_filter
     }
     
     return render(request, "clients/index.html", context)
 
-from django.http import JsonResponse
-from django.db.models import Count
-from django.contrib import messages
 
 class ClientsUpdateView(UpdateView):
     model = Clients
@@ -123,3 +127,9 @@ def create(request):
     context = { "form": form, "form_action": form_action }
     return render(request, "clients/create.html", context)
 
+def search_teste(request):
+    client_list = Clients.objects.all()
+    print(client_list)
+    client_filter = ClientsFilter(request.GET, queryset=client_list)
+    # return render(request, 'clients/client_list.html', {'filter': client_filter})
+    return render(request, 'clients/index.html', {'filter': client_filter})
