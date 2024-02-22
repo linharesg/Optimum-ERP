@@ -48,11 +48,6 @@ hr {
   width: calc(100vw - 80px);
 }
 
-.main-container {
-  padding: 0;
-  margin: 10px !important;
-}
-
 .menu-icons {
   font-size: 23px;
 }
@@ -105,5 +100,4 @@ h1 {
   height: 20px;
   margin-left: 15px;
   padding: 0 !important;
-  justify-content: sp;
 }

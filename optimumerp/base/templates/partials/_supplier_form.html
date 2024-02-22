@@ -16,7 +16,7 @@
   <div class="col-md-3">
     <label for="zipcodeInput" class="form-label">CEP</label>
     <div class="input-group">
-      <input type="text" class="form-control placeholderStyle {% if form.zipcode.errors %}{% endif %}" id="zipcodeInput" name="zipcode" value="{{ form.zipcode.value|default_if_none:'' }}" placeholder="00000-000" />
+      <input type="text" class="form-control placeholderStyle {% if form.zipcode.errors %}is-invalid{% endif %}" id="zipcodeInput" name="zipcode" value="{{ form.zipcode.value|default_if_none:'' }}" placeholder="00000-000" />
       <span class="input-group-text"><i id="zipcodeIcon" class="bi bi-geo-alt"></i></span>
       {% if form.zipcode.errors %}
         <div class="invalid-feedback">
