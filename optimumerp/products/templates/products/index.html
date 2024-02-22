@@ -1,95 +1,92 @@
 {% extends "base.html" %}
 {% load static %}
 {% load quantity_filter %}
-{% block head %}
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-    <script src="{% static 'base/js/index.js' %}"></script>
-    <script src="{% static 'products/js/index.js' %}"></script>
-{% endblock  %}
-{% block title %}Produtos{% endblock  %}
-{% block content %}
-    {% block page_name %}Produtos{% endblock  %}
 
-    <!-- Modal -->
-    <div class="modal fade" id="suppliersModal" tabindex="-1" aria-labelledby="suppliersModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+{% block title %}Produtos{% endblock  %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'products/css/index.css' %}">
+
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+<script src="{% static 'base/js/index.js' %}"></script>
+<script src="{% static 'products/js/index.js' %}"></script>
+{% endblock  %}
+
+{% block page_name %}Produtos{% endblock %}
+
+{% block search %}
+  {% comment %}Sem search{% endcomment %}
+  <div style="height: 38px;"></div>
+{% endblock %}
+
+{% block content %}
+
+<!-- Modal -->
+<div class="modal fade" id="suppliersModal" tabindex="-1" aria-labelledby="suppliersModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-            <h1 class="modal-title fs-5" id="suppliersModalLabel">Fornecedores</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h1 class="modal-title fs-5" id="suppliersModalLabel">Fornecedores</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Preço de custo</th>
-                </tr>
-                </thead>
-                <tbody id="suppliersTableBody">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Preço de custo</th>
+                    </tr>
+                    </thead>
+                    <tbody id="suppliersTableBody">
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </div>
         </div>
-        </div>
     </div>
-    
-    <a 
-    href="{% url 'products:create' %}"
-    title="Cadastrar novo produto"
-    class="btn btn-primary btn-sticky-bottom">
-    <i class="bi bi-plus"></i>
-    </a>
+</div>
 
-    {% comment %} Filtro {% endcomment %}
-    {% include "partials/_search_filter.html" with search_value="products:search" %}
+<div class="row container-fluid">
+    <div class="col-md-2">
+        <a 
+        href="{% url 'products:create' %}"
+        title="Cadastrar novo produto"
+        class="btn btn-success">
+            <i class="bi bi-plus"></i>
+            Novo
+        </a>
+    </div>
+</div>
 
-{% comment %} Tabela de produtos {% endcomment %}
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead>
+<div class="row d-flex mt-2 container-fluid">
+
+    <div class="col-md-3">
+        {% comment %} Filtro {% endcomment %}
+        {% include "partials/_filter.html" %}
+    </div>
+
+    {% comment %} Tabela de produtos {% endcomment %}
+    <div class="table-responsive bg-white p-2 col-md-9 rounded">
+        <table class="table table-borderless table-hover table-sm table-color">
+            <thead class="table-border">
                 <tr>
+                    <th>Ações</th>
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Descrição</th>
-                    <th>Quantidade em estoque</th>
-                    <th>Unidade de medida</th>
+                    <th>Estoque</th>
+                    <th>Unidade</th>
                     <th>Preço de venda</th>
-                    <th>Data de expiração</th>
+                    <th>Expiração</th>
                     <th>Ativo</th>
                 </tr>
             </thead>
             <tbody>
                 {% for product in products %}
                 <tr>
-                    <td>{{ product.id }}</td>
-                    <td title="{{ product.name }}">{{ product.name|title|truncatechars:20 }}</td>
-                    <td title="{{ product.description }}">{{ product.description|truncatechars:20 }}</td>
-                    <td>
-                        {% for inventory_product in inventory_quantity %}
-                        {% if inventory_product.product == product %}
-                        {{ inventory_product.quantity }}
-                        {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {{ product.unit_of_measurement }}
-                    </td>
-                    <td>R$ {{ product.sale_price }}</td>
-                    <td> 
-                        {% if product.expiration_date %}
-                        {{ product.expiration_date|date:"d/m/Y" }}
-                        {% else %}
-                        Não perecível
-                        {% endif %}
-                    </td>
-                    <td>
-                        <input type="checkbox" class="form-check-input" {% if product.enabled %}checked{% endif %} data-url={% url 'products:toggle_enabled' product.id %}>
-                    </td>
                     <td class="d-flex gap-1">
                         <button data-url="{% url 'products:suppliers' product.id %}" title="Fornecedores do produto" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#suppliersModal">
                             <i class="bi bi-box"></i>
@@ -104,6 +101,30 @@
                             </button>
                         </form>
                     </td>
+                    <td>{{ product.id }}</td>
+                    <td title="{{ product.name }}">{{ product.name|title|truncatechars:20 }}</td>
+                    <td title="{{ product.description }}">{{ product.description|truncatechars:20 }}</td>
+                    <td>
+                        {% for inventory_product in inventory_quantity %}
+                            {% if inventory_product.product == product %}
+                                {{ inventory_product.quantity|format_quantity }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ product.unit_of_measurement }}
+                    </td>
+                    <td>R${{ product.sale_price }}</td>
+                    <td> 
+                        {% if product.expiration_date %}
+                            {{ product.expiration_date|date:"SHORT_DATE_FORMAT" }}
+                        {% else %}
+                            Não perecível
+                        {% endif %}
+                    </td>
+                    <td>
+                        <input type="checkbox" class="form-check-input" {% if product.enabled %}checked{% endif %} data-url={% url 'products:toggle_enabled' product.id %}>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -113,7 +134,7 @@
             </tbody>
         </table>
         {% comment %} Paginação {% endcomment %}
-        {% if products.paginator.num_pages > 0 %}
+        {% if products.paginator.num_pages > 1 %}
         <nav aria-label="Paginação da página">
             <ul class="pagination justify-content-end">
                 {% if products.has_previous %}
@@ -133,5 +154,6 @@
         </nav>
         {% endif %}
     </div>
+</div>
 
 {% endblock  %}
