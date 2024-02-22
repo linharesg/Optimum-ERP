@@ -2,6 +2,7 @@ import decimal
 from django.shortcuts import render, redirect
 from .models import Transaction
 from inventory.models import Inventory
+from products.models import Product
 from .forms import TransactionsForm
 from django.core.paginator import Paginator
 from django.contrib import messages
@@ -25,9 +26,10 @@ def index(request):
 def create(request):
     if request.method == 'POST':
         form = TransactionsForm(request.POST)
+        product = Product.objects.get(id=request.POST.get("product"))
         if form.is_valid():
             try:
-                Transaction.create(product=request.POST.get("product"), quantity=decimal.Decimal(request.POST.get("quantity")), type=request.POST.get("type"))
+                Transaction.create(product=product, quantity=decimal.Decimal(request.POST.get("quantity")), type=request.POST.get("type"))
             except TransactionQuantityError:
                 messages.error(request, "Não foi possível realizar a transação, quantidade insuficiente no estoque.")
                 context = { "form": form}

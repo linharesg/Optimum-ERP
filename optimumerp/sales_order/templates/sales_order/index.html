@@ -69,6 +69,27 @@
     </div>
   </div>
 
+  <div class="modal" tabindex="-2" id="finishOrderModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Faturar pedido</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Deseja realmente faturar o pedido? Essa ação não poderá ser desfeita.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abortar</button>
+          <form id="finishOrderForm" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Faturar pedido</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-2">
       <a href="{% url 'sales_order:create' %}" title="Novo pedido de venda" class="btn btn-success">
@@ -100,9 +121,16 @@
           {% for sale_order in page_obj %}
             <tr>
               <td class="d-flex gap-1">
+                {% if sale_order.status == "Pendente" %}
+                <button data-order-id="{% url 'sales_order:finish_order' sale_order.id %}" data-bs-toggle="modal" data-bs-target="#finishOrderModal" type="submit" class="btn btn-success btn-sm" title="Faturar pedido"><i class="bi bi-check"></i></button>
+                {% elif sale_order.status == "Confirmado" %}
+                <a href="{% url 'invoices:create_invoice' sale_order.id %}" class="btn btn-success btn-sm"><i class="bi bi-receipt"></i></a>
+                {% elif sale_order.status == "Cancelado" %}
+                <a href="#" class="btn btn-success btn-sm disabled"><i class="bi bi-x"></i></a>
+                {% endif %}
                 <button data-url="{% url 'sales_order:products' sale_order.id %}" title="Produtos do pedido" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#productsModal"><i class="bi bi-dice-3"></i></button>
-                <a href="{% url 'sales_order:update' sale_order.id %}" class="btn btn-warning btn-sm" title="Editar fornecedor"><i class="bi bi-pencil"></i></a>
-                <button data-order-id="{% url 'sales_order:cancel' sale_order.id %}" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" type="submit" class="btn btn-danger btn-sm cancel-order-btn" title="Cancelar pedido"><i class="bi bi-trash"></i></button>
+                <a href="{% url 'sales_order:update' sale_order.id %}" class="btn btn-warning btn-sm {% if sale_order.status == "Cancelado" or sale_order.status == "Confirmado" %}disabled{% endif %}" title="Editar fornecedor"><i class="bi bi-pencil"></i></a>
+                <button data-order-id="{% url 'sales_order:cancel' sale_order.id %}" {% if sale_order.status == "Cancelado" or sale_order.status == "Confirmado" %}disabled{% endif %} data-bs-toggle="modal" data-bs-target="#cancelOrderModal" type="submit" class="btn btn-danger btn-sm cancel-order-btn" title="Cancelar pedido"><i class="bi bi-trash"></i></button>
               </td>
               <td>{{ sale_order.id }}</td>
               <td>{{ sale_order.status }}</td>

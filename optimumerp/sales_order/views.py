@@ -1,5 +1,5 @@
 from django import forms
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -8,6 +8,7 @@ from django.views.generic import ListView, CreateView
 from .forms import SalesOrderForm, SalesOrderProductFormSet
 from django.contrib import messages
 from products.models import Product
+from transactions.models import Transaction
 from django.views.decorators.http import require_POST, require_GET
 
 # Create your views here.
@@ -154,6 +155,27 @@ def update(request, id):
     }
 
     return render(request, "sales_order/update.html", context)
+
+def finish_order(request, id):
+    sale_order = get_object_or_404(SalesOrder, pk=id)
+    for sale_products in SalesOrderProduct.objects.filter(sale_order=sale_order):
+        try:
+            Transaction.create(product=sale_products.product, quantity=sale_products.amount, type="OUT")
+        except:
+            messages.error(request, "Não foi possível faturar o pedido, verifique o estoque")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        
+    with transaction.atomic():
+        try:
+            sale_order.status = "Confirmado"
+            sale_order.save()
+            messages.success(request, "Pedido faturado com sucesso!")
+        except:
+            messages.error(request, "Não foi possível faturar o pedido.")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
+
 
 @require_POST
 def cancel(request, id):
