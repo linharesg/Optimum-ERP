@@ -10,14 +10,32 @@ from django.contrib import messages
 from products.models import Product
 from transactions.models import Transaction
 from django.views.decorators.http import require_POST, require_GET
+from .filters import SalesOrderFilter
+from django.core.paginator import Paginator
 
 # Create your views here.
 
-class SalesOrderListView(ListView):
-    model = SalesOrder
-    template_name = "sales_order/index.html"
-    paginate_by = 10
-    ordering = "-id"
+# class SalesOrderListView(ListView):
+#     model = SalesOrder
+#     template_name = "sales_order/index.html"
+#     paginate_by = 10
+#     ordering = "-id"
+
+def index(request):
+    sales_order = SalesOrder.objects.order_by("-id")
+    sales_order_filter = SalesOrderFilter(request.GET, queryset=sales_order)
+
+    paginator = Paginator(sales_order_filter.qs, 3)
+    
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "filter": sales_order_filter
+    }
+    
+    return render(request, "sales_order/index.html", context)
 
 
 def create(request):
@@ -175,8 +193,6 @@ def finish_order(request, id):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     
-
-
 @require_POST
 def cancel(request, id):
     sale_order = get_object_or_404(SalesOrder, pk=id)

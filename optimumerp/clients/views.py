@@ -98,11 +98,11 @@ def create(request):
 
 
         messages.error(request, "Falha ao cadastrar o cliente. Verifique o preenchimento dos campos")
-        context = { "form": form, "form_action": form_action}        
+        context = { "form": form }        
         return render(request, "clients/create.html", context)
     
     #GET
     form = ClientsForm()
-    context = { "form": form, "form_action": form_action }
+    context = { "form": form }
     return render(request, "clients/create.html", context)
 

@@ -101,7 +101,7 @@
 
   <div class="row d-flex mt-2">
     <div class="col-md-3">
-      {% include 'partials/_filter.html' %}
+      {% include 'partials/_filter.html' with main_page="sales_order:index"  %}
     </div>
     <div class="table-responsive bg-white p-2 col-md-9 rounded">
       <table class="table table-borderless table-hover table-sm table-color">
@@ -112,7 +112,7 @@
             <th>Status</th>
             <th>Cliente</th>
             <th>Data de emissão</th>
-            <th>Emitido por</th>
+            <th>Vendedor</th>
             <th>Data de entrega</th>
             <th>Valor total</th>
           </tr>
