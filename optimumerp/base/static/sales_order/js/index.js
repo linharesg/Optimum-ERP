@@ -34,4 +34,13 @@ jQuery(function() {
         $('#cancelOrderForm').attr('action', orderId);
     });
 
+    const $finishOrderModal = $("#finishOrderModal");
+
+    $finishOrderModal.on("show.bs.modal", function(e) {
+        const $button = $(e.relatedTarget);
+        const orderId = $button.data("order-id");
+
+        $('#finishOrderForm').attr('action', orderId);
+    });
+
 });
