@@ -8,7 +8,6 @@
 {% endblock  %}
 {% block title %}Produtos{% endblock  %}
 {% block content %}
-    {% block page_name %}Produtos{% endblock  %}
 
     <!-- Modal -->
     <div class="modal fade" id="suppliersModal" tabindex="-1" aria-labelledby="suppliersModalLabel" aria-hidden="true">
@@ -48,7 +47,7 @@
     {% comment %} Filtro {% endcomment %}
     {% include "partials/_search_filter.html" with search_value="products:search" %}
 
-{% comment %} Tabela de produtos {% endcomment %}
+    {% comment %} Tabela de produtos {% endcomment %}
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
@@ -112,6 +111,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        
         {% comment %} Paginação {% endcomment %}
         {% if products.paginator.num_pages > 0 %}
         <nav aria-label="Paginação da página">
