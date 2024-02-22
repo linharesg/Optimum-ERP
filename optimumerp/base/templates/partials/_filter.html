@@ -1,23 +1,13 @@
+{% load crispy_forms_tags %}
 <div class="filter d-flex flex-column p-2 me-2 bg-white rounded">
   <div class="d-flex">
     <i class="bi bi-funnel me-1 fs-4"></i><h3 class="filter-title mb-3 fs-3">Filtros</h3>
   </div>
-  <form action="">
-    <div class="mb-3">
-      <input type="text" class="form-control" placeholder="Nome Fantasia" />
-    </div>
-    <div class="mb-3">
-      <input type="number" class="form-control" placeholder="Código" />
-    </div>
-    <div class="mb-3">
-      <input type="date" class="form-control" placeholder="Data de Cadastro" />
-    </div>
-    <div class="mb-3">
-      <input type="number" class="form-control" placeholder="CNPJ" />
-    </div>
-    <div class="btn-filter-group d-flex justify-content-evenly">
-      <button class="btn btn-outline-danger btn-filter" type="reset">Limpar filtros</button>
-      <button class="btn btn-outline-success btn-filter" type="submit">Aplicar filtros</button>
-    </div>
-  </form>
+    <form method="get">
+      {{ filter.form|crispy }}
+      <button class="btn btn-outline-success btn-filter" type="submit">Search</button>
+      <a href="{% url main_page %}">
+        <button class="btn btn-outline-danger btn-filter" type="button">Limpar filtros</button>
+      </a>
+    </form>
 </div>
