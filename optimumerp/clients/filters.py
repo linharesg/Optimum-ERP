@@ -1,10 +1,6 @@
-from django.forms import Field
 from .models import Clients
 import django_filters
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout
-from django import forms
-from django.forms.widgets import TextInput, Select
+from django.forms.widgets import TextInput
 
 class ClientsFilter(django_filters.FilterSet):
     company_name = django_filters.CharFilter(field_name='company_name', label="", widget=TextInput(attrs={'placeholder': 'Razão social'}), lookup_expr='icontains')
