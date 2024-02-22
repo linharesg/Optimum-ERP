@@ -1,11 +1,10 @@
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 
 from .forms import ClientsForm
 from .models import Clients
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.views.generic import UpdateView
@@ -21,7 +20,7 @@ def index(request):
     clients = Clients.objects.order_by("-id")
     client_filter = ClientsFilter(request.GET, queryset=clients)
 
-    paginator = Paginator(client_filter.qs, 1)
+    paginator = Paginator(client_filter.qs, 3)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -88,8 +87,6 @@ def delete(request, id):
 def create(request):
     
     #POST
-    form_action = reverse("clients:create")
-
     if request.method == "POST":
         form = ClientsForm(request.POST)
         
