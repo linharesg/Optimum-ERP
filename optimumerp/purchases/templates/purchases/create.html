@@ -2,10 +2,10 @@
 {% load static %}
 {% block title %}Novo pedido de compra{% endblock  %}
 {% block head %}
+    <link rel="stylesheet" href="{% static 'purchases/css/createUpdate.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="{% static 'purchases/js/createUpdate.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'purchases/css/style.css' %}">
 {% endblock  %}
 {% block page_name %}Novo pedido de venda{% endblock %}
 {% block search %}
