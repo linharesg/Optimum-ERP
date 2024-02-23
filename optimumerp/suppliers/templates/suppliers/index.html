@@ -18,7 +18,7 @@
 
 {% block content %}
 
-<div class="row">
+<div class="row container-fluid">
   <div class="col-md-2">
     <a 
       href="{% url "suppliers:create" %}" title="Cadastrar novo fornecedor"
@@ -29,7 +29,7 @@
   </div>
 </div>
 
-<div class="row d-flex mt-2">
+<div class="row d-flex mt-2 container-fluid">
 
   <div class="col-md-3">
     {% include "partials/_filter.html" %}

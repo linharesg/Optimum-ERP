@@ -3,89 +3,40 @@
 {% load crispy_forms_tags %}
 {% block title %}Cadastro de produtos{% endblock  %}
 {% block head %}
+    <link rel="stylesheet" href="{% static 'products/css/createUpdate.css' %}">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="{% static 'products/js/createUpdate.js' %}"></script>
 {% endblock  %}
+
+{% block search %}
+  {% comment %}Sem search{% endcomment %}
+  <div style="height: 38px;"></div>
+{% endblock %}
+
+{% block page_name %}
+    {% if form_action == "/produtos/cadastro" %}
+        Cadastro de produtos
+    {% else %}
+        Edição de produto
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     {% with create_url="/produtos/cadastro" %}
-        <h2 class="mb-3">
-            {% if form_action == create_url %}
-            Cadastro de produto
-          {% else %}
-            Edição de produto
-          {% endif %}</h2>
+        
         <form action="{{ form_action }}" method="POST">
             {% csrf_token %}
 
-            <div class="row mb-3">
-                <div class="col">
-                    {{ form.name|as_crispy_field }}
+            <div class="d-flex create-products p-3">
+                {% include 'partials/_products_form.html' %}
+                <div class="d-grid mb-3">
+                    <button type="button" id="addSupplierButton" class="btn btn-outline-secondary">Adicionar fornecedor</button>
                 </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    {{ form.description|as_crispy_field }}
+                <div class="d-grid">
+                    <button id="submitButton" type="submit" class="btn btn-primary btn-lg">Salvar</button>
                 </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-3">
-                    {{ form.unit_of_measurement|as_crispy_field }}
-                </div>
-                <div class="col-md-3">
-                    {{ form.minimum_stock|as_crispy_field }}
-                </div>
-                <div class="col-md-3">
-                    {{ form.cst|as_crispy_field }}
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    {{ form.sale_price|as_crispy_field }}
-                </div>
-                <div class="col-md-4">
-                    {{ form.expiration_date|as_crispy_field }}
-                </div>
-            </div>
-            <div class="row mb-3">
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    {{ form.enabled|as_crispy_field }}
-                </div>
-            </div>
-
-            <h3>Fornecedores</h3>
-            <div id="supplierFormset">
-                {{ supplier_product_formset.management_form }}
-                {% for supplier in supplier_product_formset %}
-                <div class="row mb-3">
-                    {{ form.id }}
-                    <div class="col-md-5">
-                        {{ supplier.supplier|as_crispy_field }}
-                    </div>
-                    <div class="col-md-5">
-                        {{ supplier.cost_price|as_crispy_field }}
-                    </div>
-                    <div class="col-md-2">
-                        <div class="d-grid">
-                            <button 
-                            {% if supplier.id.value %}data-url="{% url "products:delete_supplier" supplier.id.value %}"{% endif %}
-                            type="button" 
-                            class="btn btn-danger remove-btn">
-                                <i class="bi bi-x"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-
-            <div class="d-grid mb-3">
-                <button type="button" id="addSupplierButton" class="btn btn-outline-secondary">Adicionar fornecedor</button>
-            </div>
-
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
             </div>
         </form>
     {% endwith %}
