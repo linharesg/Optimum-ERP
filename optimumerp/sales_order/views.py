@@ -24,8 +24,8 @@ from django.core.paginator import Paginator
 def index(request):
     sales_order = SalesOrder.objects.order_by("-id")
     sales_order_filter = SalesOrderFilter(request.GET, queryset=sales_order)
+    paginator = Paginator(sales_order_filter.qs.distinct(), 3)
 
-    paginator = Paginator(sales_order_filter.qs, 3)
     
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
