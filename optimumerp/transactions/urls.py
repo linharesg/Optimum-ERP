@@ -5,7 +5,7 @@ app_name = "transactions"
 
 urlpatterns= [
     path("", views.index, name="index"),
-    path("search", views.search, name="search"),
+    # path("search", views.search, name="search"),
     path("cadastro/", views.create, name="create"),
 ]
 

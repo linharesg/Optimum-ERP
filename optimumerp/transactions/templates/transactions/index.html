@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% load quantity_filter %}
 {% block head %}
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
@@ -16,7 +17,38 @@
     </a>
 
     {% comment %} Filtro {% endcomment %}
-    {% include "partials/_search_filter.html" with search_value="transactions:search" %}
+    {% comment %} {% include "partials/_search_filter.html" with search_value="transactions:search" %} {% endcomment %}
+
+    <div class="col-md-3">
+        {% comment %} INCLUÍDO FILTRO DIFERENTE DO PARTIAL PARA ALINHAR OS CAMPOS DE DATA. {% endcomment %}
+        {% comment %} {% include "partials/_filter.html" with main_page="transactions:index" %} {% endcomment %}
+
+        <div class="filter d-flex flex-column p-2 me-2 bg-white rounded">
+        <div class="d-flex">
+            <i class="bi bi-funnel me-1 fs-4"></i><h3 class="filter-title mb-3 fs-3">Filtros</h3>
+        </div>
+            <form method="get">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ filter.form.date_min|as_crispy_field }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ filter.form.date_max|as_crispy_field }}
+                    </div>
+                    <div class="row">
+                        {{ filter.form.type|as_crispy_field }}
+                    </div>
+                    <div class="row">
+                        {{ filter.form.product|as_crispy_field }}
+                    </div>
+                </div>
+            <button class="btn btn-outline-success btn-filter" type="submit">Search</button>
+            <a href="{% url 'transactions:index' %}">
+                <button class="btn btn-outline-danger btn-filter" type="button">Limpar filtros</button>
+            </a>
+            </form>
+        </div>
+    </div>
 
     {% comment %} Tabela de Transações {% endcomment %}
         <div class="table-responsive">
@@ -25,7 +57,6 @@
                     <tr>
                         <th>ID</th>
                         <th>Produto</th>
-                        <th>Local</th>
                         <th>Quantidade</th>
                         <th>Tipo</th>
                         <th>Data</th>

@@ -9,16 +9,20 @@ from django.contrib import messages
 from django.db.models import Q
 from django.db import transaction
 from .exceptions import TransactionQuantityError
+from .filters import TransactionsFilter
 
 def index(request):
     transactions = Transaction.objects.order_by("-id")
-    paginator = Paginator(transactions, 2)
+    transactions_filter = TransactionsFilter(request.GET, queryset=transactions)
+
+    paginator = Paginator(transactions_filter.qs, 2)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     
     context = {
-        "transactions": page_obj,
+        'transactions': page_obj,
+        'filter': transactions_filter
     }
     
     return render(request, "transactions/index.html", context)
@@ -36,7 +40,6 @@ def create(request):
     
                 return render(request, "transactions/create.html", context)
 
-            form.save()
             messages.success(request, "Transação cadastrada com sucesso!")
             
             return redirect("transactions:index")
@@ -55,20 +58,20 @@ def create(request):
 
     return render(request, "transactions/create.html", context)
 
-def search(request):
-    search_value = request.GET.get("q").strip()
+# def search(request):
+#     search_value = request.GET.get("q").strip()
 
-    if not search_value:
-        return redirect("transactions:index")
+#     if not search_value:
+#         return redirect("transactions:index")
     
-    transactions = Transaction.objects.filter(Q(product__icontains=search_value) | Q(quantity__icontains=search_value)).order_by("-id")
+#     transactions = Transaction.objects.filter(Q(product__icontains=search_value) | Q(quantity__icontains=search_value)).order_by("-id")
 
-    paginator = Paginator(transactions, 2)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+#     paginator = Paginator(transactions, 2)
+#     page_number = request.GET.get("page")
+#     page_obj = paginator.get_page(page_number)
 
-    context = {
-        "transactions": page_obj
-    }
+#     context = {
+#         "transactions": page_obj
+#     }
     
-    return render(request, "transactions/index.html", context)
+#     return render(request, "transactions/index.html", context)
