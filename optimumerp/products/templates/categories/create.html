@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Cadastro de Categorias{% endblock  %}
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="{% static 'products/js/createUpdate.js' %}"></script>
+{% endblock  %}
+{% block content %}
+    {% with create_url="/produtos/cadastro" %}
+        <h2 class="mb-3">
+            {% if form_action == create_url %}
+                Cadastro de Categorias
+            {% else %}
+                Edição de Categorias
+            {% endif %}</h2>
+
+        <form action="{{ form_action }}" method="POST">
+            {% csrf_token %}
+
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.name|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.description|as_crispy_field }}
+                </div>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
+            </div>
+        </form>
+    {% endwith %}
+{% endblock  %}
