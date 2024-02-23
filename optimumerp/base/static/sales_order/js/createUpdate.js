@@ -20,12 +20,35 @@ jQuery(function() {
         $totalOrderValue.val((sum * (100 - $discount))/100)
     };
 
+    const updateFormIndex = function(){
+        $(".productRow").each(function(index) {
+            $(this).find(":input, select, label, div").each(function() {
+                const name = $(this).attr("name")
+                const id = $(this).attr("id")
+                if (name) {
+                    const newName = name.replace(/-\d-/, `-${index}-`)
+                    $(this).attr("name", newName)
+
+                }
+                if (id) {
+                    const newId = id.replace(/-\d-/, `-${index}-`)
+                    $(this).attr("id", newId)
+                }
+            })
+
+        })
+    }
+
     const removeProduct = function(){
         const $button = $(this);
         
-        $button.closest(".row").remove();
+        $button.closest(".row").hide();
+        const $removeCheckBox = $button.closest(".d-grid").find("input[type='checkbox']")
+        $removeCheckBox.prop('checked', true)
         $totalProducts.val(parseInt($totalProducts.val()) - 1);
         updateTotalValue();
+
+        // updateFormIndex();
     
         const url = $button.data("url");
         if (url) {
@@ -39,7 +62,7 @@ jQuery(function() {
         }
 
     };
-
+    
     const removeButtons = document.querySelectorAll('.removeProductButton');
     removeButtons.forEach(button => {
     button.addEventListener('click', updateTotalValue);
@@ -161,8 +184,9 @@ jQuery(function() {
 
         const productSelects = document.querySelectorAll('select[name^="salesorderproduct_set"]');
 
+        console.log($totalProducts.val())
         for (let select of productSelects) {
-            if (select.value !== "") {
+            if (select.value !== "" || $totalProducts.val() === 0) {
                 return
             }
         }

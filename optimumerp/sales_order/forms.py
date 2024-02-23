@@ -3,6 +3,10 @@ from .models import SalesOrder, SalesOrderProduct
 from crispy_forms.helper import FormHelper
 from products.models import Product
 from clients.models import Clients
+from django.forms.models import inlineformset_factory
+from django.core.exceptions import ValidationError
+
+
 class SalesOrderForm(forms.ModelForm):
 
     class Meta:
@@ -56,5 +60,29 @@ SalesOrderProductFormSet = forms.inlineformset_factory(
     form=SalesOrderProductForm,
     extra=1,
     can_delete=True,
-    max_num=5
+    # max_num=1
+    can_delete_extra=True
+)
+
+class BaseSalesOrderProductFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        has_product = False
+        for form in self.forms:
+            print("oi")
+            if not form.cleaned_data.get('DELETE', False) and form.cleaned_data.get('product'):
+                print("oioi")
+                has_product = True
+                break
+        if not has_product:
+            print("oioioi")
+            raise ValidationError("At least one product is required for a sales order.")
+
+SalesOrderProductFormSet = inlineformset_factory(
+    SalesOrder,
+    SalesOrderProduct,
+    form=SalesOrderProductForm,
+    extra=1,
+    can_delete=True,
+    formset=BaseSalesOrderProductFormSet
 )

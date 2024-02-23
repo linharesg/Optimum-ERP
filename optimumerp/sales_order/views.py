@@ -16,7 +16,7 @@ from django.views.decorators.http import require_POST, require_GET
 class SalesOrderListView(ListView):
     model = SalesOrder
     template_name = "sales_order/index.html"
-    paginate_by = 10
+    paginate_by = 7
     ordering = "-id"
 
 
@@ -118,7 +118,7 @@ def update(request, id):
         if form.is_valid():
             try:
                 form.save()
-
+                
                 if sale_order_product_formset.is_valid():
                     sale_order_product_formset.save()
                     messages.success(request, "Pedido atualizado com sucesso!")

@@ -17,7 +17,7 @@
     {{ sale_order_product_formset.management_form }}
     {% for product in sale_order_product_formset %}
     <div class="row productRow">
-        {{ form.id }}
+        {{ product.id }}
         <div class="col-md-4 productInput">
             {{ product.product|as_crispy_field }}
         </div>
@@ -30,7 +30,6 @@
         <div class="col-md-2 productTotalValue">
             {{ product.total_value_product|as_crispy_field }}
         </div>
-
         <div class="col-md-2">
             <div class="d-grid">
                 <button
@@ -38,10 +37,13 @@
                 {% if supplier.id.value %}data-url="#"{% endif %}
                 type="button" 
                 class="btn btn-danger remove-btn removeProductButton">
-                    <i class="bi bi-x"></i>
-                </button>
+                <i class="bi bi-x"></i>
+            </button>
+            <div class="d-none">
+                {{ product.DELETE }}
             </div>
         </div>
+    </div>
     </div>
     {% endfor %}
     
