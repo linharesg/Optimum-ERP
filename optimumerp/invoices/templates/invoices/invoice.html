@@ -1,6 +1,7 @@
 {% load static %}
 {% load cnpj_filter %}
 {% load zipcode_format %}
+{% load phone_filter %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -353,6 +354,7 @@
 </head>
 <body>
     <div class="page nfeArea">
+        {% for company in companies %}
         <img class="imgCanceled" src="tarja_nf_cancelada.png" alt="" />
         <img class="imgNull" src="tarja_nf_semvalidade.png" alt="" />
         <div class="boxFields" style="padding-top: 20px;">
@@ -360,7 +362,7 @@
                 <tbody>
                     <tr>
                         <td colspan="2" class="txt-upper">
-                            Recebemos de Optimum ERP os produtos e serviços constantes na nota fiscal indicada ao lado
+                            Recebemos de {{ company.name }} os produtos e serviços constantes na nota fiscal indicada ao lado
                         </td>
                         <td rowspan="2" class="tserie txt-center">
                             <span class="font-12" style="margin-bottom: 5px;">NF-e</span>
@@ -386,16 +388,16 @@
                             <img class="client_logo" src="{% static 'base/img/logo_sem_fundo.png' %}" alt="" onerror=""/>
                         </td>
                         <td rowspan="3" style="width: 46mm; font-size: 7pt;" class="txt-center">
-                            <span class="mb2 bold block">Optimum ERP</span>
-                            <span class="block">Rua Av. Brasil</span>
+                            <span class="mb2 bold block">{{ company.name }}</span>
+                            <span class="block">{{ company.street }}</span>
                             <span class="block">
-                                Ponta aguda - 89050-000
+                                {{ company.zipcode|format_zipcode }}
                             </span>
                             <span class="block">
-                                Blumenau - SC
+                                {{ company.city }} - {{ company.state }}
                             </span>
                             <span class="block">
-                                Fone: (47) 92000-0223
+                                Fone: {{ company.phone|format_phone }}
                             </span>
                         </td>
                         <td rowspan="3" class="txtc txt-upper" style="width: 34mm; height: 29.5mm;">
@@ -467,7 +469,7 @@
                     <tr>
                         <td>
                             <span class="nf-label">INSCRIÇÃO ESTADUAL</span>
-                            <span class="info">123456789</span>
+                            <span class="info">{{ company.state_registration }}</span>
                         </td>
                         <td style="width: 67.5mm;">
                             <span class="nf-label">INSCRIÇÃO ESTADUAL DO SUBST. TRIB.</span>
@@ -475,7 +477,7 @@
                         </td>
                         <td style="width: 64.3mm">
                             <span class="nf-label">CNPJ</span>
-                            <span class="info">12.345.678/0001-23</span>
+                            <span class="info">{{ company.cnpj|format_cnpj }}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -821,6 +823,7 @@
             </footer>
         </div>
         [page-break]
+        {% endfor %}
     </div>
 </body>
 </html>

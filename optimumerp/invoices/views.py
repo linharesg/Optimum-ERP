@@ -1,14 +1,18 @@
 from django.shortcuts import redirect, render, get_object_or_404
+
+from company.models import Company
 from .models import Invoice
 from sales_order.models import SalesOrder, SalesOrderProduct
 from clients.models import Clients
 from random import randint
 
 def open_invoice(request, id):
+    companies = Company.objects.all()
     sale_order = get_object_or_404(SalesOrder, pk=id)
     sale_order_products = SalesOrderProduct.objects.filter(sale_order=sale_order)
     invoice = Invoice.objects.get(sale_order=sale_order)
     context = {
+        "companies": companies,
         "sale_order": sale_order,
         "sale_order_products": sale_order_products,
         "invoice": invoice

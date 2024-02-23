@@ -33,8 +33,9 @@ class Company(models.Model):
         "DF": "Distrito Federal",
     }
     
-    company_name = models.CharField(max_length=255)
-    fantasy_name = models.CharField(max_length = 255, unique=True)
+    name = models.CharField(max_length=255)
+    fantasy_name = models.CharField(max_length=255, unique=True)
+    state_registration = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True, blank=True)
     cnpj = models.CharField(max_length=20)
     email = models.EmailField(unique=True)
@@ -46,10 +47,10 @@ class Company(models.Model):
     phone = models.CharField(max_length=255)
     
     def __str__(self):
-        return self.company_name
+        return self.name
 
     def __repr__(self):
-        return self.company_name
+        return self.name
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.fantasy_name)
