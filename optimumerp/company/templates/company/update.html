@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Edição da empresa
+{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'suppliers/css/createUpdate.css' %}" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="{% static 'company/js/createUpdate.js' %}"></script>
+{% endblock %}
+
+{% block page_name %}
+  Edição da empresa
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="d-flex create-supplier p-3">
+      {% include 'partials/_company_form.html' %}
+      <div class="d-grid">
+        <button class="btn btn-primary btn-lg">Salvar</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}

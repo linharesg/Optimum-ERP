@@ -5,6 +5,24 @@ jQuery(function() {
 
     const $originalSupplier = $suppliersContainer.children(".row:first").clone(true);
 
+    const updateFormIndex = function(){
+        $(".productRow").each(function(index){
+            $(this).find(":input, select, label, div").each(function(){
+                const name = $(this).attr("name");
+                const id = (this).attr("id");
+                if (name) {
+                    const newName = name.replace(/-\d-/, `${index}`);
+                    $(this).attr("id", newId);
+                    const newId = id.replace(/-\d-/, `${index}` );
+                }
+                if (id) {
+                    const newId = id.replace(/-\d-/, `${index}` );
+                    $(this).attr("id", newId);
+                }
+            })
+        })
+    }
+
     $addButton.on("click", function() {
         const $newRow = $originalSupplier.clone(true);
         const index = parseInt($totalSuppliers.val());

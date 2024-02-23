@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'inventory.apps.InventoryConfig',
     'invoices.apps.InvoicesConfig',
     'purchases.apps.PurchasesConfig',
+    'company.apps.CompanyConfig'
 ]
 
 MIDDLEWARE = [
@@ -70,7 +71,8 @@ TEMPLATES = [
             BASE_DIR / 'transactions' / 'templates',
             BASE_DIR / 'inventory' / 'templates',
             BASE_DIR / 'users' / 'templates',
-            BASE_DIR / 'invoices' / 'templates'
+            BASE_DIR / 'invoices' / 'templates',
+            BASE_DIR / 'company' / 'templates',
             ],
         'APP_DIRS': True,
         'OPTIONS': {
