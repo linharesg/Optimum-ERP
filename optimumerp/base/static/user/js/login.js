@@ -1,9 +1,18 @@
 jQuery(function() {
-    const $usernameInput = $("#id_username");
-    const $passwordInput = $("#id_password");
-    const $bgDarkClass = $(".bg_dark");
-    
-    $usernameInput.on("focus", function() {
-        $(this).css("background-color", $bgDarkClass.css("background-color"));
-    })
-})
+    const $inputPassword = $("#id_password")
+    const $btnPassword = $("#btnPassword")
+    const $eyeIcon = $("#eyeIcon")
+
+    $btnPassword.on("click", () => {
+        if ($inputPassword.attr("type") === "password") {
+            $eyeIcon.removeClass("bi bi-eye-slash")
+            $eyeIcon.addClass("bi bi-eye")
+            $inputPassword.attr("type", "text");
+            console.log("teste")
+        } else {
+            $eyeIcon.removeClass("bi bi-eye")
+            $eyeIcon.addClass("bi bi-eye-slash")
+            $inputPassword.attr("type", "password");
+        }
+    });
+});

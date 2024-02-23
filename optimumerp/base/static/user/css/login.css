@@ -15,20 +15,20 @@
 
 .bi-person {
     position: relative;
-    top: 54px;
+    top: 67px;
     left: 9px;
 }
 
 .bi-lock {
     position: relative;
-    top: 117px;
+    top: 131px;
     right: 7px;
 }
 
-.bi-eye-slash {
+.btn-position {
     position: relative;
-    top: 117px;
-    left: 240px;
+    top: 125px;
+    left: 227px;
 }
 
 .input {
