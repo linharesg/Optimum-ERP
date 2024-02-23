@@ -1,20 +1,43 @@
 {% extends "base.html" %}x
 {% load static %}
 {% load crispy_forms_tags %}
+
+{% block title %}
+  Cadastro de transações
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'transactions/css/createUpdate.css' %}" />
+{% endblock %}
+
+{% block page_name %}
+  Cadastro de transação
+{% endblock %}
+
+{% block search %}
+  {% comment %}Sem search{% endcomment %}
+  <div style="height: 38px;"></div>
+{% endblock %}
+
 {% block content %}
     <form action="{{form_action}}" method="post" novalidate enctype="multipart/form-data">
         {% csrf_token %}
-        <div>
-            <h2>Cadastrar Transação</h2>
-            {{form.product|as_crispy_field}}
-            {{form.type|as_crispy_field}}
-            {{form.quantity|as_crispy_field}}
-        </div>
+        <div class="d-flex create-transaction p-3">
+            <div class="row">
+                <div class="col">{{form.product|as_crispy_field}}</div>
+            </div>
+            <div class="row">
+                <div class="col">{{form.type|as_crispy_field}}</div>
+            </div>
+            <div class="row">
+                <div class="col">{{form.quantity|as_crispy_field}}</div>
+            </div>
 
-        <div class="d-grid">
-            <button class="btn btn-primary btn-lg">
-                Salvar
-            </button>
+            <div class="d-grid">
+                <button class="btn btn-primary btn-lg">
+                    Salvar
+                </button>
+            </div>
         </div>
     </form>
 {% endblock  %}

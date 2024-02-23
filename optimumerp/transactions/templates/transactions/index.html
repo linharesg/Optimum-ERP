@@ -1,80 +1,98 @@
 {% extends "base.html" %}
 {% load static %}
 {% load quantity_filter %}
-{% block head %}
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-{% endblock  %}
+
 {% block title %}Transações{% endblock  %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'transactions/css/index.css' %}">
+
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="{% static 'base/js/index.js' %}"></script>
+{% endblock  %}
+
+{% block page_name %}Transações{% endblock %}
+
+{% block search %}
+  {% comment %}Sem search{% endcomment %}
+  <div style="height: 38px;"></div>
+{% endblock %}
+
 {% block content %}
-    <h2 class="mb-3">Transações</h2>
 
-    <a 
-    href="{% url 'transactions:create' %}"
-    title="Cadastrar nova transação"
-    class="btn btn-primary btn-sticky-bottom">
-    <i class="bi bi-plus"></i>
-    </a>
+<div class="row container-fluid">
+    <div class="col-md-2">
+        <a 
+        href="{% url 'transactions:create' %}"
+        title="Cadastrar nova transação"
+        class="btn btn-success">
+            <i class="bi bi-plus"></i>
+            Novo
+        </a>
+    </div>
+</div>
 
-    {% comment %} Filtro {% endcomment %}
-    {% include "partials/_search_filter.html" with search_value="transactions:search" %}
+<div class="row d-flex mt-2 container-fluid">
+
+    <div class="col-md-3">
+        {% include "partials/_filter.html" %}
+    </div>
 
     {% comment %} Tabela de Transações {% endcomment %}
-        <div class="table-responsive">
-            <table class="table table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Produto</th>
-                        <th>Local</th>
-                        <th>Quantidade</th>
-                        <th>Tipo</th>
-                        <th>Data</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for transaction in transactions %}
-                    <tr>
-                        <td>{{ transaction.id }}</td>
-                        <td>{{ transaction.product }}</td>
-                        <td>{{ transaction.quantity }}</td>
-                        <td>
-                            {% if transaction.type == "IN" %}
-                            Entrada
-                            {% elif transaction.type == "OUT" %}
-                            Saída
-                            {% endif %}
-                        </td>
-                        <td>{{ transaction.date|date:"d/m/y à\s H:i:s" }}</td>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" class="text=center">Nenhuma transação cadastrada</td>
-                    </tr>
-                    {% endfor %}
-                    
-                </tbody>
-            </table>
-            {% comment %} Paginação {% endcomment %}
-            {% if transactions.paginator.num_pages > 0 %}
-            <nav aria-label="Paginação da página">
-                <ul class="pagination justify-content-end">
-                    {% if transactions.has_previous %}
-                    <li class="page-item">
-                        <a href="?page={{ transactions.previous_page_number }}" class="page-link" aria-label="Anterior">&laquo;</a>
-                    </li>
-                    {% endif %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ transactions.number }}</span>
-                    </li>
-                    {% if transactions.has_next %}
-                    <li class="page-item">
-                        <a href="?page={{ transactions.next_page_number }}" class="page-link" aria-label="Próximo">&raquo;</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-            {% endif %}
-        </div>
-
+    <div class="table-responsive bg-white p-2 col-md-9 rounded">
+        <table class="table table-borderless table-hover table-sm table-color">
+            <thead class="table-border">
+                <tr>
+                    <th>ID</th>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Tipo</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.product }}</td>
+                    <td>{{ transaction.quantity|format_quantity }}</td>
+                    <td>
+                        {% if transaction.type == "IN" %}
+                        Entrada
+                        {% elif transaction.type == "OUT" %}
+                        Saída
+                        {% endif %}
+                    </td>
+                    <td>{{ transaction.date|date:"d/m/y à\s H:i:s" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text=center">Nenhuma transação cadastrada</td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+        {% comment %} Paginação {% endcomment %}
+        {% if transactions.paginator.num_pages > 1 %}
+        <nav aria-label="Paginação da página">
+            <ul class="pagination justify-content-end">
+                {% if transactions.has_previous %}
+                <li class="page-item">
+                    <a href="?page={{ transactions.previous_page_number }}" class="page-link" aria-label="Anterior">&laquo;</a>
+                </li>
+                {% endif %}
+                <li class="page-item active">
+                    <span class="page-link">{{ transactions.number }}</span>
+                </li>
+                {% if transactions.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ transactions.next_page_number }}" class="page-link" aria-label="Próximo">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
 {% endblock  %}
