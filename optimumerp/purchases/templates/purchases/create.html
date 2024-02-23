@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load crispy_forms_tags %}
 {% block title %}Novo pedido de compra{% endblock  %}
 {% block head %}
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
@@ -8,83 +7,22 @@
     <script src="{% static 'purchases/js/createUpdate.js' %}"></script>
     <link rel="stylesheet" href="{% static 'purchases/css/style.css' %}">
 {% endblock  %}
+{% block page_name %}Novo pedido de venda{% endblock %}
+{% block search %}
+    {% comment %}Sem search{% endcomment %}
+    <div style="height: 38px;"></div>
+{% endblock %}
 {% block content %}
-    <div class="row mb-3">
-        <div class="col">
-            <h3>Novo pedido de compra</h3>
-        </div>
-    </div>
     <form id="purchases_form" action="{% url "purchases:create" %}" method="POST">
         {% csrf_token %}
-        <div class="row mb-3">
-            <div class="col">
-                {{ form.status|as_crispy_field }}
+        <div class="d-flex create-purchases p-3">
+            {% include 'partials/_purchases_form.html' %}
+            <div class="d-grid mb-3">
+                <button type="button" id="addPurchaseButton" class="btn btn-outline-secondary">Adicionar produto</button>
             </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                {{ form.supplier|as_crispy_field }}
+            <div class="d-grid">
+                <button id="submitButton" type="submit" class="btn btn-primary btn-lg">Salvar</button>
             </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                {{ form.installments|as_crispy_field }}
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                {{ form.discount|as_crispy_field }}
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                {{ form.delivery_date|as_crispy_field }}
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                {{ form.total_value|as_crispy_field }}
-            </div>
-        </div>
-        
-        <h4>Produtos</h4>
-        <div id="productFormset">
-            {{ purchase_product_formset.management_form }}
-            {% for product  in purchases_product_formset %}
-            
-            <div class="row mb-3 productRow">
-                {{ form.id }}
-                <div class="col-md-4 productInput">
-                    {{ product.product|as_crispy_field }}
-                </div>
-                <div class="col-md-2 productUnitValue">
-                    {{ product.unit_value|as_crispy_field }}
-                </div>
-                <div class="col-md-2 productAmount">
-                    {{ product.amount|as_crispy_field }}
-                </div>
-                <div class="col-md-2 productTotalValue">
-                    {{ product.total_value_product|as_crispy_field }}
-                </div>
-
-                <div class="col-md-2">
-                    <div class="d-grid">
-                        <button type="button" class="btn btn-danger remove-btn">
-                            <i class="bi bi-x"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        
-        <div class="d-grid mb-3">
-            <button type="button" id="addPurchaseButton" class="btn btn-outline-secondary">Adicionar produto</button>
-        </div>
-
-        <div class="d-grid">
-            <button id="submitButton" type="submit" class="btn btn-primary btn-lg">Salvar</button>
         </div>
     </form>
-
 {% endblock  %}
