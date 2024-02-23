@@ -12,7 +12,7 @@ from .exceptions import TransactionQuantityError
 
 def index(request):
     transactions = Transaction.objects.order_by("-id")
-    paginator = Paginator(transactions, 2)
+    paginator = Paginator(transactions, 10)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -63,7 +63,7 @@ def search(request):
     
     transactions = Transaction.objects.filter(Q(product__icontains=search_value) | Q(quantity__icontains=search_value)).order_by("-id")
 
-    paginator = Paginator(transactions, 2)
+    paginator = Paginator(transactions, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 

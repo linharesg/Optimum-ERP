@@ -73,26 +73,26 @@
                 
             </tbody>
         </table>
-        {% comment %} Paginação {% endcomment %}
-        {% if transactions.paginator.num_pages > 1 %}
-        <nav aria-label="Paginação da página">
-            <ul class="pagination justify-content-end">
-                {% if transactions.has_previous %}
-                <li class="page-item">
-                    <a href="?page={{ transactions.previous_page_number }}" class="page-link" aria-label="Anterior">&laquo;</a>
-                </li>
-                {% endif %}
-                <li class="page-item active">
-                    <span class="page-link">{{ transactions.number }}</span>
-                </li>
-                {% if transactions.has_next %}
-                <li class="page-item">
-                    <a href="?page={{ transactions.next_page_number }}" class="page-link" aria-label="Próximo">&raquo;</a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endif %}
     </div>
+            {% comment %} Paginação {% endcomment %}
+            {% if transactions.paginator.num_pages > 1 %}
+            <nav aria-label="Paginação da página">
+                <ul class="pagination justify-content-end">
+                    {% if transactions.has_previous %}
+                    <li class="page-item">
+                        <a href="?page={{ transactions.previous_page_number }}" class="page-link" aria-label="Anterior">&laquo;</a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ transactions.number }}</span>
+                    </li>
+                    {% if transactions.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ transactions.next_page_number }}" class="page-link" aria-label="Próximo">&raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
 </div>
 {% endblock  %}
