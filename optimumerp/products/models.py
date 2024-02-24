@@ -19,6 +19,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     MEASUREMENT_CHOICES = {
+        "": "Escolha a unidade de medida",
         "KG": "Quilograma",
         "Metro": "Metro",
         "Litro": "Litro",
@@ -26,6 +27,7 @@ class Product(models.Model):
     }
 
     CST_CHOICES = {
+        "": "Escolha o CST",
         "200": "200",
         "210": "210",
         "220": "220",

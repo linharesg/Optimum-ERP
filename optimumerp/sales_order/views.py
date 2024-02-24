@@ -1,3 +1,4 @@
+import decimal
 from django import forms
 from django.db import IntegrityError, transaction
 from django.http import HttpResponseRedirect, JsonResponse
@@ -9,6 +10,7 @@ from .forms import SalesOrderForm, SalesOrderProductFormSet
 from django.contrib import messages
 from products.models import Product
 from transactions.models import Transaction
+from inventory.models import Inventory
 from django.views.decorators.http import require_POST, require_GET
 
 # Create your views here.
@@ -159,11 +161,18 @@ def update(request, id):
 def finish_order(request, id):
     sale_order = get_object_or_404(SalesOrder, pk=id)
     for sale_products in SalesOrderProduct.objects.filter(sale_order=sale_order):
-        try:
-            Transaction.create(product=sale_products.product, quantity=sale_products.amount, type="OUT")
-        except:
+        inventory = Inventory.objects.get(product=sale_products.product)
+        if inventory.quantity - sale_products.amount < 0:
             messages.error(request, "Não foi possível faturar o pedido, verifique o estoque")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+    with transaction.atomic():
+        for sale_products in SalesOrderProduct.objects.filter(sale_order=sale_order):
+                try:
+                    _transaction = Transaction.create(product=sale_products.product, quantity=sale_products.amount, type="OUT")
+                except:
+                    messages.error(request, "Não foi possível faturar o pedido, verifique o estoque")
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         
     with transaction.atomic():
         try:
@@ -171,6 +180,7 @@ def finish_order(request, id):
             sale_order.save()
             messages.success(request, "Pedido faturado com sucesso!")
         except:
+            sale_order.status = "Pendente"
             messages.error(request, "Não foi possível faturar o pedido.")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
