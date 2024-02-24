@@ -9,7 +9,6 @@ jQuery(function() {
         fetch(url)
             .then(response => response.json())
             .then(products => {
-                console.log(products)
                 const $productsTableBody = $("#productsTableBody");
                 $productsTableBody.empty();
 
@@ -37,8 +36,6 @@ jQuery(function() {
 
     $finishPurchaseModal.on("show.bs.modal", function(e) {
         const $button = $(e.relatedTarget);
-        console.log($finishPurchaseModal)
-        console.log($button)
         const orderId = $button.data("order-id");
 
         $('#finishPurchaseForm').attr('action', orderId);
