@@ -1,24 +1,25 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from .forms import SuppliersForm
 from .models import Suppliers
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.views.generic import UpdateView
-
+from .filters import SuppliersFilter
 def index(request):
     suppliers = Suppliers.objects.order_by("-id")
+    supplier_filter = SuppliersFilter(request.GET, queryset=suppliers)
 
-    paginator = Paginator(suppliers, 2)
+    paginator = Paginator(supplier_filter.qs, 2)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     
     context = {
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        'filter': supplier_filter
     }
     
     return render(request, "suppliers/index.html", context)
@@ -38,24 +39,6 @@ class SupplierUpdateView(UpdateView):
         response = super().form_invalid(form)
         messages.success(self.request, "Erro ao atualizar o fornecedor!")
         return response
-
-def search(request):
-    search_value = request.GET.get("q").strip()
-    
-    if not search_value:
-        return redirect("suppliers:index")
-    
-    suppliers = Suppliers.objects.filter(Q(fantasy_name__icontains=search_value) | Q(company_name__icontains=search_value)).order_by("-id")
-    print(suppliers)
-    paginator = Paginator(suppliers, 2)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        "page_obj": page_obj
-    }
-    
-    return render(request, "suppliers/index.html", context)
 
 @require_POST
 def toggle_enabled(request, id):

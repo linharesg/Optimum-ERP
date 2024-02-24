@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% load quantity_filter %}
 
 {% block title %}Transações{% endblock  %}
@@ -34,8 +35,40 @@
 
 <div class="row d-flex mt-2 container-fluid">
 
+    {% comment %} Filtro {% endcomment %}
+    {% comment %} {% include "partials/_search_filter.html" with search_value="transactions:search" %} {% endcomment %}
+
     <div class="col-md-3">
-        {% include "partials/_filter.html" %}
+        {% comment %} INCLUÍDO FILTRO DIFERENTE DO PARTIAL PARA ALINHAR OS CAMPOS DE DATA. {% endcomment %}
+        {% comment %} {% include "partials/_filter.html" with main_page="transactions:index" %} {% endcomment %}
+
+        <div class="filter d-flex flex-column p-2 me-2 bg-white rounded">
+        <div class="d-flex">
+            <i class="bi bi-funnel me-1 fs-4"></i><h3 class="filter-title mb-3 fs-3">Filtros</h3>
+        </div>
+            <form method="get">
+                <div class="row">
+                    <div class="row">
+                        {{ filter.form.product|as_crispy_field }}
+                    </div>
+                    <div class="row">
+                        {{ filter.form.type|as_crispy_field }}
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {{ filter.form.date_min|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ filter.form.date_max|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+            <button class="btn btn-outline-success btn-filter" type="submit">Search</button>
+            <a href="{% url 'transactions:index' %}">
+                <button class="btn btn-outline-danger btn-filter" type="button">Limpar filtros</button>
+            </a>
+            </form>
+        </div>
     </div>
 
     {% comment %} Tabela de Transações {% endcomment %}
@@ -51,7 +84,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for transaction in transactions %}
+                {% for transaction in page_obj %}
                 <tr>
                     <td>{{ transaction.id }}</td>
                     <td>{{ transaction.product }}</td>
@@ -75,24 +108,7 @@
         </table>
     </div>
             {% comment %} Paginação {% endcomment %}
-            {% if transactions.paginator.num_pages > 1 %}
-            <nav aria-label="Paginação da página">
-                <ul class="pagination justify-content-end">
-                    {% if transactions.has_previous %}
-                    <li class="page-item">
-                        <a href="?page={{ transactions.previous_page_number }}" class="page-link" aria-label="Anterior">&laquo;</a>
-                    </li>
-                    {% endif %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ transactions.number }}</span>
-                    </li>
-                    {% if transactions.has_next %}
-                    <li class="page-item">
-                        <a href="?page={{ transactions.next_page_number }}" class="page-link" aria-label="Próximo">&raquo;</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-            {% endif %}
-</div>
+            {% include "partials/_paginator.html" %}
+        </div>
+
 {% endblock  %}

@@ -1,29 +1,20 @@
 from django.shortcuts import render, redirect
 from .models import Inventory
-from django.db.models import Q
+from .filters import InventoryFilter
+from django.core.paginator import Paginator
 
 def index(request):
     inventory = Inventory.objects.all()
-
-    context = {
-        "inventory": inventory
-    }
-
-    return render(request, "inventory/index.html", context)
-
-def search(request):
-    search_value = request.GET.get("q").strip()
-
-
-    if not search_value:
-        return redirect("inventory:index")
+    inventory_filter = InventoryFilter(request.GET, queryset=inventory)
     
-    inventory = Inventory.objects\
-        .filter(Q(product__icontains=search_value) | Q(quantity__icontains=search_value))\
-        .order_by("-product")
+    paginator = Paginator(inventory_filter.qs, 5)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     
     context = {
-        "inventory": inventory
+        "page_obj": page_obj,
+        'filter': inventory_filter
     }
 
     return render(request, "inventory/index.html", context)

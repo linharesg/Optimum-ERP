@@ -9,7 +9,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 <script src="{% static 'base/js/index.js' %}"></script>
-<script src="{% static 'suppliers/js/index.js' %}"></script>
 {% endblock  %}
 
 {% block page_name %}Fornecedores{% endblock %}
@@ -35,7 +34,7 @@
 <div class="row d-flex mt-2 container-fluid">
 
   <div class="col-md-3">
-    {% include "partials/_filter.html" %}
+    {% include "partials/_filter.html" with main_page="suppliers:index" %}
   </div>
 
   <div class="table-responsive flex-column bg-white p-2 col-md-9 rounded">

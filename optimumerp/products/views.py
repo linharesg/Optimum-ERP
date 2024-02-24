@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Product, SupplierProduct, Category
 from inventory.models import Inventory
-from django.db.models import Q, Sum, F
+from django.db.models import Q
 from django.db import IntegrityError
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render, get_object_or_404
@@ -14,45 +14,47 @@ from .forms import SupplierProductFormSet
 from sales_order.models import SalesOrderProduct
 from inventory.models import Inventory
 from django.db.models import Count
+from .filters import ProductFilter
 
 def index(request):
     products = Product.objects.order_by("-id")
     inventory_quantity = Inventory.objects.all()
-
+    product_filter = ProductFilter(request.GET, queryset=products)
     # Aplicando a paginação
-    paginator = Paginator(products, 100)
+    paginator = Paginator(product_filter.qs, 100)
     # /produtos?page=1 -> Obtendo a página da URL
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     context = {
         "products": page_obj,
-        "inventory_quantity": inventory_quantity
+        "inventory_quantity": inventory_quantity,
+        'filter': product_filter
         }
     
     return render(request, "products/index.html", context)
 
-def search(request):
-    # Obtendo o valor da requisição (Formulário)
-    search_value = request.GET.get("q").strip()
+# def search(request):
+#     # Obtendo o valor da requisição (Formulário)
+#     search_value = request.GET.get("q").strip()
 
-    # Verificando se algo foi digitado
-    if not search_value:
-        return redirect("products:index")
+#     # Verificando se algo foi digitado
+#     if not search_value:
+#         return redirect("products:index")
     
-    # Filtrando os produtos
-    #  O Q é usado para combinar filtros (& ou |)
-    products = Product.objects\
-        .filter(Q(name__icontains=search_value))\
-        .order_by("-id")
+#     # Filtrando os produtos
+#     #  O Q é usado para combinar filtros (& ou |)
+#     products = Product.objects\
+#         .filter(Q(name__icontains=search_value))\
+#         .order_by("-id")
 
-    paginator = Paginator(products, 100)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+#     paginator = Paginator(products, 100)
+#     page_number = request.GET.get("page")
+#     page_obj = paginator.get_page(page_number)
 
-    context = { "products": page_obj}
+#     context = { "products": page_obj}
 
-    return render(request, "products/index.html", context)
+#     return render(request, "products/index.html", context)
 
 def create(request):
     form_action = reverse("products:create")

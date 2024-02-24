@@ -63,10 +63,13 @@
 
 <div class="row d-flex mt-2 container-fluid">
 
+    {% comment %} FILTRO AO LADO DO USUARIO {% endcomment %}
+    {% comment %} Filtro {% endcomment %}
+    {% comment %} {% include "partials/_search_filter.html" with search_value="products:search" %} {% endcomment %}
+
     <div class="col-md-3">
-        {% comment %} Filtro {% endcomment %}
-        {% include "partials/_filter.html" %}
-    </div>
+        {% include "partials/_filter.html" with main_page="products:index" %}
+      </div>
 
     {% comment %} Tabela de produtos {% endcomment %}
     <div class="table-responsive bg-white p-2 col-md-9 rounded">
