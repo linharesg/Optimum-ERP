@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{% static 'purchases/css/index.css' %}">
     <script src="{% static 'base/js/jquery-3.7.1.min.js' %}"></script>
     <script src="{% static 'purchases/js/createUpdate.js' %}"></script>
+    <script src="{% static 'purchases/js/index.js' %}"></script>
 {% endblock %}
 {% block page_name %}Pedidos de compra{% endblock %}
 {% block search %}
@@ -59,6 +60,27 @@
         </div>
     </div>
 
+    <div class="modal" tabindex="-2" id="finishPurchaseModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Receber pedido</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Deseja realmente receber o pedido? Essa ação não poderá ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abortar</button>
+              <form id="finishPurchaseForm" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Receber pedido</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
     <div class="row container-fluid">
         <div class="col-md-2">
         <a href="{% url 'purchases:create' %}" title="Novo pedido de compra" class="btn btn-success">
@@ -95,16 +117,17 @@
                                     <button 
                                         data-order-id="{% url 'purchases:finish_order' purchase.id %}" 
                                         data-bs-toggle="modal" 
-                                        data-bs-target="#finishOrderModal" 
+                                        data-bs-target="#finishPurchaseModal" 
                                         type="submit" 
-                                        class="btn btn-success btn-sm" title="Realizar entrada">
+                                        class="btn btn-success btn-sm" title="Receber">
                                         <i class="bi bi-check"></i>
                                     </button>
                                 {% elif purchase.status == "Confirmado" %}
                                     <a 
-                                        href="{% url 'invoices:create_invoice' purchase.id %}" 
-                                        class="btn btn-success btn-sm">
-                                        <i class="bi bi-receipt"></i>
+                                        href="#" 
+                                        class="btn btn-success btn-sm disabled"
+                                        title="Confirmado">
+                                        <i class="bi bi-check"></i>
                                     </a>
                                 {% elif purchase.status == "Cancelado" %}
                                     <a 
@@ -121,10 +144,9 @@
                                     data-bs-target="#productsModal">
                                     <i class="bi bi-dice-3"></i>
                                 </button>
-                                <a 
+                                <a
                                     href="{% url 'purchases:update' purchase.id %}" 
-                                    class="btn btn-warning btn-sm" 
-                                    {% if purchase.status == "Cancelado" or purchase.status == "Confirmado" %}disabled{% endif %}"
+                                    class="btn btn-warning btn-sm {% if purchase.status == "Cancelado" or purchase.status == "Confirmado" %}disabled{% endif %}"
                                     title="Editar fornecedor">
                                     <i class="bi bi-pencil"></i>
                                 </a>
@@ -144,7 +166,7 @@
                             <td>{{ purchase.supplier|title }}</td>
                             <td>{{ purchase.created_at|date:'SHORT_DATE_FORMAT' }}</td>
                             <td>{{ purchase.user }}</td>
-                            <td>{{ purchase.delivery_date|date:'SHORT_DATE_FORMAT' }}</td>
+                            <td>{{ purchase.delivery_date|date:'SHORT_DATE_FORMAT' }}{% if not purchase.delivery_date %}À combinar{% endif %}</td>
                             <td>R${{ purchase.total_value }}</td>
                         </tr>
                 

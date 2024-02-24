@@ -24,8 +24,8 @@ class Transaction(models.Model):
         inventory = Inventory.objects.get(product__id=product.id)
         with transaction.atomic():
             try:
+                _transaction = Transaction.objects.create(product=product, quantity=quantity, type=type)
                 if type == "OUT":
-                    _transaction = Transaction.objects.create(product=product, quantity=quantity, type=type)
                     if inventory.quantity - quantity < 0:
                         transaction_error = TransactionQuantityError("Quantidade indisponível no estoque")
                         raise transaction_error
