@@ -6,7 +6,7 @@ from django.core.validators import validate_email
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "username", "password", "is_active"]
+        fields = ["first_name", "last_name", "email", "password", "is_active"]
         widgets = {
             "password": forms.PasswordInput()
         }
@@ -15,7 +15,7 @@ class UserForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["first_name"].required = True
         self.fields["last_name"].required = True
-        self.fields["username"].help_text = "Por favor, informe um endereço de e-mail válido como usuário."
+        self.fields["email"].help_text = "Por favor, informe um endereço de e-mail válido como usuário."
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -35,11 +35,10 @@ class UserForm(forms.ModelForm):
             self.add_error("first_name", ValidationError("O primeiro nome não pode ser igual ao último nome."))
             self.add_error("last_name", ValidationError("O primeiro nome não pode ser igual ao último nome."))
 
-        username = self.cleaned_data.get("username")
+        email = self.cleaned_data.get("email")
 
         try:
-            validate_email(username)
+            validate_email(email)
         except ValidationError:
-            self.add_error("username", ValidationError("Informe um endereço de e-mail válido."))
+            self.add_error("email", ValidationError("Informe um endereço de e-mail válido."))
         return super().clean()
-    

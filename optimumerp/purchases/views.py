@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from .models import Purchases, PurchasesProduct
 from django.http import HttpResponseRedirect, JsonResponse
 from products.models import Product
@@ -8,6 +7,7 @@ from django.views.generic import ListView
 from .forms import PurchasesForm, PurchasesProductFormSet
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib import messages
+from transactions.models import Transaction
 
 class PurchasesListView(ListView):
     model = Purchases
@@ -16,6 +16,7 @@ class PurchasesListView(ListView):
     ordering = "-id"
     
 def create(request):
+    # POST
     if request.method == 'POST':
         form = PurchasesForm(request.POST)
 
@@ -173,8 +174,28 @@ def get_products_from_purchase(request, id):
     # Serialização
     products_serialized = [{
         "name": PurchasesProduct.product.name,
+        "unit_of_measurement": PurchasesProduct.product.unit_of_measurement,
         "amount": PurchasesProduct.amount,
         "total_value": PurchasesProduct.total_value_product,
     } for PurchasesProduct in products]
 
     return JsonResponse(products_serialized, safe = False)
+
+def finish_order(request, id):
+    purchase = get_object_or_404(Purchases, pk=id)
+    for sale_products in PurchasesProduct.objects.filter(purchase=purchase):
+        try:
+            Transaction.create(product=sale_products.product, quantity=sale_products.amount, type="OUT")
+        except:
+            messages.error(request, "Não foi possível faturar o pedido, verifique o estoque")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        
+    with transaction.atomic():
+        try:
+            purchase.status = "Confirmado"
+            purchase.save()
+            messages.success(request, "Pedido faturado com sucesso!")
+        except:
+            messages.error(request, "Não foi possível faturar o pedido.")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

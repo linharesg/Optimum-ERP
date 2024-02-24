@@ -1,9 +1,9 @@
 jQuery(function() {
-    const $form = $("#sales_order_form");
+    const $form = $("#purchases_form");
     const $submitButton = $("#submitButton");
-    const $addButton = $("#addSaleOrderButton");
+    const $addButton = $("#addPurchaseButton");
     const $productsContainer = $("#productFormset");
-    const $totalProducts = $("#id_salesorderproduct_set-TOTAL_FORMS");
+    const $totalProducts = $("#id_purchasesproduct_set-TOTAL_FORMS");
     const $originalProduct = $productsContainer.children(".row:first").clone(true);
     const $totalOrderValue = $("#id_total_value")
     const $discount = $('#id_discount')
@@ -54,7 +54,7 @@ jQuery(function() {
         }).length > 1;
 
         if (duplicate) {
-            alert('Este produto já consta no pedido de venda!');
+            alert('Este produto já consta no pedido de compra!');
             $(this).val('');
             return;
         }
@@ -159,7 +159,7 @@ jQuery(function() {
 
     $submitButton.on("click", function() {
 
-        const productSelects = document.querySelectorAll('select[name^="salesorderproduct_set"]');
+        const productSelects = document.querySelectorAll('select[name^="purchasesproduct_set"]');
 
         for (let select of productSelects) {
             if (select.value !== "") {
