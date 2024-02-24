@@ -1,6 +1,5 @@
 .bg-login {
     background: linear-gradient(144deg, rgba(61,108,229,1) 0%, rgba(61,108,229,0.3299584482230392) 100%);
-    height: calc(100vh - 200px);
 }
 
 .img {
@@ -15,20 +14,20 @@
 
 .bi-person {
     position: relative;
-    top: 54px;
+    top: 67px;
     left: 9px;
 }
 
 .bi-lock {
     position: relative;
-    top: 117px;
+    top: 131px;
     right: 7px;
 }
 
-.bi-eye-slash {
+.btn-position {
     position: relative;
-    top: 117px;
-    left: 240px;
+    top: 125px;
+    left: 227px;
 }
 
 .input {

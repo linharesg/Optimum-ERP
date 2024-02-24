@@ -1,13 +1,40 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Atualização de cadastro de usuário{% endblock %}
+{% load crispy_forms_tags %}
+{% block title %}Atualização de Usuários{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'user/css/createUpdate.css' %}">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+{% endblock %}
+
+{% block page_name %}
+    Atualização de Usuário
+{% endblock %}
+
+{% block search %}
+  {% comment %}Sem search{% endcomment %}
+  <div style="height: 38px;"></div>
+{% endblock %}
+
 {% block content %}
-    <h2 class="mb-3">Edição de Usuários</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <div class="d-grid">
-            <button type="submit" class="btn btn-primary btn-lg">Salvar Alterações</button>
+        <div class="d-flex create-user p-3">
+            <div class="row">
+                <div class="col">{{ form.first_name|as_crispy_field }}</div>
+                <div class="col">{{ form.last_name|as_crispy_field }}</div>
+            </div>
+            <div class="row">
+                <div class="col">{{ form.username|as_crispy_field }}</div>
+                <div class="col">{{ form.password|as_crispy_field }}</div>
+            </div>
+            <div class="row">
+                <div class="col">{{ form.is_active|as_crispy_field }}</div>
+            </div>
+            <div class="d-grid">
+                <button class="btn btn-primary btn-lg">Salvar</button>
+            </div>
         </div>
     </form>
 {% endblock %}

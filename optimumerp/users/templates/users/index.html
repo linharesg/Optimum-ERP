@@ -2,39 +2,57 @@
 {% load static %}
 {% block title %}Usuários{% endblock %}
 {% block head %}
+    <link rel="stylesheet" href="{% static 'user/css/index.css' %}">
+
     <script src="{% static 'user/js/index.js' %}"></script>
 {% endblock %}
+
+{% block page_name %}Usuários{% endblock %}
+
+{% block search %}
+  {% comment %}Sem search{% endcomment %}
+  <div style="height: 38px;"></div>
+{% endblock %}
+
 {% block content %}
-    <h2 class="mb-3">Usuários</h2>
-    <a href="{% url "users:create" %}" title="Cadastrar um novo usuário" class="btn btn-primary btn-sticky-bottom">
-    <i class="bi bi-plus"></i>
-    </a>
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead>
+
+<div class="row container-fluid">
+    <div class="col-md-2">
+        <a href="{% url "users:create" %}" title="Cadastrar um novo usuário" class="btn btn-success">
+            <i class="bi bi-plus"></i>
+            Novo
+        </a>
+    </div>
+</div>
+
+<div class="row d-flex mt-2 mx-0 container-fluid">
+
+    <div class="table-responsive bg-white col p-2 rounded">
+        <table class="table table-borderless table-hover table-sm table-color">
+            <thead class="table-border">
                 <tr>
+                    <th>Ações</th>
                     <th>ID</th>
                     <th>Nome</th>
                     <th>E-mail</th>
                     <th>Ativo</th>
-                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
                 {% for user in users %}
                     <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.get_full_name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>
-                            <input {% if user.is_active %}checked{% endif %} type="checkbox" class="form-check-input">
-                        </td>
-                        <td class="d-flex gap-1">
-                            <a href="{% url 'users:update' user.email %}" class="btn btn-warning btn-sm" title="editar usuário"><i class="bi bi-pencil"></i></a>
+                        <td class="d-flex gap-1 actions">
+                            <a href="{% url 'users:update' user.username %}" class="btn btn-warning btn-sm" title="editar usuário"><i class="bi bi-pencil"></i></a>
                             <form action="{% url 'users:delete' user.id %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger btn-sm" title="remover usuário"><i class="bi bi-trash"></i></button>
                             </form>
+                        </td>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.get_full_name }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            <input {% if user.is_active %}checked{% endif %} type="checkbox" class="form-check-input">
                         </td>
                     </tr>
                     {% empty %}
@@ -45,4 +63,5 @@
             </tbody>
         </table>
     </div>
+</div>
 {% endblock %}
