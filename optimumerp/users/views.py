@@ -56,7 +56,7 @@ def update(request, username):
             context = {
                 "form": form,
             }
-            return render(request, "update.html", context)
+            return render(request, "users/update.html", context)
         
     else:
         form = UserForm(instance=user)
