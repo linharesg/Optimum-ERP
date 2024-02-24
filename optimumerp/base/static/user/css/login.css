@@ -1,6 +1,5 @@
 .bg-login {
     background: linear-gradient(144deg, rgba(61,108,229,1) 0%, rgba(61,108,229,0.3299584482230392) 100%);
-    height: calc(100vh - 200px);
 }
 
 .img {
