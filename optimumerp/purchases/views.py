@@ -142,6 +142,27 @@ def update(request, id):
 
     return render(request, "purchases/update.html", context)
 
+def finish_order(request, id):
+    purchase = get_object_or_404(Purchases, pk=id)
+    print(PurchasesProduct.objects.all())
+    for purchase_product in PurchasesProduct.objects.filter(purchase=purchase):
+            try:
+                Transaction.create(product=purchase_product.product, quantity=purchase_product.amount, type="IN")
+            except:
+                messages.error(request, "Não foi possível faturar o pedido, verifique o estoque")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        
+    with transaction.atomic():
+        try:
+            purchase.status = "Confirmado"
+            purchase.save()
+            messages.success(request, "Pedido faturado com sucesso!")
+        except:
+            purchase.status = "Pendente"
+            messages.error(request, "Não foi possível faturar o pedido.")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
 @require_POST
 def cancel(request, id):
     purchase = get_object_or_404(Purchases, pk=id)
@@ -183,19 +204,19 @@ def get_products_from_purchase(request, id):
 
 def finish_order(request, id):
     purchase = get_object_or_404(Purchases, pk=id)
-    for sale_products in PurchasesProduct.objects.filter(purchase=purchase):
+    for purchase_product in PurchasesProduct.objects.filter(purchase=purchase):
         try:
-            Transaction.create(product=sale_products.product, quantity=sale_products.amount, type="OUT")
+            Transaction.create(product=purchase_product.product, quantity=purchase_product.amount, type="IN")
         except:
-            messages.error(request, "Não foi possível faturar o pedido, verifique o estoque")
+            messages.error(request, "Não foi possível receber o pedido")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         
     with transaction.atomic():
         try:
             purchase.status = "Confirmado"
             purchase.save()
-            messages.success(request, "Pedido faturado com sucesso!")
+            messages.success(request, "Pedido recebido com sucesso!")
         except:
-            messages.error(request, "Não foi possível faturar o pedido.")
+            messages.error(request, "Não foi possível receber o pedido.")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

@@ -9,6 +9,7 @@ jQuery(function() {
         fetch(url)
             .then(response => response.json())
             .then(products => {
+                console.log(products)
                 const $productsTableBody = $("#productsTableBody");
                 $productsTableBody.empty();
 
@@ -30,6 +31,17 @@ jQuery(function() {
         const orderId = $button.data("order-id");
 
         $('#cancelOrderForm').attr('action', orderId);
+    });
+
+    const $finishPurchaseModal = $("#finishPurchaseModal");
+
+    $finishPurchaseModal.on("show.bs.modal", function(e) {
+        const $button = $(e.relatedTarget);
+        console.log($finishPurchaseModal)
+        console.log($button)
+        const orderId = $button.data("order-id");
+
+        $('#finishPurchaseForm').attr('action', orderId);
     });
 
 });
