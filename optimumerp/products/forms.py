@@ -47,7 +47,7 @@ class SupplierProductForm(forms.ModelForm):
         model = SupplierProduct
         exclude = ["product"]
         widgets = {
-            "cost_price": forms.NumberInput(attrs={"placeholder": "Preço de custo"})
+            "cost_price": forms.NumberInput(attrs={"placeholder": "Preço de custo"}),
         }
 
     def __init__(self, *args, **kwargs):

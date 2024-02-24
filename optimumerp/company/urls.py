@@ -5,5 +5,4 @@ app_name = "company"
 
 urlpatterns= [
     path("dados/", views.index, name="index"),
-    path("update-company/<int:id>/", views.update, name="update")
 ]

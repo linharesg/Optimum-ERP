@@ -5,54 +5,110 @@
 {% load zipcode_format %}
 {% block head %}
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
     <script src="{% static 'base/js/index.js' %}"></script>
+    <script src="{% static 'suppliers/js/createUpdate.js' %}"></script>
 {% endblock  %}
 {% block title %}Empresa{% endblock  %}
+{% block page_name %}Dados da empresa{% endblock  %}
 {% block content %}
-    {% block page_name %}Dados da empresa{% endblock  %}
 
-{% comment %} Tabela de produtos {% endcomment %}
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Razão Social</th>
-                    <th>Nome fantasia</th>
-                    <th>CNPJ</th>
-                    <th>E-mail principal</th>
-                    <th>CEP</th>
-                    <th>Estado</th>
-                    <th>Cidade</th>
-                    <th>Rua</th>
-                    <th>Número</th>
-                    <th>Telefone</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for company in companies %}
-                <tr>
-                    <td>{{ company.id }}</td>
-                    <td title="{{ company.name }}">{{ company.name|title|truncatechars:20 }}</td>
-                    <td title="{{ company.fantasy_name }}">{{ company.fantasy_name|truncatechars:20 }}</td>
-                    <td>{{ company.cnpj }}</td>
-                    <td>{{ company.email }}</td>
-                    <td> {{company.zipcode}}</td>
-                    <td>{{ company.state }}</td>
-                    <td>{{ company.city }}</td>
-                    <td>{{ company.street }}</td>
-                    <td>{{ company.number }}</td>
-                    <td>{{ company.phone }}</td>
-                    <td class="d-flex gap-1">
-                        <a href="{% url 'company:update' company.id %}" class="btn btn-warning btn-sm" title="Editar produto">
-                            <i class="bi bi-pencil"></i>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+{% for company in companies %}
+<div class="row">
+  <div class="col-md-2">
+    <div id="div_id_name" class="mb-3">
+            <label for="id_name" class="form-label">
+                Nome
+            </label>
+            <input type="text" name="name" value="{{ company.name }}" readonly class="textinput form-control" id="id_name">
     </div>
-
-{% endblock  %}
+</div>
+  <div class="col-md-4">
+    <div id="div_id_fantasy_name" class="mb-3">
+            <label for="id_fantasy_name" class="form-label">
+                Nome fantasia
+            </label>
+            <input type="text" name="fantasy_name" value="{{ company.fantasy_name }}" readonly class="textinput form-control" id="id_fantasy_name">
+    </div>
+</div>
+  <div class="col-md-4">
+    <div id="div_id_cnpj" class="mb-3">
+            <label for="id_cnpj" class="form-label">
+                CNPJ
+            </label>
+            <input type="text" name="cnpj" value="{{ company.cnpj }}" readonly class="textinput form-control" id="id_cnpj">
+    </div>
+</div>
+  <div class="col-md-2">
+    <div id="div_id_state_registration" class="mb-3">
+            <label for="id_state_registration" class="form-label">
+                Inscrição Estadual
+            </label>
+            <input type="text" name="state_registration" value="{{ company.state_registration }}" readonly class="textinput form-control" id="id_state_registration">        
+    </div>
+</div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div id="div_id_email" class="mb-3">
+            <label for="id_email" class="form-label">
+                E-mail
+            </label>
+            <input type="email" name="email" value="{{ company.email }}" readonly class="emailinput form-control" id="id_email">
+    </div>
+</div>
+  <div class="col-md-6">
+    <div id="div_id_phone" class="mb-3">
+            <label for="id_phone" class="form-label">
+                Contato
+            </label>
+                        <input type="text" name="phone" value="{{ company.phone }}" readonly class="textinput form-control" id="id_phone">
+    </div>
+</div>
+</div>
+<h2>Endereço</h2>
+<div class="row">
+  <div class="col-md-3">
+    <label for="zipcodeInput" class="form-label">CEP</label>
+    <div class="input-group">
+      <input type="text" readonly class="form-control placeholderStyle " id="zipcodeInput" name="zipcode" value="{{ company.zipcode }}" placeholder="00000-000" />
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div id="div_id_street" class="mb-3">
+            <label for="id_street" class="form-label">
+                Rua
+            </label>
+            <input type="text" name="street" value="{{ company.street }}" readonly class="textinput form-control" id="id_street">
+    </div>
+</div>
+  <div class="col-md-3">
+    <div id="div_id_number" class="mb-3">   
+            <label for="id_number" class="form-label">
+                Número
+            </label>
+            <input type="text" name="number" readonly value="{{ company.number }}" class="textinput form-control" id="id_number">
+    </div>
+</div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div id="div_id_city" class="mb-3">
+            <label for="id_city" class="form-label">
+                Cidade
+            </label>
+            <input type="text" name="city" value="{{ company.city }}" readonly class="textinput form-control" id="id_city">
+    </div>
+</div>
+  <div class="col-md-6">
+    <div id="div_id_state" class="mb-3">
+        <label for="id_state" class="form-label">
+            Estado
+        </label>
+        <input type="text" name="city" value="{{ company.state }}" readonly class="textinput form-control" id="id_city">
+    </div>
+</div>
+</div>
+{% endfor %}
+{% endblock %}
