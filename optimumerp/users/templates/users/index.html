@@ -15,7 +15,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
-                    <th>Username</th>
+                    <th>E-mail</th>
                     <th>Ativo</th>
                     <th>Ações</th>
                 </tr>
@@ -25,12 +25,12 @@
                     <tr>
                         <td>{{ user.id }}</td>
                         <td>{{ user.get_full_name }}</td>
-                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
                         <td>
                             <input {% if user.is_active %}checked{% endif %} type="checkbox" class="form-check-input">
                         </td>
                         <td class="d-flex gap-1">
-                            <a href="{% url 'users:update' user.username %}" class="btn btn-warning btn-sm" title="editar usuário"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'users:update' user.email %}" class="btn btn-warning btn-sm" title="editar usuário"><i class="bi bi-pencil"></i></a>
                             <form action="{% url 'users:delete' user.id %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger btn-sm" title="remover usuário"><i class="bi bi-trash"></i></button>
