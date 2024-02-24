@@ -18,7 +18,7 @@
     </a>
 
     {% comment %} Filtro {% endcomment %}
-    {% include "partials/_search_filter.html" with search_value="products:search" %}
+    {% comment %} {% include "partials/_search_filter.html" with search_value="products:search" %} {% endcomment %}
 
     {% comment %} Tabela de produtos {% endcomment %}
     <div class="table-responsive">
@@ -50,7 +50,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="10" class="text=center">Nenhum produto cadastrado</td>
+                    <td colspan="10" class="text=center">Nenhuma categoria cadastrada</td>
                 </tr>
                 {% endfor %}
             </tbody>
