@@ -14,19 +14,19 @@ class PurchasesForm(forms.ModelForm):
             "status": "Status",
             "delivery_date": "Data de entrega",
             "total_value": "Valor total",
-            "discount": "Desconto",
+            "discount": "Desconto(%)",
             "installments": "Parcelas",
             "created_at": "Data de emissão",
             "supplier": "Fornecedor",
             "products": "Produtos",
-            #"user": "Usuário solicitante"
+            "user": "Usuário solicitante"
         }
 
         widgets = {
             "delivery_date": forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d"),
             'status': forms.TextInput(attrs={'readonly': 'readonly'}),
             'total_value': forms.TextInput(attrs={'readonly': 'readonly'}),
-            # 'user': forms.TextInput(attrs={'readonly': 'readonly'})
+            'user': forms.TextInput(attrs={'readonly': 'readonly'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -37,7 +37,7 @@ class PurchasesProductForm(forms.ModelForm):
     class Meta:
         model = PurchasesProduct
         fields = "__all__"
-        # exclude = ["status"]
+
         widgets = {
             "unit_value": forms.NumberInput(attrs={"placeholder": "Preço de custo"}),
             "amount": forms.NumberInput(attrs={"placeholder": "Quantidade"}),
