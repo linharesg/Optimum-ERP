@@ -15,13 +15,13 @@ def index(request):
     transactions = Transaction.objects.order_by("-id")
     transactions_filter = TransactionsFilter(request.GET, queryset=transactions)
 
-    paginator = Paginator(transactions_filter.qs, 2)
+    paginator = Paginator(transactions_filter.qs, 5)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     
     context = {
-        'transactions': page_obj,
+        'page_obj': page_obj,
         'filter': transactions_filter
     }
     

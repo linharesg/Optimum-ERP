@@ -5,7 +5,6 @@ app_name = "inventory"
 
 urlpatterns= [
     path("", views.index, name="index"),
-    path("search", views.search, name="search"),
 ]
 
 

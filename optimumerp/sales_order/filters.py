@@ -7,8 +7,8 @@ from django.db.models import Value, F
 from django import forms
 
 class SalesOrderFilter(django_filters.FilterSet):
-    status = django_filters.ChoiceFilter(field_name="status", label="Status", choices=SalesOrder.STATUS_CHOICES)
-    costumer_company_or_fantasy_name = django_filters.CharFilter(method='costumer_company_or_fantasy_name_filter', label="",  widget=TextInput(attrs={'placeholder': 'Razão social / Nome fantasia'}))
+    status = django_filters.ChoiceFilter(field_name="status", empty_label="Status", label="", choices=SalesOrder.STATUS_CHOICES)
+    costumer_company_or_fantasy_name = django_filters.CharFilter(method='costumer_company_or_fantasy_name_filter', label="",  widget=TextInput(attrs={'placeholder': 'Cliente'}))
     user = django_filters.CharFilter(method='user_seller_filter', label="",  widget=TextInput(attrs={'placeholder': 'Vendedor'}))
     product = django_filters.CharFilter(field_name="products__name", label="", widget=TextInput(attrs={'placeholder': 'Produto'}), lookup_expr='icontains')
     delivery_date = django_filters.DateFilter(field_name='delivery_date', label="Entrega até:", lookup_expr='lte', widget=forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d"))

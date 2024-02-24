@@ -29,17 +29,19 @@
         </div>
             <form method="get">
                 <div class="row">
-                    <div class="col-md-6">
-                        {{ filter.form.date_min|as_crispy_field }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ filter.form.date_max|as_crispy_field }}
+                    <div class="row">
+                        {{ filter.form.product|as_crispy_field }}
                     </div>
                     <div class="row">
                         {{ filter.form.type|as_crispy_field }}
                     </div>
                     <div class="row">
-                        {{ filter.form.product|as_crispy_field }}
+                        <div class="col-6">
+                            {{ filter.form.date_min|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ filter.form.date_max|as_crispy_field }}
+                        </div>
                     </div>
                 </div>
             <button class="btn btn-outline-success btn-filter" type="submit">Search</button>
@@ -63,7 +65,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for transaction in transactions %}
+                    {% for transaction in page_obj %}
                     <tr>
                         <td>{{ transaction.id }}</td>
                         <td>{{ transaction.product }}</td>
@@ -87,25 +89,7 @@
                 </tbody>
             </table>
             {% comment %} Paginação {% endcomment %}
-            {% if transactions.paginator.num_pages > 0 %}
-            <nav aria-label="Paginação da página">
-                <ul class="pagination justify-content-end">
-                    {% if transactions.has_previous %}
-                    <li class="page-item">
-                        <a href="?page={{ transactions.previous_page_number }}" class="page-link" aria-label="Anterior">&laquo;</a>
-                    </li>
-                    {% endif %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ transactions.number }}</span>
-                    </li>
-                    {% if transactions.has_next %}
-                    <li class="page-item">
-                        <a href="?page={{ transactions.next_page_number }}" class="page-link" aria-label="Próximo">&raquo;</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-            {% endif %}
+            {% include "partials/_paginator.html" %}
         </div>
 
 {% endblock  %}
