@@ -58,6 +58,7 @@ class Suppliers(models.Model):
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.fantasy_name)
+        self.enabled = True
         super(Suppliers, self).save(*args, **kwargs)
     
     class Meta:
