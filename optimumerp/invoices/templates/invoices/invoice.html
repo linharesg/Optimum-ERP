@@ -546,7 +546,7 @@
                                         </td>
                                         <td style="width: 34mm">
                                             <span class="nf-label">FONE/FAX</span>
-                                            <span class="info"></span>
+                                            <span class="info">{{ sale_order.client.phone|format_phone }}</span>
                                         </td>
                                         <td style="width: 28mm">
                                             <span class="nf-label">UF</span>
@@ -571,8 +571,6 @@
             <div class="boxFatura">
                 <p class="area-name">Fatura</p>
                 <span class="info">
-                    Parcela: 1 / Vencimento: 10/10/2024 / Valor: R$ 500 |
-                    Parcela 2 / Vencimento: 10/10/2024 / Valor: R$ 500
                 </span>
             </div>
     
@@ -616,7 +614,7 @@
                             </td>
                             <td>
                                 <span class="nf-label label-small">V. TOTAL DE PRODUTOS</span>
-                                <span class="info">R$ {{ sale_order.total_value }}</span>
+                                <span class="info">R$ {{ total_value_products }}</span>
                             </td>
                         </tr>
                         <tr>
@@ -630,7 +628,7 @@
                             </td>
                             <td>
                                 <span class="nf-label">DESCONTO</span>
-                                <span class="info">{{ sale_order.discount }}</span>
+                                <span class="info">{{ discount }}</span>
                             </td>
                             <td>
                                 <span class="nf-label">OUTRAS DESP.</span>
@@ -654,7 +652,7 @@
                             </td>
                             <td>
                                 <span class="nf-label label-small">V. TOTAL DA NOTA</span>
-                                <span class="info">{{ sale_order.total_value }}</span>
+                                <span class="info">R$ {{ invoice_total_value }}</span>
                             </td>
                         </tr>
                     </tbody>
