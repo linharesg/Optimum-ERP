@@ -111,9 +111,9 @@
             <th>ID</th>
             <th>Status</th>
             <th>Cliente</th>
-            <th>Data de emissão</th>
+            <th>Emissão</th>
             <th>Vendedor</th>
-            <th>Data de entrega</th>
+            <th>Entrega</th>
             <th>Valor total</th>
           </tr>
         </thead>
@@ -137,7 +137,7 @@
               <td>{{ sale_order.client|title }}</td>
               <td>{{ sale_order.created_at|date:'SHORT_DATE_FORMAT' }}</td>
               <td>{{ sale_order.user }}</td>
-              <td>{{ sale_order.delivery_date|date:'SHORT_DATE_FORMAT' }}{% if not sale_order.delivery_date %}À combinar{% endif %}</td>
+              <td>{{ sale_order.delivery_date|date:'SHORT_DATE_FORMAT' }}{% if not sale_order.delivery_date %}A definir{% endif %}</td>
               <td>R${{ sale_order.total_value }}</td>
             </tr>
             {% empty %}

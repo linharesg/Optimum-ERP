@@ -32,10 +32,20 @@ def index(request):
 def create(request):
     if request.method == 'POST':
         form = TransactionsForm(request.POST)
-        product = Product.objects.get(id=request.POST.get("product"))
+        inventory = Inventory.objects.get(product=request.POST.get("product"))
+        quantity = decimal.Decimal(request.POST.get("quantity"))
         if form.is_valid():
             try:
                 form.save()
+                if request.POST.get("type") == "IN":
+                    inventory.quantity += quantity
+                    inventory.save()
+                else:
+                    if inventory.quantity - quantity < 0:
+                        raise TransactionQuantityError("Quantidade indisponível no estoque")
+                    else:
+                        inventory.quantity -= quantity
+                        inventory.save()
             except TransactionQuantityError:
                 messages.error(request, "Não foi possível realizar a transação, quantidade insuficiente no estoque.")
                 context = { "form": form}
