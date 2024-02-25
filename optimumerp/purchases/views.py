@@ -9,7 +9,9 @@ from django.contrib import messages
 from transactions.models import Transaction
 from .filters import PurchasesFilter
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def index(request):
     purchase = Purchases.objects.order_by("-id")
     purchase_filter = PurchasesFilter(request.GET, queryset=purchase)

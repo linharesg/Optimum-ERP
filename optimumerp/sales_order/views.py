@@ -1,11 +1,7 @@
-import decimal
-from django import forms
 from django.db import IntegrityError, transaction
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
 from .models import SalesOrder, SalesOrderProduct
-from django.views.generic import ListView, CreateView
 from .forms import SalesOrderForm, SalesOrderProductFormSet
 from django.contrib import messages
 from products.models import Product
@@ -14,15 +10,9 @@ from inventory.models import Inventory
 from django.views.decorators.http import require_POST, require_GET
 from .filters import SalesOrderFilter
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
-
-# class SalesOrderListView(ListView):
-#     model = SalesOrder
-#     template_name = "sales_order/index.html"
-#     paginate_by = 10
-#     ordering = "-id"
-
+@login_required
 def index(request):
     sales_order = SalesOrder.objects.order_by("-id")
     sales_order_filter = SalesOrderFilter(request.GET, queryset=sales_order)
