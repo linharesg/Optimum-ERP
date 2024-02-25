@@ -8,7 +8,9 @@ from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.views.generic import UpdateView
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def index(request):
     suppliers = Suppliers.objects.order_by("-id")
 

@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Inventory
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def index(request):
     inventory = Inventory.objects.all()
 

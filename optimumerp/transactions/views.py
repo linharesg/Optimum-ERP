@@ -9,7 +9,9 @@ from django.contrib import messages
 from django.db.models import Q
 from django.db import transaction
 from .exceptions import TransactionQuantityError
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def index(request):
     transactions = Transaction.objects.order_by("-id")
     paginator = Paginator(transactions, 10)
