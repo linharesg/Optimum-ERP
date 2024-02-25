@@ -21,13 +21,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@700&display=swap" rel="stylesheet">
 </head>
 <body class="d-flex flex-column align-items-center bg-dark text-light">
-    {% block content %}
     <div class="position-absolute top-50 start-50 translate-middle">
         <div class="img">
            <img src="{% static 'base/img/optimum_logo.png' %}" alt="Logo Optimum" height="100px"> 
         </div>
         <div class="p-4 mb-3 bg-login rounded d-flex flex-column justify-content-center">
-            <form action="{% url 'users:login' %}" method="post" class="d-flex flex-column p-5">
+            <form action="{% url 'users:login' %}" method="post" class="d-flex flex-column p-5" novalidate>
                 {% csrf_token %}
                 <h3>Faça seu login</h3>
                 <div class="d-flex">
@@ -37,11 +36,11 @@
                 </div>
                 <div id="div_id_username" class="mb-1">
                     <label for="id_username" class="form-label requiredField"></label>
-                    <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" class="textinput form-control bg-dark text-light border border-0 input" required="" id="id_username">
+                    <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" class="textinput form-control bg-dark text-light border border-0 input {% if form.username.errors %}is-invalid{% endif %}" required="" id="id_username">
                 </div>
                 <div id="div_id_password" class="mb-5">
                     <label for="id_password" class="form-label requiredField"></label>
-                    <input type="password" name="password" autocomplete="current-password" class="passwordinput form-control bg-dark text-light border border-0 input" required="" id="id_password">
+                    <input type="password" name="password" autocomplete="current-password" class="passwordinput form-control bg-dark text-light border border-0 input {% if form.username.errors %}is-invalid{% endif %}" required="" id="id_password">
                 </div>
                 <input type="hidden" name="next" value={{request.GET.next}}>
                 <button type="submit" class="btn btn-dark mt-3 btn-submit">ENTRAR</button>
@@ -49,6 +48,18 @@
         </div>
         <h1 class="mt-3">Seu futuro começa aqui!</h1>
     </div>
-    {% endblock %}  
+    {% if form.errors %}
+    <div class="alert alert-danger sticky" role="alert">
+        {% if form.username.errors and form.password.errors %}
+            Usuário e senha incorretos
+        {% elif form.username.errors %}
+            Usuário incorreto
+        {% elif form.password.errors %}
+            Senha incorreta
+        {% else %}
+            Entre com um usuário cadastrado
+        {% endif %}
+    </div>
+    {% endif %}
 </body>
 </html>
