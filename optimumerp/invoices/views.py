@@ -10,11 +10,20 @@ def open_invoice(request, id):
     companies = Company.objects.all()
     sale_order = get_object_or_404(SalesOrder, pk=id)
     sale_order_products = SalesOrderProduct.objects.filter(sale_order=sale_order)
+    total_value_products = 0 
+    for product in sale_order_products:
+        total_value_products += product.total_value_product
+    total_value_products_formatted = f"{total_value_products:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    discount = f"{total_value_products * (sale_order.discount/100):,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
     invoice = Invoice.objects.get(sale_order=sale_order)
+    invoice_total_value = f"{sale_order.total_value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
     context = {
         "companies": companies,
         "sale_order": sale_order,
         "sale_order_products": sale_order_products,
+        "total_value_products": total_value_products_formatted,
+        "invoice_total_value": invoice_total_value,
+        "discount": discount,
         "invoice": invoice
         }
     
