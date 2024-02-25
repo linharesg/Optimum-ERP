@@ -5,7 +5,9 @@ from .models import Invoice
 from sales_order.models import SalesOrder, SalesOrderProduct
 from clients.models import Clients
 from random import randint
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def open_invoice(request, id):
     companies = Company.objects.all()
     sale_order = get_object_or_404(SalesOrder, pk=id)
