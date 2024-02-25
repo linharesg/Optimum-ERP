@@ -15,8 +15,10 @@ jQuery(function() {
                 products.forEach(product => {
                     const $row = $("<tr></tr>");
                     $row.append($("<td>").text(product.name));
-                    $row.append($("<td>").text(product.amount));
-                    $row.append($("<td>").text(product.total_value));
+                    $row.append($("<td>").text(
+                        product.unit_of_measurement === "Unidade" ? Math.floor(product.amount) : product.amount
+                    ));
+                    $row.append($("<td>").text("R$" + product.total_value));
                     $productsTableBody.append($row);
                 })
             })
