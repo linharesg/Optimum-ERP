@@ -17,7 +17,7 @@ jQuery(function() {
             sum += parseFloat(element.value || 0);
         });
         const $discount = $('#id_discount').val()
-        $totalOrderValue.val((sum * (100 - $discount))/100)
+        $totalOrderValue.val(((sum * (100 - $discount))/100).toFixed(2))
     };
 
     const removeProduct = function(){
@@ -82,7 +82,7 @@ jQuery(function() {
         const $productAmount = $currentProductRow.find('.productAmount input').val();
         
         const total = $productUnitValue * $productAmount;
-        $productTotalValue.val(total);
+        $productTotalValue.val(total.toFixed(2));
         
         updateTotalValue();
     }
