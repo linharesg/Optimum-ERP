@@ -101,3 +101,9 @@ h1 {
   margin-left: 15px;
   padding: 0 !important;
 }
+
+.toast {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+}
