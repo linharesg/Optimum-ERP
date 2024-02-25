@@ -63,10 +63,10 @@
                         </div>
                     </div>
                 </div>
-            <button class="btn btn-outline-success btn-filter" type="submit">Search</button>
-            <a href="{% url 'transactions:index' %}">
-                <button class="btn btn-outline-danger btn-filter" type="button">Limpar filtros</button>
-            </a>
+                <a href="{% url 'transactions:index' %}" class="btn btn-outline-danger btn-filter">
+                    Limpar filtros
+                </a>
+                <button class="btn btn-outline-success btn-filter" type="submit">Aplicar filtros</button>
             </form>
         </div>
     </div>
