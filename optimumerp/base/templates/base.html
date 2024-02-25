@@ -132,7 +132,13 @@
                       <hr class="dropdown-divider-dark" />
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#">Sair</a>
+                      <form class="dropdown-item" action="{% url 'users:logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link link-dark">
+                          <i class="bi bi-box-arrow-left"></i>
+                          Sair
+                        </button>
+                      </form>
                     </li>
                   </ul>
                 </li>
