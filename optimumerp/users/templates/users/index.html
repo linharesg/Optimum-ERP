@@ -42,18 +42,16 @@
                 {% for user in users %}
                     <tr>
                         <td class="d-flex gap-1 actions">
-                            <a href="{% url 'users:update' user.username %}" class="btn btn-warning btn-sm" title="editar usuário"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'users:update' user.name %}" class="btn btn-warning btn-sm" title="editar usuário"><i class="bi bi-pencil"></i></a>
                             <form action="{% url 'users:delete' user.id %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger btn-sm" title="remover usuário"><i class="bi bi-trash"></i></button>
                             </form>
                         </td>
                         <td>{{ user.id }}</td>
-                        <td>{{ user.get_full_name }}</td>
-                        <td>{{ user.username }}</td>
-                        <td>
-                            <input {% if user.is_active %}checked{% endif %} type="checkbox" class="form-check-input">
-                        </td>
+                        <td>{{ user.name|title }}</td>
+                        <td>{{ user.email }}</td>
+                        <td><input {% if user.is_active %}checked{% endif %} type="checkbox" class="form-check-input"></td>
                     </tr>
                     {% empty %}
                     <tr>

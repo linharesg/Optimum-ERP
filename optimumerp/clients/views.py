@@ -10,12 +10,11 @@ from django.contrib import messages
 from django.views.generic import UpdateView
 from sales_order.models import SalesOrder
 from django.db.models import Count
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.db.models import Count
-from django.contrib import messages
-
 from .filters import ClientsFilter
 
+@login_required
 def index(request):
     clients = Clients.objects.order_by("-id")
     client_filter = ClientsFilter(request.GET, queryset=clients)

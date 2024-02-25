@@ -15,7 +15,11 @@ from sales_order.models import SalesOrderProduct
 from inventory.models import Inventory
 from django.db.models import Count
 from .filters import ProductFilter
+from django.views.generic import ListView
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def index(request):
     products = Product.objects.order_by("-id")
     inventory_quantity = Inventory.objects.all()
@@ -211,17 +215,12 @@ def get_suppliers_from_product(request, id):
 
 # Categories
 
-def get_categories(request):
-    categories = Category.objects.order_by("-id")
-    inventory_quantity = Inventory.objects.all()
+class CategoryListView(PermissionRequiredMixin, ListView):
+    model = Category
+    template_name = "categories/index.html"
+    paginate_by = 100
+    permission_required = "products.view_category"
 
-    # Aplicando a paginação
-    paginator = Paginator(categories, 100)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    context = {"categories": page_obj, "inventory_quantity": inventory_quantity}
-    return render(request, "categories/index.html", context)
 
 def search_categories(request):
     # Obtendo o valor da requisição (Formulário)

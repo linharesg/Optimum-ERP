@@ -10,7 +10,9 @@ from django.db.models import Q
 from django.db import transaction
 from .exceptions import TransactionQuantityError
 from .filters import TransactionsFilter
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def index(request):
     transactions = Transaction.objects.order_by("-id")
     transactions_filter = TransactionsFilter(request.GET, queryset=transactions)
