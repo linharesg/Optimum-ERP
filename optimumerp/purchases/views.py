@@ -49,7 +49,7 @@ def create(request):
                 return render(request, "purchases/create.html", context)
 
             if purchase_product_formset.is_valid():
-                messages.success(request, "O produto foi cadastrado com sucesso!")
+                messages.success(request, "O pedido de compra foi cadastrado com sucesso!")
                 purchase.user = request.user
                 purchase.save()
                 purchase_product_formset.save()
@@ -154,27 +154,6 @@ def update(request, id):
     }
 
     return render(request, "purchases/update.html", context)
-
-def finish_order(request, id):
-    purchase = get_object_or_404(Purchases, pk=id)
-    print(PurchasesProduct.objects.all())
-    for purchase_product in PurchasesProduct.objects.filter(purchase=purchase):
-            try:
-                Transaction.create(product=purchase_product.product, quantity=purchase_product.amount, type="IN")
-            except:
-                messages.error(request, "Não foi possível faturar o pedido, verifique o estoque")
-                return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        
-    with transaction.atomic():
-        try:
-            purchase.status = "Confirmado"
-            purchase.save()
-            messages.success(request, "Pedido faturado com sucesso!")
-        except:
-            purchase.status = "Pendente"
-            messages.error(request, "Não foi possível faturar o pedido.")
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @require_POST
 def cancel(request, id):
