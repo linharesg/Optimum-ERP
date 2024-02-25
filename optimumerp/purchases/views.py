@@ -3,17 +3,28 @@ from django.db import IntegrityError, transaction
 from .models import Purchases, PurchasesProduct
 from django.http import HttpResponseRedirect, JsonResponse
 from products.models import Product
-from django.views.generic import ListView
 from .forms import PurchasesForm, PurchasesProductFormSet
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib import messages
 from transactions.models import Transaction
+from .filters import PurchasesFilter
+from django.core.paginator import Paginator
 
-class PurchasesListView(ListView):
-    model = Purchases
-    template_name = "purchases/index.html"
-    paginate_by = 10
-    ordering = "-id"
+def index(request):
+    purchase = Purchases.objects.order_by("-id")
+    purchase_filter = PurchasesFilter(request.GET, queryset=purchase)
+    paginator = Paginator(purchase_filter.qs.distinct(), 3)
+
+    
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "filter": purchase_filter
+    }
+    
+    return render(request, "purchases/index.html", context)
     
 def create(request):
     # POST

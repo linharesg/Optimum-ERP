@@ -92,7 +92,7 @@
 
     <div class="row d-flex mt-2 container-fluid">
         <div class="col-md-3">
-          {% include 'partials/_filter.html' %}
+          {% include 'partials/_filter.html' with main_page="purchases:index" %}
         </div>
 
         <div class="table-responsive bg-white p-2 col-md-9 rounded">
@@ -103,9 +103,9 @@
                         <th>ID</th>
                         <th>Status</th>
                         <th>Fornecedor</th>
-                        <th>Data de emissão</th>
-                        <th>Emitido por</th>
-                        <th>Data de entrega</th>
+                        <th>Emissão</th>
+                        <th>Comprador</th>
+                        <th>Entrega</th>
                         <th>Valor total</th>
                     </tr>
                 </thead>
@@ -166,7 +166,7 @@
                             <td>{{ purchase.supplier|title }}</td>
                             <td>{{ purchase.created_at|date:'SHORT_DATE_FORMAT' }}</td>
                             <td>{{ purchase.user }}</td>
-                            <td>{{ purchase.delivery_date|date:'SHORT_DATE_FORMAT' }}{% if not purchase.delivery_date %}À combinar{% endif %}</td>
+                            <td>{{ purchase.delivery_date|date:'SHORT_DATE_FORMAT' }}{% if not purchase.delivery_date %}A definir{% endif %}</td>
                             <td>R${{ purchase.total_value }}</td>
                         </tr>
                 
