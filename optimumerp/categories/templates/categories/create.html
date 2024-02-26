@@ -7,7 +7,7 @@
     <script src="{% static 'products/js/createUpdate.js' %}"></script>
 {% endblock  %}
 {% block content %}
-    {% with create_url="/produtos/cadastro" %}
+    {% with create_url="/categorias/cadastro/" %}
         <h2 class="mb-3">
             {% if form_action == create_url %}
                 Cadastro de Categorias

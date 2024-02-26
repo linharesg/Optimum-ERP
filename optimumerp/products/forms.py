@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, SupplierProduct, Category
+from .models import Product, SupplierProduct
 from crispy_forms.helper import FormHelper
 
 class ProductForm(forms.ModelForm):
@@ -63,12 +63,3 @@ SupplierProductFormSet = forms.inlineformset_factory(
     can_delete=True,
     max_num=5
 )
-
-class CategoryForm(forms.ModelForm):
-    class Meta:
-        model = Category
-        fields = "__all__"
-        labels = {
-            "name": "Nome",
-            "description": "Descrição",
-        }
