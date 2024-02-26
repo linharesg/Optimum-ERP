@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'invoices.apps.InvoicesConfig',
     'purchases.apps.PurchasesConfig',
     'company.apps.CompanyConfig',
+    # 'dashboard.apps.DashboardConfig',
+    'categories.apps.CategoriesConfig'
 ]
 
 MIDDLEWARE = [

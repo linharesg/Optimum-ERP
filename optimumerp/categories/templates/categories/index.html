@@ -11,7 +11,7 @@
 
 
     <a 
-    href="{% url 'products:category_create' %}"
+    href="{% url 'categories:create' %}"
     title="Cadastrar nova categoria"
     class="btn btn-primary btn-sticky-bottom">
     <i class="bi bi-plus"></i>
@@ -27,20 +27,22 @@
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
+                    <th>Descrição</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
-                {% for category in categories %}
+                {% for category in page_obj %}
                 <tr>
                     <td>{{ category.id }}</td>
                     <td>{{ category.name|title }}</td>
+                    <td title="{{ category.description }}">{{ category.description|truncatechars:20 }}</td>
 
                     <td class="d-flex gap-1">
-                        <a href="{% url 'products:category_update' category.id %}" class="btn btn-warning btn-sm" title="Editar categoria">
+                        <a href="{% url 'categories:update' category.id %}" class="btn btn-warning btn-sm" title="Editar categoria">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <form method="post" action={% url 'products:category_delete' category.id %}>
+                        <form method="post" action={% url 'categories:delete' category.id %}>
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm" title="remover categoria">
                                 <i class="bi bi-trash"></i>
