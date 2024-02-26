@@ -17,7 +17,7 @@
     {{ sale_order_product_formset.management_form }}
     {% for product in sale_order_product_formset %}
     <div class="row productRow">
-        {{ form.id }}
+        {{ product.id }}
         <div class="col-md-4 productInput">
             {{ product.product|as_crispy_field }}
         </div>

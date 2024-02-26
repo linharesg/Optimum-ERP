@@ -47,6 +47,7 @@ jQuery(function() {
         $totalProducts.val(parseInt($totalProducts.val()) - 1);
         updateTotalValue();
 
+        
         if (parseInt($initialProducts.val()) > 0) {
             $initialProducts.val(parseInt($initialProducts.val()) -1);
             updateFormIndex()
@@ -131,16 +132,11 @@ jQuery(function() {
         });
         
         $newRow.find("div>div[id]").each(function() {
-            console.log("2")
             const id = $(this).attr("id").replace("-0-", `-${index}-`)
-            // console.log(id)
-            // console.log($(this))
             $(this).attr({ id }).val("");
-            // console.log($(this))
         });
 
         $newRow.find("button[data-url").each(function() {
-            console.log("3")
             const oldUrl = $(this).attr("data-url");
             const newUrl = oldUrl.replace(/\d+/, '0');
             $(this).attr("data-url", newUrl).val("");

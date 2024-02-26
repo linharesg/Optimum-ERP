@@ -216,6 +216,7 @@ def delete_product(request, id):
     supplier_product = get_object_or_404(SalesOrderProduct, pk=id)
     supplier_product.delete()
 
+
     return JsonResponse({ "message": "success"})
 
 @require_GET

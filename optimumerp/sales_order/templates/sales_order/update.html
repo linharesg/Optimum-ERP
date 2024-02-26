@@ -14,12 +14,10 @@
 {% endblock %}
 
 {% block search %}
-  {% comment %}Sem search{% endcomment %}
   <div style="height: 38px;"></div>
 {% endblock %}
 
 {% block content %}
-{% comment %} <form id="sales_order_form" action="{% url 'sales_order:update' id %}" method="POST"> {% endcomment %}
 <form id="sales_order_form" method="POST">
     {% csrf_token %}
     

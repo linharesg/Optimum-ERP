@@ -56,5 +56,5 @@ SalesOrderProductFormSet = forms.inlineformset_factory(
     form=SalesOrderProductForm,
     extra=1,
     can_delete=True,
-    max_num=5
+    max_num=1
 )
