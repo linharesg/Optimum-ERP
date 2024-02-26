@@ -43,6 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Employee(models.Model):
     DEFAULT_GROUP_ID = 1
     group = models.ForeignKey(Group, on_delete=models.CASCADE, default=DEFAULT_GROUP_ID)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.name if self.user else "Employee"

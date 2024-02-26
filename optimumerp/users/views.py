@@ -26,8 +26,8 @@ class EmployeeCreateView(CreateView):
     success_url = reverse_lazy("users:index")
 
 
-def update(request, username):
-    user = User.objects.get(username=username)
+def update(request, name):
+    user = User.objects.get(name=name)
 
     if request.method == 'POST':
         form = UserForm(request.POST, instance=user)

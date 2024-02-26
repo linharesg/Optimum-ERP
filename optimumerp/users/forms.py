@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
 from .models import Employee
@@ -40,9 +39,7 @@ class UserChangeForm(forms.ModelForm):
         fields = ["email", "password", "name", "is_active", "is_superuser"]
 
 
-class UserForm(forms.ModelForm):
-    groups = forms.ModelChoiceField(queryset=Group.objects.all(), required=True)
-    
+class UserForm(forms.ModelForm):    
     class Meta:
         model = User
         fields = ["name", "email", "password", "is_active"]
@@ -52,6 +49,7 @@ class UserForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.default_group = Group.objects.get(name='Employee')
 
     @transaction.atomic
     def save(self, commit=True):
@@ -63,10 +61,9 @@ class UserForm(forms.ModelForm):
             user.set_password(password)
         if commit:
             user.save()
-            group = self.cleaned_data.get("groups")
-            # Cria um novo funcionário (Employee) associado ao usuário
-            employee = Employee.objects.create(group=group)
-            employee.user = user  # Define o usuário associado ao funcionário
+            # Atribui automaticamente o grupo padrão ao usuário
+            user.groups.add(self.default_group)
+            # Cria um novo funcionário (Employee) associado ao usuário e ao grupo padrão
+            employee = Employee.objects.create(user=user, group=self.default_group)
             employee.save()
-            user.groups.add(group)
         return user
