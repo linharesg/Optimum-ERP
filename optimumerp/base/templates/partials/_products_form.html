@@ -12,8 +12,9 @@
     <div class="col-md-4">{{ form.sale_price|as_crispy_field }}</div>
 </div>
 <div class="row">
-    <div class="col-md-6">{{ form.cst|as_crispy_field }}</div>
-    <div class="col-md-6">{{ form.expiration_date|as_crispy_field }}</div>
+    <div class="col-md-4">{{ form.cst|as_crispy_field }}</div>
+    <div class="col-md-4">{{ form.category|as_crispy_field }}</div>
+    <div class="col-md-4">{{ form.expiration_date|as_crispy_field }}</div>
 </div>
 {% if h1.text == "Edição do produto" %}
 <div class="row">
