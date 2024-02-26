@@ -212,7 +212,7 @@ def cancel(request, id):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @require_POST
-def delete_product_from_sale_order(request, id):
+def delete_product(request, id):
     supplier_product = get_object_or_404(SalesOrderProduct, pk=id)
     supplier_product.delete()
 

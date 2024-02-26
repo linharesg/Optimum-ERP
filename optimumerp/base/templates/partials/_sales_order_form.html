@@ -34,7 +34,8 @@
         <div class="col-md-2">
             <div class="d-grid">
                 <button
-                type="button" 
+                type="button"
+                {% if product.id.value %}data-url="{% url 'sales_order:delete_product' product.id.value %}"{% endif %}
                 class="btn btn-danger remove-btn removeProductButton">
                     <i class="bi bi-x"></i>
                 </button>
