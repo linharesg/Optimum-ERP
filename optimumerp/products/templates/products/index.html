@@ -80,6 +80,7 @@
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Descrição</th>
+                    <th>Categoria</th>
                     <th>Estoque</th>
                     <th>Unidade</th>
                     <th>Preço de venda</th>
@@ -107,6 +108,7 @@
                     <td>{{ product.id }}</td>
                     <td title="{{ product.name }}">{{ product.name|title|truncatechars:20 }}</td>
                     <td title="{{ product.description }}">{{ product.description|truncatechars:20 }}</td>
+                    <td title="{{ product.category }}">{{ product.category|truncatechars:15 }}</td>
                     <td>
                         {% for inventory_product in inventory_quantity %}
                             {% if inventory_product.product == product %}
