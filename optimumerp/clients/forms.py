@@ -21,8 +21,6 @@ class ClientsForm(forms.ModelForm):
             "city": "Cidade",
             "state": "Estado",
             "phone": "Contato",
-            "enabled": "Ativo"
-
         }
         
         error_messages = {

@@ -34,8 +34,4 @@
   <div class="col-md-6">{{ form.state|as_crispy_field }}</div>
   <div class="col-md-6">{{ form.city|as_crispy_field }}</div>
 </div>
-<div class="row">
-  {% if form_action != '/clientes/cadastro/' %}
-    <div class="col">{{ form.enabled|as_crispy_field }}</div>
-  {% endif %}
-</div>
+
