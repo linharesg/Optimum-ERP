@@ -14,18 +14,6 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def index(request):
-    """
-    Esta view retorna uma página contendo uma lista paginada de pedidos de venda, 
-    permitindo a filtragem por diferentes critérios, como status, cliente, vendedor e produto.
-
-    Requer autenticação do usuário.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest contendo os dados da requisição.
-
-    Returns:
-        HttpResponse: Uma resposta HTTP contendo a página de listagem dos pedidos de venda.
-    """
     sales_order = SalesOrder.objects.order_by("-id")
     sales_order_filter = SalesOrderFilter(request.GET, queryset=sales_order)
     paginator = Paginator(sales_order_filter.qs.distinct(), 3)
@@ -42,18 +30,6 @@ def index(request):
     return render(request, "sales_order/index.html", context)
 
 def create(request):
-    """
-    Esta view permite que o usuário crie um novo pedido de venda, fornecendo um formulário para 
-    preencher as informações do pedido e dos produtos relacionados.
-
-    Requer autenticação do usuário.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest contendo os dados da requisição.
-
-    Returns:
-        HttpResponse: Uma resposta HTTP contendo o formulário para criar um novo pedido de venda.
-    """
     # POST
     if request.method == 'POST':
         form = SalesOrderForm(request.POST)
@@ -114,15 +90,6 @@ def create(request):
     return render(request, "sales_order/create.html", context)
 
 def get_sale_value(request):
-    """
-    Esta função é acessada via requisição AJAX e retorna o preço de venda de um produto com base em seu ID.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest contendo os dados da requisição.
-
-    Returns:
-        JsonResponse: Uma resposta JSON contendo o preço de venda do produto.
-    """
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest' and request.method == 'GET':
         product_id = request.GET.get('product_id')
         product = Product.objects.get(id=product_id)
@@ -132,17 +99,6 @@ def get_sale_value(request):
         return JsonResponse({'error': 'Invalid request'})    
 
 def get_sale_value_update(request, id):
-    """
-
-    Esta função retorna o preço de venda atualizado de um produto após uma atualização na view.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest contendo os dados da requisição.
-        id (int): O ID do produto.
-
-    Returns:
-        JsonResponse: Uma resposta JSON contendo o preço de venda atualizado do produto.
-    """
     value = get_sale_value(request)
     return value
     
@@ -151,19 +107,7 @@ def get_sale_value_create(request):
     return value
 
 def update(request, id):
-    """
-    Esta view permite que o usuário edite um pedido de venda existente, fornecendo um formulário para 
-    atualizar as informações do pedido e dos produtos relacionados.
 
-    Requer autenticação do usuário.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest contendo os dados da requisição.
-        id (int): O ID do pedido de venda a ser atualizado.
-
-    Returns:
-        HttpResponse: Uma resposta HTTP contendo o formulário para atualizar o pedido de venda.
-    """
     sale_order = get_object_or_404(SalesOrder, pk=id)
 
     if sale_order.status == "Cancelado":
@@ -222,20 +166,6 @@ def update(request, id):
     return render(request, "sales_order/update.html", context)
 
 def finish_order(request, id):
-    """
-    Finaliza e fatura um pedido de venda.
-
-    Esta função fatura um pedido de venda após a verificação do estoque disponível para os produtos.
-
-    Requer autenticação do usuário.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest contendo os dados da requisição.
-        id (int): O ID do pedido de venda a ser faturado.
-
-    Returns:
-        HttpResponseRedirect: Uma resposta HTTP redirecionando para a página de origem.
-    """
     sale_order = get_object_or_404(SalesOrder, pk=id)
     for sale_products in SalesOrderProduct.objects.filter(sale_order=sale_order):
         inventory = Inventory.objects.get(product=sale_products.product)
@@ -264,18 +194,6 @@ def finish_order(request, id):
     
 @require_POST
 def cancel(request, id):
-    """
-    Esta função cancela um pedido de venda existente.
-
-    Requer autenticação do usuário.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest contendo os dados da requisição.
-        id (int): O ID do pedido de venda a ser cancelado.
-
-    Returns:
-        HttpResponseRedirect: Uma resposta HTTP redirecionando para a página de origem.
-    """
     sale_order = get_object_or_404(SalesOrder, pk=id)
 
     if sale_order.status == "Cancelado":
@@ -294,18 +212,6 @@ def cancel(request, id):
 
 @require_POST
 def delete_product(request, id):
-    """
-    Esta função exclui um produto específico de um pedido de venda.
-
-    Requer autenticação do usuário.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest contendo os dados da requisição.
-        id (int): O ID do produto a ser excluído do pedido de venda.
-
-    Returns:
-        JsonResponse: Uma resposta JSON indicando o sucesso da exclusão.
-    """
     supplier_product = get_object_or_404(SalesOrderProduct, pk=id)
     supplier_product.delete()
 
@@ -314,18 +220,6 @@ def delete_product(request, id):
 
 @require_GET
 def get_products_from_sale_order(request, id):
-    """
-    Obtém os produtos de um pedido de venda.
-
-    Esta função retorna uma lista de produtos de um pedido de venda específico.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest contendo os dados da requisição.
-        id (int): O ID do pedido de venda.
-
-    Returns:
-        JsonResponse: Uma resposta JSON contendo os detalhes dos produtos do pedido de venda.
-    """
     products = SalesOrderProduct.objects.filter(sale_order__id=id).order_by("-id")
 
     # Serialização
