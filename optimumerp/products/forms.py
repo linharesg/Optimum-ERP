@@ -2,7 +2,11 @@ from django import forms
 from .models import Product, SupplierProduct
 from crispy_forms.helper import FormHelper
 
+
 class ProductForm(forms.ModelForm):
+    """
+    Formulário para adicionar ou atualizar informações de um produto.
+    """
     class Meta:
         model = Product
         exclude = ["slug", "is_perishable"]
@@ -42,7 +46,12 @@ class ProductForm(forms.ModelForm):
             "expiration_date": forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
         }
 
+
 class SupplierProductForm(forms.ModelForm):
+    """
+    Formulário para adicionar ou atualizar informações de fornecedores de um produto.
+    """    
+    
     class Meta:
         model = SupplierProduct
         exclude = ["product"]
