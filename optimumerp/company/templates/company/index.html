@@ -4,11 +4,8 @@
 {% load cnpj_filter %}
 {% load zipcode_format %}
 {% block head %}
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
-    <script src="{% static 'base/js/index.js' %}"></script>
-    <script src="{% static 'suppliers/js/createUpdate.js' %}"></script>
+    <script src="{% static 'company/js/createUpdate.js' %}"></script>
 {% endblock  %}
 {% block title %}Empresa{% endblock  %}
 {% block page_name %}Dados da empresa{% endblock  %}
