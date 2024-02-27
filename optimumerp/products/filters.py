@@ -2,7 +2,11 @@ from .models import Product
 import django_filters
 from django.forms.widgets import TextInput
 
+
 class ProductFilter(django_filters.FilterSet):
+    """
+    Filtro para buscar produtos com base em diferentes critérios.
+    """
     name = django_filters.CharFilter(field_name='name', label="", widget=TextInput(attrs={'placeholder': 'Nome do produto'}), lookup_expr='icontains')
     description = django_filters.CharFilter(field_name='description', label="", widget=TextInput(attrs={'placeholder': 'Descrição'}), lookup_expr='icontains')
     # category = django_filters.CharFilter(field_name='category',label="", widget=TextInput(attrs={'placeholder': 'Categoria'}), lookup_expr='icontains')

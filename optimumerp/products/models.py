@@ -4,6 +4,9 @@ from categories.models import Category
 from suppliers.models import Suppliers
 
 class Product(models.Model):
+    """
+    Representa um produto em estoque.
+    """
     MEASUREMENT_CHOICES = {
         "": "Escolha a unidade de medida",
         "KG": "Quilograma",
@@ -133,7 +136,11 @@ class Product(models.Model):
         verbose_name = "Produto"
         verbose_name_plural = "Produtos"
 
+
 class SupplierProduct(models.Model):
+    """
+    Representa o relacionamento entre produtos e seus fornecedores.
+    """
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     supplier = models.ForeignKey(Suppliers, on_delete=models.CASCADE)
     cost_price = models.DecimalField(max_digits=8, decimal_places=2)
