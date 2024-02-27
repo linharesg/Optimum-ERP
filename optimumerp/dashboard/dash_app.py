@@ -3,7 +3,6 @@ from dash import dcc, html
 import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
 from django.db.models import Count, Sum
-from suppliers.models import Suppliers
 from purchases.models import Purchases
 from inventory.models import Inventory
 from sales_order.models import SalesOrder, SalesOrderProduct
@@ -11,29 +10,33 @@ from sales_order.models import SalesOrder, SalesOrderProduct
 # Crie um aplicativo Dash
 app = DjangoDash("Dashboard")
 
-# GRÁFICO DE FORNECEDORES POR ESTADO
+# GRÁFICO DE VENDAS POR CATEGORIA
 @app.dash_app.callback(
-    dash.dependencies.Output('suppliers-chart', 'figure'),
+    dash.dependencies.Output('sales-by-category-chart', 'figure'),
     []
 )
-def update_suppliers_chart():
+def update_sales_by_category_chart():
     """
-    Atualiza o gráfico que mostra a distribuição de fornecedores por estado.
+    Atualiza o gráfico que mostra as vendas por categoria.
     """
-    suppliers_by_state = Suppliers.objects.values('state').annotate(count=Count('id'))
-    states = [s['state'] for s in suppliers_by_state]
-    counts = [s['count'] for s in suppliers_by_state]
+    # Consulta para obter o total de vendas por categoria
+    sales_by_category = SalesOrderProduct.objects.values('product__category__name').annotate(total_sales=Sum('amount'))
 
+    # Extrair as categorias e os totais de vendas
+    categories = [item['product__category__name'] for item in sales_by_category]
+    sales_totals = [item['total_sales'] for item in sales_by_category]
+
+    # Renderizar o gráfico de barras
     data = [
         go.Bar(
-            x=states,
-            y=counts,
+            x=categories,
+            y=sales_totals,
         )
     ]
 
     layout = go.Layout(
-        xaxis=dict(title='Estado'),
-        yaxis=dict(title='Número de Fornecedores')
+        xaxis=dict(title='Categoria'),
+        yaxis=dict(title='Total de Vendas')
     )
 
     return {'data': data, 'layout': layout}
@@ -190,8 +193,8 @@ app.layout = html.Div([
     # GRÁFICO DE VENDAS POR POR USUÁRIO
     dcc.Graph(id='sales-by-user-chart'),
 
-    # GRÁFICO DE FORNECEDORES POR ESTADO
-    dcc.Graph(id='suppliers-chart'),
+    # GRÁFICO DE VENDAS POR CATEGORIA
+    dcc.Graph(id='sales-by-category-chart'),
     
     # GRÁFICO DE COMPRAS POR FORNECEDOR
     dcc.Graph(id='purchases-chart'),
