@@ -1,11 +1,14 @@
 from django import forms
+from django.forms.models import inlineformset_factory
 from .models import Purchases, PurchasesProduct
 from crispy_forms.helper import FormHelper
 from suppliers.models import Suppliers
 from products.models import Product
 
 class PurchasesForm(forms.ModelForm):
-
+    """
+    Formulário para criar ou atualizar um pedido de compra.
+    """
     class Meta:
         model = Purchases
         exclude = ["products"]
@@ -34,6 +37,9 @@ class PurchasesForm(forms.ModelForm):
         self.fields["supplier"].queryset = Suppliers.objects.filter(enabled=True)
 
 class PurchasesProductForm(forms.ModelForm):
+    """
+    Formulário para criar ou atualizar um item de produto em um pedido de compra.
+    """
     class Meta:
         model = PurchasesProduct
         fields = "__all__"
@@ -50,7 +56,7 @@ class PurchasesProductForm(forms.ModelForm):
         self.fields["product"].queryset = Product.objects.filter(enabled=True)
         self.helper.form_show_labels = False
 
-PurchasesProductFormSet = forms.inlineformset_factory(
+PurchasesProductFormSet = inlineformset_factory(
     Purchases,
     PurchasesProduct,
     form=PurchasesProductForm,
