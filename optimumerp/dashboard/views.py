@@ -8,9 +8,15 @@ from inventory.models import Inventory
 from sales_order.models import SalesOrder, SalesOrderProduct
 
 class DashView(TemplateView):
+    """
+    View responsável por exibir o painel de controle com gráficos relacionados às vendas e estoque.
+    """
     template_name = "dashboard/index.html"
     
     def get_context_data(self, **kwargs):
+        """
+        Obtém os dados necessários para renderizar os gráficos e adiciona ao contexto da view.
+        """
         context = super().get_context_data(**kwargs)
 
         # Gráfico de Compras por Fornecedor
@@ -48,7 +54,6 @@ class DashView(TemplateView):
         product_names = [item.product.name for item in top_inventory]
         quantities = [item.quantity for item in top_inventory]
         plot_div_inventory = plot([Bar(x=quantities, y=product_names, orientation='h')], output_type="div", include_plotlyjs=False)
-
 
         context["plot_div_purchases"] = plot_div_purchases
         context["plot_div_sales"] = plot_div_sales
