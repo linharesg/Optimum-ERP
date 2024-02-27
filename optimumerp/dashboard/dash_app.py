@@ -29,8 +29,9 @@ def update_sales_by_category_chart():
     # Renderizar o gráfico de barras
     data = [
         go.Bar(
-            x=categories,
-            y=sales_totals,
+            x=sales_totals,
+            y=categories,
+            orientation='h'
         )
     ]
 
@@ -114,7 +115,7 @@ def create_top_products_chart():
         go.Bar(
             x=total_sold,
             y=product_names,
-            orientation='v'
+            orientation='h'
         )
     ]
     layout = go.Layout(

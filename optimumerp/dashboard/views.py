@@ -34,13 +34,13 @@ class DashView(TemplateView):
         sales_by_category = SalesOrderProduct.objects.values('product__category__name').annotate(total_sales=Sum('total_value_product'))
         categories = [item['product__category__name'] for item in sales_by_category]
         sales_totals = [item['total_sales'] for item in sales_by_category]
-        plot_div_category = plot([Bar(x=categories, y=sales_totals)], output_type="div", include_plotlyjs=False)
+        plot_div_category = plot([Bar(x=sales_totals, y=categories, orientation='h')], output_type="div", include_plotlyjs=False)
 
         # Gráfico Top 10 produtos mais vendidos
         top_products = SalesOrderProduct.objects.values('product__name').annotate(total_sold=Sum('amount')).order_by('-total_sold')[:10]
         product_names = [item['product__name'] for item in top_products]
         total_sold = [item['total_sold'] for item in top_products]
-        plot_div_salesproduct = plot([Bar(x=total_sold, y=product_names, orientation='v')], output_type="div", include_plotlyjs=False)
+        plot_div_salesproduct = plot([Bar(x=total_sold, y=product_names, orientation='h')], output_type="div", include_plotlyjs=False)
 
         # Gráfico Vendas por Usuário/Vendedor
         sales_by_user = SalesOrder.objects.values('user__name').annotate(total_sales=Sum('total_value'))
