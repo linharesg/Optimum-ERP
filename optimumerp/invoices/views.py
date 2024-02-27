@@ -1,14 +1,27 @@
 from django.shortcuts import redirect, render, get_object_or_404
-
 from company.models import Company
 from .models import Invoice
 from sales_order.models import SalesOrder, SalesOrderProduct
-from clients.models import Clients
 from random import randint
 from django.contrib.auth.decorators import login_required
 
 @login_required
 def open_invoice(request, id):
+    """
+    Esta função exibe os detalhes de uma fatura específica, incluindo informações sobre a venda associada,
+    produtos incluídos na venda, valor total dos produtos, desconto aplicado, valor total da fatura e informações
+    do emissor e do destinatário.
+
+    Args:
+        request (HttpRequest): Objeto HttpRequest que contém os dados da requisição.
+
+    Returns:
+        HttpResponse: Uma resposta HTTP contendo a renderização do template "invoices/invoice.html" com os
+        detalhes da fatura.
+
+    Raises:
+        Http404: Se a venda associada à fatura não existir.
+    """
     companies = Company.objects.all()
     sale_order = get_object_or_404(SalesOrder, pk=id)
     sale_order_products = SalesOrderProduct.objects.filter(sale_order=sale_order)
@@ -32,6 +45,21 @@ def open_invoice(request, id):
     return render(request, "invoices/invoice.html", context)
 
 def create_invoice(request, id):
+    """
+    Esta função cria uma nova fatura para uma venda específica. Se uma fatura já existir para a venda
+    especificada, a função redireciona para a visualização da fatura. Caso contrário, uma nova fatura é
+    criada com base nas informações da empresa (emissor) e do cliente (destinatário).
+
+    Args:
+        request (HttpRequest): Objeto HttpRequest que contém os dados da requisição.
+        id (int): O ID da venda para a qual a fatura será criada.
+
+    Returns:
+        HttpResponseRedirect: Um redirecionamento para a visualização da fatura criada.
+
+    Raises:
+        Http404: Se a venda especificada não existir.
+    """
     sale_order = get_object_or_404(SalesOrder, pk=id)
     companies = Company.objects.all()
     client = sale_order.client
