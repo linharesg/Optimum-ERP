@@ -19,8 +19,8 @@ class SuppliersForm(forms.ModelForm):
             "number": "Número",
             "city": "Cidade",
             "state": "Estado",
-            "phone": "Contato"
-
+            "phone": "Contato",
+            "enabled": "Ativo"
         }
         
         error_messages = {

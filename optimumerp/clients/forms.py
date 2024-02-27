@@ -2,6 +2,8 @@
 import re
 from django import forms
 from .models import Clients
+from crispy_forms.helper import FormHelper, Layout
+from crispy_forms.layout import Hidden
 
 class ClientsForm(forms.ModelForm):
        
@@ -21,6 +23,7 @@ class ClientsForm(forms.ModelForm):
             "city": "Cidade",
             "state": "Estado",
             "phone": "Contato",
+            "enabled": "Ativo"
         }
         
         error_messages = {
@@ -34,6 +37,7 @@ class ClientsForm(forms.ModelForm):
             }
         }
 
+    
     def clean_cnpj(self):
         cnpj = self.cleaned_data.get("cnpj", "")
         cnpj = re.sub("[^0-9]", "", cnpj)
