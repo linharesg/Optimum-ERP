@@ -362,7 +362,7 @@
                 <tbody>
                     <tr>
                         <td colspan="2" class="txt-upper">
-                            Recebemos de {{ company.name }} os produtos e serviços constantes na nota fiscal indicada ao lado
+                            Recebemos de {{ invoice.emitter_name }} os produtos e serviços constantes na nota fiscal indicada ao lado
                         </td>
                         <td rowspan="2" class="tserie txt-center">
                             <span class="font-12" style="margin-bottom: 5px;">NF-e</span>
@@ -388,16 +388,16 @@
                             <img class="client_logo" src="{% static 'base/img/logo_sem_fundo.png' %}" alt="" onerror=""/>
                         </td>
                         <td rowspan="3" style="width: 46mm; font-size: 7pt;" class="txt-center">
-                            <span class="mb2 bold block">{{ company.name }}</span>
-                            <span class="block">{{ company.street }}</span>
+                            <span class="mb2 bold block">{{ invoice.emitter_name }}</span>
+                            <span class="block">{{ invoice.emitter_street }}</span>
                             <span class="block">
-                                {{ company.zipcode|format_zipcode }}
+                                {{ invoice.emitter_zipcode|format_zipcode }}
                             </span>
                             <span class="block">
-                                {{ company.city }} - {{ company.state }}
+                                {{ invoice.emitter_city }} - {{ invoice.emitter_state }}
                             </span>
                             <span class="block">
-                                Fone: {{ company.phone|format_phone }}
+                                Fone: {{ invoice.emitter_phone|format_phone }}
                             </span>
                         </td>
                         <td rowspan="3" class="txtc txt-upper" style="width: 34mm; height: 29.5mm;">
@@ -469,7 +469,7 @@
                     <tr>
                         <td>
                             <span class="nf-label">INSCRIÇÃO ESTADUAL</span>
-                            <span class="info">{{ company.state_registration }}</span>
+                            <span class="info">{{ invoice.emitter_state_registration }}</span>
                         </td>
                         <td style="width: 67.5mm;">
                             <span class="nf-label">INSCRIÇÃO ESTADUAL DO SUBST. TRIB.</span>
@@ -477,7 +477,7 @@
                         </td>
                         <td style="width: 64.3mm">
                             <span class="nf-label">CNPJ</span>
-                            <span class="info">{{ company.cnpj|format_cnpj }}</span>
+                            <span class="info">{{ invoice.emitter_cnpj|format_cnpj }}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -494,11 +494,11 @@
                                     <tr>
                                         <td>
                                             <span class="nf-label">NOME/RAZÃO SOCIAL</span>
-                                            <span class="info">{{ sale_order.client.company_name }}</span>
+                                            <span class="info">{{ invoice.receiver_name }}</span>
                                         </td>
                                         <td style="width: 40mm">
                                             <span class="nf-label">CNPJ/CPF</span>
-                                            <span class="info">{{ sale_order.client.cnpj|format_cnpj }}</span>
+                                            <span class="info">{{ invoice.receiver_cnpj|format_cnpj }}</span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -516,7 +516,7 @@
                                     <tr>
                                         <td>
                                             <span class="nf-label">ENDEREÇO</span>
-                                            <span class="info">{{ sale_order.client.street }}</span>
+                                            <span class="info">{{ invoice.receiver_street }}</span>
                                         </td>
                                         <td style="width: 47mm;">
                                             <span class="nf-label">BAIRRO/DISTRITO</span>
@@ -524,7 +524,7 @@
                                         </td>
                                         <td style="width: 37.2 mm">
                                             <span class="nf-label">CEP</span>
-                                            <span class="info">{{ sale_order.client.zipcode|format_zipcode }}</span>
+                                            <span class="info">{{ invoice.receiver_zipcode|format_zipcode }}</span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -542,15 +542,15 @@
                                     <tr>
                                         <td>
                                             <span class="nf-label">MUNICÍPIO</span>
-                                            <span class="info">{{ sale_order.client.city }}</span>
+                                            <span class="info">{{ invoice.receiver_city }}</span>
                                         </td>
                                         <td style="width: 34mm">
                                             <span class="nf-label">FONE/FAX</span>
-                                            <span class="info">{{ sale_order.client.phone|format_phone }}</span>
+                                            <span class="info">{{ invoice.receiver_phone|format_phone }}</span>
                                         </td>
                                         <td style="width: 28mm">
                                             <span class="nf-label">UF</span>
-                                            <span class="info">{{ sale_order.client.state }}</span>
+                                            <span class="info">{{ invoice.receiver_state }}</span>
                                         </td>
                                         <td style="width: 51mm">
                                             <span class="nf-label">INSCRIÇÃO ESTADUAL</span>
