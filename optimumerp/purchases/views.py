@@ -10,7 +10,6 @@ from transactions.models import Transaction
 from .filters import PurchasesFilter
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from inventory.models import Inventory
 
 @login_required
 def index(request):

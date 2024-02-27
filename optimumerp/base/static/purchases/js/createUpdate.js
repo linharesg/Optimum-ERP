@@ -136,7 +136,7 @@ jQuery(function() {
             $(this).attr({ id }).val("");
         });
 
-        $newRow.find("button[data-url").each(function() {
+        $newRow.find("button[data-url]").each(function() {
             const oldUrl = $(this).attr("data-url");
             const newUrl = oldUrl.replace(/\d+/, '0');
             $(this).attr("data-url", newUrl).val("");
