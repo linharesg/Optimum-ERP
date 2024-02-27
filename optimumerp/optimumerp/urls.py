@@ -14,6 +14,6 @@ urlpatterns = [
     path('nota-fiscal/', include('invoices.urls')),
     path("pedidos-de-compras/", include("purchases.urls")),
     path('empresa/', include("company.urls")),
+    path('dashboard/', include('dashboard.urls')),
     path('categorias/', include("categories.urls"))
-    # path('dashboard/', include('dashboard.urls'))
 ]

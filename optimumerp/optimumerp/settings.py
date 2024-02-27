@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_bootstrap5',
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     'suppliers.apps.SuppliersConfig',
     'products.apps.ProductsConfig',
     'users.apps.UsersConfig',
@@ -49,8 +50,8 @@ INSTALLED_APPS = [
     'invoices.apps.InvoicesConfig',
     'purchases.apps.PurchasesConfig',
     'company.apps.CompanyConfig',
-    # 'dashboard.apps.DashboardConfig',
-    'categories.apps.CategoriesConfig'
+    'categories.apps.CategoriesConfig',
+    'dashboard.apps.DashboardConfig'
 ]
 
 MIDDLEWARE = [
