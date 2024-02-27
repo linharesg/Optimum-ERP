@@ -21,6 +21,7 @@ class ClientsForm(forms.ModelForm):
             "city": "Cidade",
             "state": "Estado",
             "phone": "Contato",
+            "enabled": "Ativo"
         }
         
         error_messages = {
@@ -34,6 +35,7 @@ class ClientsForm(forms.ModelForm):
             }
         }
 
+    
     def clean_cnpj(self):
         cnpj = self.cleaned_data.get("cnpj", "")
         cnpj = re.sub("[^0-9]", "", cnpj)
