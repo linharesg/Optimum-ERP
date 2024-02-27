@@ -2,7 +2,6 @@ from django.views.generic import TemplateView
 from plotly.offline import plot
 from plotly.graph_objects import Bar, Pie
 from django.db.models import Sum
-from suppliers.models import Suppliers
 from purchases.models import Purchases
 from inventory.models import Inventory
 from sales_order.models import SalesOrder, SalesOrderProduct
@@ -31,11 +30,11 @@ class DashView(TemplateView):
         total_values_sales = [s['total_value'] for s in sales_by_client]
         plot_div_sales = plot([Bar(x=total_values_sales, y=clients, orientation='h')], output_type="div", include_plotlyjs=False)
 
-        # Gráfico de Fornecedores por Estado
-        suppliers_by_state = Suppliers.objects.values('state').annotate(count=Sum('id'))
-        states = [s['state'] for s in suppliers_by_state]
-        counts = [s['count'] for s in suppliers_by_state]
-        plot_div_suppliers = plot([Bar(x=states, y=counts)], output_type="div", include_plotlyjs=False)
+        # Gráfico de Vendas por Categoria
+        sales_by_category = SalesOrderProduct.objects.values('product__category__name').annotate(total_sales=Sum('total_value_product'))
+        categories = [item['product__category__name'] for item in sales_by_category]
+        sales_totals = [item['total_sales'] for item in sales_by_category]
+        plot_div_category = plot([Bar(x=categories, y=sales_totals)], output_type="div", include_plotlyjs=False)
 
         # Gráfico Top 10 produtos mais vendidos
         top_products = SalesOrderProduct.objects.values('product__name').annotate(total_sold=Sum('amount')).order_by('-total_sold')[:10]
@@ -57,7 +56,7 @@ class DashView(TemplateView):
 
         context["plot_div_purchases"] = plot_div_purchases
         context["plot_div_sales"] = plot_div_sales
-        context["plot_div_suppliers"] = plot_div_suppliers
+        context["plot_div_category"] = plot_div_category
         context["plot_div_salesproduct"] = plot_div_salesproduct
         context["plot_div_salesusers"] = plot_div_salesusers
         context["plot_div_inventory"] = plot_div_inventory
