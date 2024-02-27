@@ -2,8 +2,6 @@
 import re
 from django import forms
 from .models import Clients
-from crispy_forms.helper import FormHelper, Layout
-from crispy_forms.layout import Hidden
 
 class ClientsForm(forms.ModelForm):
        
