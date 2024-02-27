@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.db import IntegrityError, transaction
 from .models import Purchases, PurchasesProduct
 from django.http import HttpResponseRedirect, JsonResponse
-from products.models import Product
+from products.models import Product, SupplierProduct
 from .forms import PurchasesForm, PurchasesProductFormSet
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib import messages
@@ -88,21 +88,26 @@ def create(request):
 
     return render(request, "purchases/create.html", context)
 
-def get_sale_value(request):
+def get_purchasing_price(request):
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest' and request.method == 'GET':
         product_id = request.GET.get('product_id')
-        product = Product.objects.get(id=product_id)
-        sale_price = product.sale_price
-        return JsonResponse({'sale_price': sale_price})
+        supplier_id = request.GET.get('supplier')
+
+
+        product = SupplierProduct.objects.filter(product_id=product_id, supplier_id=supplier_id).first()
+        purchasing = ""
+        if product:
+            purchasing = product.cost_price
+        return JsonResponse({'purchasing': purchasing})
     else:
         return JsonResponse({'error': 'Invalid request'})    
 
-def get_sale_value_update(request, id):
-    value = get_sale_value(request)
+def get_purchasing_price_update(request, id):
+    value = get_purchasing_price(request)
     return value
 
-def get_sale_value_create(request):
-    value = get_sale_value(request)
+def get_purchasing_price_create(request):
+    value = get_purchasing_price(request)
     return value
 
 def update(request, id):

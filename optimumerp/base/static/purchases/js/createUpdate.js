@@ -8,6 +8,7 @@ jQuery(function() {
     const $totalOrderValue = $("#id_total_value")
     const $initialProducts = $("#id_purchasesproduct_set-INITIAL_FORMS")
     const $discount = $('#id_discount')
+    const $supplier = $("#id_supplier")
     var $productRow = $(".productRow")
 
     const updateTotalValue = function() {
@@ -84,16 +85,18 @@ jQuery(function() {
             $(this).val('');
             return;
         }
-    
+        
+        var supplier = $supplier.val()
         var productId = $(this).val();
         $.ajax({
-            url: 'get_sale_value/',
+            url: 'get_purchasing_price/',
             data: {
-                'product_id': productId
+                'product_id': productId,
+                'supplier': supplier
             },
             dataType: 'json',
             success: function(data) {
-                $currentProductRow.find('.productUnitValue input').val(data.sale_price);
+                $currentProductRow.find('.productUnitValue input').val(data.purchasing);
             }
         });
 
@@ -112,7 +115,7 @@ jQuery(function() {
         
         updateTotalValue();
     }
-
+    
     $productRow.find('select').on('change', onProductChange);
     $productRow.find('.productAmount').on('change', onAmountChange);
     $productRow.find('.productUnitValue').on('change', onAmountChange);
