@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_bootstrap5',
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     'suppliers.apps.SuppliersConfig',
     'products.apps.ProductsConfig',
     'users.apps.UsersConfig',
