@@ -37,7 +37,7 @@ class SalesOrderProductForm(forms.ModelForm):
     class Meta:
         model = SalesOrderProduct
         fields = "__all__"
-        # exclude = ["status"]
+
         widgets = {
             "unit_value": forms.NumberInput(attrs={"placeholder": "Preço de custo"}),
             "amount": forms.NumberInput(attrs={"placeholder": "Quantidade"}),

@@ -56,5 +56,5 @@ PurchasesProductFormSet = forms.inlineformset_factory(
     form=PurchasesProductForm,
     extra=1,
     can_delete=True,
-    max_num=5
+    max_num=1
 )

@@ -47,8 +47,7 @@ jQuery(function() {
         $totalProducts.val(parseInt($totalProducts.val()) - 1);
         updateTotalValue();
 
-        
-        if (parseInt($initialProducts.val()) > 0) {
+        if (parseInt($initialProducts.val()) > 0 && !($button.attr("data-url").includes("/0/"))) {
             $initialProducts.val(parseInt($initialProducts.val()) -1);
             updateFormIndex()
         };
@@ -136,7 +135,7 @@ jQuery(function() {
             $(this).attr({ id }).val("");
         });
 
-        $newRow.find("button[data-url").each(function() {
+        $newRow.find("button[data-url]").each(function() {
             const oldUrl = $(this).attr("data-url");
             const newUrl = oldUrl.replace(/\d+/, '0');
             $(this).attr("data-url", newUrl).val("");

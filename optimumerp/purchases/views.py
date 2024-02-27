@@ -10,6 +10,7 @@ from transactions.models import Transaction
 from .filters import PurchasesFilter
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from inventory.models import Inventory
 
 @login_required
 def index(request):
@@ -39,6 +40,7 @@ def create(request):
 
             if not purchase_product_formset.is_valid():                      
                 messages.error(request, "Falha ao cadastrar os produtos do pedido de compra.")
+                
                 purchase_product_formset = PurchasesProductFormSet(request.POST)
                 
                 context = { 
@@ -182,7 +184,7 @@ def delete_product_from_purchase(request, id):
 
 @require_GET
 def get_products_from_purchase(request, id):
-    products = PurchasesProduct.objects.filter(sale_order__id=id).order_by("-id")
+    products = PurchasesProduct.objects.filter(purchase__id=id).order_by("-id")
 
     # Serialização
     products_serialized = [{

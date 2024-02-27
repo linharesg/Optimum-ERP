@@ -17,7 +17,7 @@
     {{ purchase_product_formset.management_form }}
     {% for product in purchase_product_formset %}
     <div class="row productRow">
-        {{ form.id }}
+        {{ product.id }}
         <div class="col-md-4 productInput">
             {{ product.product|as_crispy_field }}
         </div>
@@ -34,9 +34,8 @@
         <div class="col-md-2">
             <div class="d-grid">
                 <button
-                {% comment %} {% if supplier.id.value %}data-url="{% url "products:delete_supplier" supplier.id.value %}"{% endif %} {% endcomment %}
-                {% if supplier.id.value %}data-url="#"{% endif %}
                 type="button" 
+                {% if product.id.value %}data-url="{% url 'purchases:delete_product' product.id.value %}"{% endif %}
                 class="btn btn-danger remove-btn removeProductButton">
                     <i class="bi bi-x"></i>
                 </button>

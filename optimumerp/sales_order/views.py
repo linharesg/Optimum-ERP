@@ -29,7 +29,6 @@ def index(request):
     
     return render(request, "sales_order/index.html", context)
 
-
 def create(request):
     # POST
     if request.method == 'POST':
