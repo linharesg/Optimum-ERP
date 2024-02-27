@@ -6,6 +6,14 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def index(request):
+    """
+    Esta view requer que o usuário esteja autenticado. Ela recupera todos os objetos do modelo Inventory
+    e os filtra de acordo com os parâmetros fornecidos na requisição GET. Os resultados são então paginados
+    e enviados para o template "inventory/index.html" para exibição.
+
+    Returns:
+        HttpResponse: Uma resposta HTTP renderizada contendo a lista paginada de itens de inventário.
+    """
     inventory = Inventory.objects.all()
     inventory_filter = InventoryFilter(request.GET, queryset=inventory)
     
