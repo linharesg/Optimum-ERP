@@ -3,15 +3,8 @@ from .models import SalesOrder, SalesOrderProduct
 from crispy_forms.helper import FormHelper
 from products.models import Product
 from clients.models import Clients
-
-
 class SalesOrderForm(forms.ModelForm):
-    """
-    Formulário para criar ou atualizar um pedido de venda.
 
-    Attributes:
-        client (QuerySet): Conjunto de dados de clientes habilitados para seleção.
-    """
     class Meta:
         model = SalesOrder
         exclude = ["products"]
@@ -36,20 +29,11 @@ class SalesOrderForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        """
-        Inicializa o formulário e filtra os clientes habilitados.
-        """
         super().__init__(*args, **kwargs)
         self.fields["client"].queryset = Clients.objects.filter(enabled=True)
 
 
 class SalesOrderProductForm(forms.ModelForm):
-    """
-    Formulário para adicionar ou editar um produto em um pedido de venda.
-
-    Attributes:
-        product (QuerySet): Conjunto de dados de produtos habilitados para seleção.
-    """
     class Meta:
         model = SalesOrderProduct
         fields = "__all__"
@@ -61,9 +45,6 @@ class SalesOrderProductForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        """
-        Inicializa o formulário e filtra os produtos habilitados.
-        """
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.fields["product"].queryset = Product.objects.filter(enabled=True)

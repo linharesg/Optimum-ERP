@@ -2,39 +2,6 @@ from django.db import models
 from sales_order.models import SalesOrder
 
 class Invoice(models.Model):
-    """
-    Modelo que representa uma fatura.
-
-    Esta classe representa as informações relacionadas a uma fatura, incluindo detalhes do emissor, do destinatário
-    e da venda associada.
-
-    Atributos:
-        sale_order (ForeignKey): Venda associada à fatura.
-        access_key (CharField): Chave de acesso da fatura.
-        barcode (CharField): Código de barras da fatura.
-        emitter_name (CharField): Nome do emissor.
-        emitter_fantasy_name (CharField): Nome fantasia do emissor.
-        emitter_state_registration (CharField): Inscrição estadual do emissor.
-        emitter_cnpj (CharField): CNPJ do emissor.
-        emitter_email (EmailField): Email do emissor.
-        emitter_zipcode (CharField): CEP do emissor.
-        emitter_street (CharField): Rua do emissor.
-        emitter_number (CharField): Número do emissor.
-        emitter_city (CharField): Cidade do emissor.
-        emitter_state (CharField): Estado do emissor.
-        emitter_phone (CharField): Telefone do emissor.
-        receiver_name (CharField): Nome do destinatário.
-        receiver_fantasy_name (CharField): Nome fantasia do destinatário.
-        receiver_cnpj (CharField): CNPJ do destinatário.
-        receiver_email (EmailField): Email do destinatário.
-        receiver_zipcode (CharField): CEP do destinatário.
-        receiver_street (CharField): Rua do destinatário.
-        receiver_number (CharField): Número do destinatário.
-        receiver_city (CharField): Cidade do destinatário.
-        receiver_state (CharField): Estado do destinatário.
-        receiver_phone (CharField): Telefone do destinatário.
-        emission_date (DateTimeField): Data de emissão da fatura.
-    """
     sale_order = models.ForeignKey(SalesOrder, on_delete=models.DO_NOTHING)
     access_key = models.CharField(max_length=255)
     barcode = models.CharField(max_length=255)

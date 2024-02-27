@@ -14,17 +14,6 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def index(request):
-    """
-    Esta view é responsável por exibir a página inicial do módulo de transações, listando todas as transações registradas
-    no sistema. Também fornece filtros para pesquisar transações específicas.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest que contém os dados da solicitação.
-
-    Returns:
-        HttpResponse: Uma resposta HTTP que renderiza a página inicial do módulo de transações.
-
-    """
     transactions = Transaction.objects.order_by("-id")
     transactions_filter = TransactionsFilter(request.GET, queryset=transactions)
 
@@ -41,18 +30,6 @@ def index(request):
     return render(request, "transactions/index.html", context)
 
 def create(request):
-    """
-    Esta view é responsável por criar uma nova transação com base nos dados fornecidos pelo usuário. 
-    Os dados são enviados através de um formulário POST. Antes de salvar a transação, verifica-se 
-    se a quantidade da transação é válida em relação ao estoque disponível.
-
-    Args:
-        request (HttpRequest): O objeto HttpRequest que contém os dados da solicitação.
-
-    Returns:
-        HttpResponse: Uma resposta HTTP que renderiza o formulário de criação de transação ou redireciona para a página inicial do módulo de transações após a criação bem-sucedida.
-
-    """
     if request.method == 'POST':
         form = TransactionsForm(request.POST)
         inventory = Inventory.objects.get(product=request.POST.get("product"))
@@ -92,3 +69,21 @@ def create(request):
         }
 
     return render(request, "transactions/create.html", context)
+
+# def search(request):
+#     search_value = request.GET.get("q").strip()
+
+#     if not search_value:
+#         return redirect("transactions:index")
+    
+#     transactions = Transaction.objects.filter(Q(product__icontains=search_value) | Q(quantity__icontains=search_value)).order_by("-id")
+
+#     paginator = Paginator(transactions, 2)
+#     page_number = request.GET.get("page")
+#     page_obj = paginator.get_page(page_number)
+
+#     context = {
+#         "transactions": page_obj
+#     }
+    
+#     return render(request, "transactions/index.html", context)

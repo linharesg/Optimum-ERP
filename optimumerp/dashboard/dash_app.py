@@ -17,9 +17,6 @@ app = DjangoDash("Dashboard")
     []
 )
 def update_suppliers_chart():
-    """
-    Atualiza o gráfico que mostra a distribuição de fornecedores por estado.
-    """
     suppliers_by_state = Suppliers.objects.values('state').annotate(count=Count('id'))
     states = [s['state'] for s in suppliers_by_state]
     counts = [s['count'] for s in suppliers_by_state]
@@ -44,14 +41,14 @@ def update_suppliers_chart():
     []
 )
 def update_purchases_chart():
-    """
-    Atualiza o gráfico que mostra o valor total de compras por fornecedor.
-    """
+    # Obtenha os dados de compra por fornecedor
     purchases_by_supplier = Purchases.objects.values('supplier__company_name').annotate(total_value=Sum('total_value'))
 
+    # Extraia os nomes dos fornecedores e os valores totais
     suppliers = [p['supplier__company_name'] for p in purchases_by_supplier]
     total_values = [p['total_value'] for p in purchases_by_supplier]
 
+    # Crie o gráfico de barras
     data = [
         go.Bar(
             x=suppliers,
@@ -65,25 +62,26 @@ def update_purchases_chart():
 
     return {'data': data, 'layout': layout}
 
+
 # GRÁFICO DE TOP 10 CLIENTES QUE MAIS COMPRARAM
 @app.dash_app.callback(
     dash.dependencies.Output('sales-chart', 'figure'),
     []
 )
 def update_sales_chart():
-    """
-    Atualiza o gráfico que mostra os top 10 clientes que mais compraram.
-    """
+    # Consulta para obter as vendas por cliente
     sales_by_client = SalesOrder.objects.values('client__company_name').annotate(total_value=Sum('total_value')).order_by('-total_value')[:10]
 
+    # Extrair os dados para o gráfico
     clients = [s['client__company_name'] for s in sales_by_client]
     total_values = [s['total_value'] for s in sales_by_client]
 
+    # Criar o gráfico
     data = [
         go.Bar(
             x=total_values,
             y=clients,
-            orientation='h'
+            orientation='h'  # Define a orientação para horizontal
         )
     ]
     layout = go.Layout(
@@ -99,14 +97,14 @@ def update_sales_chart():
     []
 )
 def create_top_products_chart():
-    """
-    Cria o gráfico dos top 10 produtos mais vendidos.
-    """
+    # Consulta para obter os top 10 produtos mais vendidos
     top_products = SalesOrderProduct.objects.values('product__name').annotate(total_sold=Sum('amount')).order_by('-total_sold')[:10]
-
+    print(top_products)
+    # Extraia os nomes dos produtos e as quantidades vendidas
     product_names = [item['product__name'] for item in top_products]
     total_sold = [item['total_sold'] for item in top_products]
 
+    # Crie o gráfico de barras
     data = [
         go.Bar(
             x=total_sold,
@@ -122,20 +120,21 @@ def create_top_products_chart():
 
     return {'data': data, 'layout': layout}
 
+
 # GRÁFICO DE VENDAS POR USUÁRIO
 @app.dash_app.callback(
     dash.dependencies.Output('sales-by-user-chart', 'figure'),
     []
 )
 def update_sales_by_user_chart():
-    """
-    Atualiza o gráfico que mostra as vendas por usuário.
-    """
+    # Consulta para obter as vendas por usuário
     sales_by_user = SalesOrder.objects.values('user__name').annotate(total_sales=Sum('total_value'))
 
+    # Extraia os nomes dos usuários e os valores totais de vendas
     name = [item['user__name'] for item in sales_by_user]
     total_sales = [item['total_sales'] for item in sales_by_user]
 
+    # Crie o gráfico de pizza
     data = [
         go.Pie(
             labels=name,
@@ -154,14 +153,14 @@ def update_sales_by_user_chart():
     []
 )
 def update_top_inventory_chart():
-    """
-    Atualiza o gráfico que mostra os top 10 produtos com maior estoque.
-    """
+    # Consulta para obter os top 10 produtos com maior estoque
     top_inventory = Inventory.objects.order_by('-quantity')[:10]
 
+    # Extraia os nomes dos produtos e as quantidades em estoque
     product_names = [item.product.name for item in top_inventory]
     quantities = [item.quantity for item in top_inventory]
 
+    # Crie o gráfico de barras
     data = [
         go.Bar(
             x=quantities,
@@ -197,5 +196,5 @@ app.layout = html.Div([
     dcc.Graph(id='purchases-chart'),
 
     # GRÁFICO DE TOP 10 PRODUTOS COM MAIOR ESTOQUE
-    dcc.Graph(id='top-inventory-chart')
+    dcc.Graph(id='top-inventory-charts')
 ])
