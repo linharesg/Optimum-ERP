@@ -28,7 +28,9 @@ def index(request):
     """
     sales_order = SalesOrder.objects.order_by("-id")
     sales_order_filter = SalesOrderFilter(request.GET, queryset=sales_order)
-    paginator = Paginator(sales_order_filter.qs.distinct(), 3)
+
+    # Aplicando a paginação
+    paginator = Paginator(sales_order_filter.qs.distinct(), 50)
 
     
     page_number = request.GET.get("page")

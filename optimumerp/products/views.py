@@ -36,7 +36,7 @@ def index(request):
     product_filter = ProductFilter(request.GET, queryset=products)
 
     # Aplicando a paginação
-    paginator = Paginator(product_filter.qs, 100)
+    paginator = Paginator(product_filter.qs, 50)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 

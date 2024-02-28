@@ -95,7 +95,7 @@
           {% include 'partials/_filter.html' with main_page="purchases:index" %}
         </div>
 
-        <div class="table-responsive bg-white p-2 col-md-9 rounded">
+        <div class="table-responsive bg-white p-2 col-md-9 rounded" style="height:80vh">
             <table class="table table-borderless table-hover table-sm table-color">
                 <thead class="table-border">
                     <tr>
@@ -179,8 +179,8 @@
                 </tbody>
             </table>
         </div>
+        {% include "partials/_paginator.html" %}
     </div>
-    {% include "partials/_paginator.html" %}
     {% for order in orders %}
         {{order.supplier}}
     {% endfor %}

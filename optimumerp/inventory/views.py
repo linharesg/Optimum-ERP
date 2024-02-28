@@ -17,7 +17,8 @@ def index(request):
     inventory = Inventory.objects.all()
     inventory_filter = InventoryFilter(request.GET, queryset=inventory)
     
-    paginator = Paginator(inventory_filter.qs, 5)
+    # Aplicando a paginação
+    paginator = Paginator(inventory_filter.qs, 50)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)

@@ -102,7 +102,7 @@ class UserLoginView(LoginView):
     """
     template_name = 'users/login.html'
     redirect_authenticated_user = True
-    next_page = "products:index"
+    next_page = "dashboard:index"
     
     
 class UserLogoutView(LogoutView):
