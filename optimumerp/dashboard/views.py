@@ -22,37 +22,63 @@ class DashView(TemplateView):
         purchases_by_supplier = Purchases.objects.values('supplier__company_name').annotate(total_value=Sum('total_value'))
         suppliers = [p['supplier__company_name'] for p in purchases_by_supplier]
         total_values = [p['total_value'] for p in purchases_by_supplier]
-        plot_div_purchases = plot([Bar(x=suppliers, y=total_values)], output_type="div", include_plotlyjs=False)
+
+        # Defina a cor azul marinho que deseja usar
+        navy_blue = '#001F3F'
+
+        plot_div_purchases = plot([Bar(x=suppliers, y=total_values, marker_color=navy_blue)], output_type="div", include_plotlyjs=False)
 
         # Gráfico de Vendas por Cliente
         sales_by_client = SalesOrder.objects.values('client__company_name').annotate(total_value=Sum('total_value')).order_by('-total_value')[:10]
         clients = [s['client__company_name'] for s in sales_by_client]
         total_values_sales = [s['total_value'] for s in sales_by_client]
-        plot_div_sales = plot([Bar(x=total_values_sales, y=clients, orientation='h')], output_type="div", include_plotlyjs=False)
+
+        # Defina a cor azul marinho que deseja usar
+        navy_blue = '#001F3F'
+
+        plot_div_sales = plot([Bar(x=total_values_sales, y=clients, orientation='h', marker_color=navy_blue)], output_type="div", include_plotlyjs=False)
 
         # Gráfico de Vendas por Categoria
         sales_by_category = SalesOrderProduct.objects.values('product__category__name').annotate(total_sales=Sum('total_value_product'))
         categories = [item['product__category__name'] for item in sales_by_category]
         sales_totals = [item['total_sales'] for item in sales_by_category]
-        plot_div_category = plot([Bar(x=sales_totals, y=categories, orientation='h')], output_type="div", include_plotlyjs=False)
+
+        # Defina a cor azul marinho que deseja usar
+        navy_blue = '#001F3F'
+
+        plot_div_category = plot([Bar(x=sales_totals, y=categories, orientation='h', marker_color=navy_blue)], output_type="div", include_plotlyjs=False)
 
         # Gráfico Top 10 produtos mais vendidos
         top_products = SalesOrderProduct.objects.values('product__name').annotate(total_sold=Sum('amount')).order_by('-total_sold')[:10]
         product_names = [item['product__name'] for item in top_products]
         total_sold = [item['total_sold'] for item in top_products]
-        plot_div_salesproduct = plot([Bar(x=total_sold, y=product_names, orientation='h')], output_type="div", include_plotlyjs=False)
+
+        # Defina a cor azul marinho que deseja usar
+        navy_blue = '#001F3F'
+
+        plot_div_salesproduct = plot([Bar(x=product_names, y=total_sold, orientation='v', marker_color=navy_blue)], output_type="div", include_plotlyjs=False)
 
         # Gráfico Vendas por Usuário/Vendedor
         sales_by_user = SalesOrder.objects.values('user__name').annotate(total_sales=Sum('total_value'))
         name = [item['user__name'] for item in sales_by_user]
         total_sales = [item['total_sales'] for item in sales_by_user]
-        plot_div_salesusers = plot([Pie(labels=name, values=total_sales)], output_type="div", include_plotlyjs=False)
 
+        # Definindo as cores azul marinho, vermelho e verde
+        navy_blue = '#001F3F'
+        red = '#FF0000'
+        green = '#00FF00'
+
+        plot_div_salesusers = plot([Pie(labels=name, values=total_sales, marker_colors=[green, navy_blue, red])], output_type="div", include_plotlyjs=False)
+        
         # Gráfico Top 10 Produtos com maior estoque
         top_inventory = Inventory.objects.order_by('-quantity')[:10]
         product_names = [item.product.name for item in top_inventory]
         quantities = [item.quantity for item in top_inventory]
-        plot_div_inventory = plot([Bar(x=quantities, y=product_names, orientation='h')], output_type="div", include_plotlyjs=False)
+
+        # Defina a cor azul marinho que deseja usar
+        navy_blue = '#001F3F'
+
+        plot_div_inventory = plot([Bar(x=quantities, y=product_names, orientation='h', marker_color=navy_blue)], output_type="div", include_plotlyjs=False)
 
         context["plot_div_purchases"] = plot_div_purchases
         context["plot_div_sales"] = plot_div_sales

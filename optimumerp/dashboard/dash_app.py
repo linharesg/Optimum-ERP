@@ -113,9 +113,9 @@ def create_top_products_chart():
 
     data = [
         go.Bar(
-            x=total_sold,
-            y=product_names,
-            orientation='h'
+            x=product_names,
+            y=total_sold,
+            orientation='v'
         )
     ]
     layout = go.Layout(
