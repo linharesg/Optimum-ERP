@@ -8,7 +8,7 @@
 {% block page_name %}Dashboard{% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 z-n1">
             <div class="chart-container">
                 <div class="chart-title">TOP 10 PRODUTOS MAIS VENDIDOS</div>
                 <div id='top-products-chart'>{{ plot_div_salesproduct|safe }}</div>
@@ -16,13 +16,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 z-n1">
             <div class="chart-container">
                 <div class="chart-title">COMPRAS POR FORNECEDOR</div>
                 <div id='purchases-chart'>{{ plot_div_purchases|safe }}</div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 z-n1">
             <div class="chart-container">
                 <div class="chart-title">TOP 10 PRODUTOS COM MAIOR ESTOQUE</div>
                 <div id='top-inventory-charts'>{{ plot_div_inventory|safe }}</div>
@@ -30,13 +30,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 z-n1">
             <div class="chart-container">
                 <div class="chart-title">TOP 10 CLIENTES QUE MAIS COMPRAM</div>
                 <div id='sales-chart'>{{ plot_div_sales|safe }}</div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 z-n1">
             <div class="chart-container">
                 <div class="chart-title">VENDAS POR USUÁRIO/VENDEDOR</div>
                 <div id='sales-by-user-chart'>{{ plot_div_salesusers|safe }}</div>
@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 z-n1">
             <div class="chart-container">
                 <div class="chart-title">VENDAS POR CATEGORIA</div>
                 <div id='sales-by-category-chart'>{{ plot_div_category|safe }}</div>
