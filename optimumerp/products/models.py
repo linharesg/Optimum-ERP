@@ -141,8 +141,8 @@ class SupplierProduct(models.Model):
     """
     Representa o relacionamento entre produtos e seus fornecedores.
     """
+    supplier = models.ForeignKey(Suppliers, on_delete=models.PROTECT)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    supplier = models.ForeignKey(Suppliers, on_delete=models.CASCADE)
     cost_price = models.DecimalField(max_digits=8, decimal_places=2)
 
     class Meta:

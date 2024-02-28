@@ -25,8 +25,8 @@
 <div id="supplierFormset">
     {{ supplier_product_formset.management_form }}
     {% for supplier in supplier_product_formset %}
-    <div class="row mb-3">
-        {{ form.id }}
+    <div class="row mb-3 supplierRow">
+        {{ supplier.id }}
         <div class="col-md-5">
             {{ supplier.supplier|as_crispy_field }}
         </div>

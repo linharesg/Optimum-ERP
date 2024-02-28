@@ -60,7 +60,7 @@ def create(request):
     Returns:
         HttpResponse: Uma resposta HTTP que renderiza a página de criação de produtos ou redireciona para a página de listagem de produtos após a criação bem-sucedida.
     """    
-    form_action = reverse("products:create")
+    # form_action = reverse("products:create")
 
     if request.method == 'POST':
         form = ProductForm(request.POST)
@@ -69,13 +69,13 @@ def create(request):
                 try:
                     Inventory.objects.create(product=product, quantity=0) # Cria um registro na tabela Inventory
                 except:
-                    messages.error(request, "Falha ao cadastrar o produto no estoque")
+                    messages.error(request, "Falha ao cadastrar o produto no estoque.")
                     product.delete() # Deleta o produto caso não crie o registro na tabela Inventory
 
                     context = { 
                         "form": form, 
                         "supplier_product_formset": supplier_product_formset, 
-                        "form_action": form_action,
+                        # "form_action": form_action,
                         }
                     
                     return render(request, "products/create.html", context)
@@ -84,7 +84,7 @@ def create(request):
                 
                 if not supplier_product_formset.is_valid():     
                     # Se o formulário de fornecedores não for válido, exclui o produto                 
-                    messages.error(request, "Falha ao cadastrar os fornecedores do produto")
+                    messages.error(request, "Falha ao cadastrar os fornecedores do produto.")
                     product.delete()
                     
                     supplier_product_formset = SupplierProductFormSet(request.POST)
@@ -92,11 +92,11 @@ def create(request):
                     context = { 
                         "form": form, 
                         "supplier_product_formset": supplier_product_formset, 
-                        "form_action": form_action,
+                        # "form_action": form_action,
                         }
                     
                     return render(request, "products/create.html", context)
-                
+                messages.success(request, "Produto cadastrado!")
                 supplier_product_formset.save()
 
                 return redirect("products:index")
@@ -107,7 +107,7 @@ def create(request):
 
     context = {
         "form": form, 
-        "form_action": form_action,
+        # "form_action": form_action,
         "supplier_product_formset": supplier_product_formset
         }
 
@@ -126,7 +126,7 @@ def update(request, slug):
         HttpResponse: Uma resposta HTTP que renderiza o formulário de atualização de produto ou redireciona para a página de listagem de produtos após a atualização bem-sucedida.
     """    
     product = get_object_or_404(Product, slug=slug)
-    form_action = reverse("products:update", args=(slug,))
+    # form_action = reverse("products:update", args=(slug,))
 
     # POST
     if request.method == "POST":
@@ -134,44 +134,48 @@ def update(request, slug):
         supplier_product_formset = SupplierProductFormSet(request.POST, instance=product)
         
         if form.is_valid():
-            if supplier_product_formset.is_valid():
-                try:
+            print(f"-------------form valido------------")
+            print("")
+            try:
+                form.save()        
+
+                if supplier_product_formset.is_valid():
                     supplier_product_formset.save()
                     messages.success(request, "Produto atualizado com sucesso!")
-
-                except IntegrityError:
-                    messages.error(request, "Existem fornecedores duplicados.")
-                    context = {
-                        "form_action": form_action,
-                        "supplier_product_formset": supplier_product_formset,
-                        "form": form
-                    }
-
-                    return render(request, "products/create.html", context)
-            
-            form.save()
-            print(supplier_product_formset)
-            # messages.success(request, "Produto atualizado com sucesso!")
-            return redirect("products:index")
+                    return redirect("products:index")
+                else:
+                    print(f"data: {supplier_product_formset.data}")
+                    print("")
+                    print(f"erro: {supplier_product_formset.errors}")
+                    messages.error(
+                        request, "Falha ao atualizar o produto. Verifique os fornecedores do produto.")
+                    
+            except IntegrityError:
+                messages.error(
+                    request, "Falha ao atualizar o produto: Não é possível ter o mesmo fornecedor mais de uma vez para um único produto.")
+        else:
+            messages.error(
+                request, "Falha ao atualizar o produto: formulário inválido.")
         
-        messages.error(request, "Não foi possível atualizar o produto.")
+        
+        supplier_product_formset = SupplierProductFormSet(instance=product)
         context = {
-            "form_action": form_action,
-            "form": form
+            # "form_action": form_action,
+            "form": form,
+            "supplier_product_formset": supplier_product_formset
         }
+        
+        return render(request, "products/update.html", context)
 
-        return render(request, "products/create.html", context)
-    
-    # GET
     form =  ProductForm(instance=product)
     supplier_product_formset = SupplierProductFormSet(instance=product)
     context = {
-        "form_action": form_action,
+        # "form_action": form_action,
         "form": form,
         "supplier_product_formset": supplier_product_formset,
     }
 
-    return render(request, "products/create.html", context)
+    return render(request, "products/update.html", context)
 
 @require_POST
 def delete(request, id):

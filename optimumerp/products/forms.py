@@ -1,4 +1,6 @@
 from django import forms
+
+from suppliers.models import Suppliers
 from .models import Product, SupplierProduct
 from crispy_forms.helper import FormHelper
 
@@ -9,7 +11,7 @@ class ProductForm(forms.ModelForm):
     """
     class Meta:
         model = Product
-        exclude = ["slug", "is_perishable"]
+        exclude = ["slug", "is_perishable", "supplier"]
 
         labels = {
             "name": "Nome",
@@ -54,7 +56,8 @@ class SupplierProductForm(forms.ModelForm):
     
     class Meta:
         model = SupplierProduct
-        exclude = ["product"]
+        fields = "__all__"
+        # exclude = ["product"]
         widgets = {
             "cost_price": forms.NumberInput(attrs={"placeholder": "Preço de custo"}),
         }
@@ -62,6 +65,7 @@ class SupplierProductForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.fields["supplier"].queryset = Suppliers.objects.filter(enabled=True)
         self.helper.form_show_labels = False
 
 SupplierProductFormSet = forms.inlineformset_factory(
@@ -70,5 +74,5 @@ SupplierProductFormSet = forms.inlineformset_factory(
     form=SupplierProductForm,
     extra=1,
     can_delete=True,
-    max_num=5
+    max_num=1
 )

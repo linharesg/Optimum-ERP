@@ -194,7 +194,7 @@ def update(request, id):
 
             except IntegrityError:
                 messages.error(
-                    request, "Falha ao atualizar o pedido: Não é possível ter o mesmo produto mais de uma vez em um único produto.")
+                    request, "Falha ao atualizar o pedido: Não é possível ter o mesmo produto mais de uma vez em um único pedido.")
         else:
             messages.error(
                 request, "Falha ao atualizar o pedido: formulário inválido.")
