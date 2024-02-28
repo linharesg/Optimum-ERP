@@ -49,7 +49,7 @@ hr {
 }
 
 .menu-icons {
-  font-size: 23px;
+  font-size: 20px;
 }
 
 .nav-size {
@@ -61,6 +61,11 @@ hr {
   font-size: 15px;
 }
 
+span.nav-link  {
+  position: relative;
+  top: 6px;
+}
+
 .nav-link {
   padding: 1;
   height: 50px;
@@ -69,7 +74,7 @@ hr {
 
 #navbar {
   height: 100vh !important;
-  overflow: hidden;
+  overflow: auto;
   position: fixed;
   z-index: 5 !important;
 }
@@ -90,7 +95,6 @@ h1 {
   color: white;
   font-size: 35px;
   position: relative;
-  top: -35%;
   margin-block: 0px !important;
   padding: 0px !important;
   align-self: center;
