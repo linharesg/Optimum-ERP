@@ -72,7 +72,7 @@
       </div>
 
     {% comment %} Tabela de produtos {% endcomment %}
-    <div class="table-responsive bg-white p-2 col-md-9 rounded">
+    <div class="table-responsive bg-white p-2 col-md-9 rounded" style="height:80vh">
         <table class="table table-borderless table-hover table-sm table-color">
             <thead class="table-border">
                 <tr>
@@ -138,28 +138,27 @@
                 {% endfor %}
             </tbody>
         </table>
-        
-        {% comment %} Paginação {% endcomment %}
-        {% if products.paginator.num_pages > 1 %}
-        <nav aria-label="Paginação da página">
-            <ul class="pagination justify-content-end">
-                {% if products.has_previous %}
-                <li class="page-item">
-                    <a href="?page={{ products.previous_page_number }}" class="page-link" aria-label="Anterior">&laquo;</a>
-                </li>
-                {% endif %}
-                <li class="page-item active">
-                    <span class="page-link">{{ products.number }}</span>
-                </li>
-                {% if products.has_next %}
-                <li class="page-item">
-                    <a href="?page={{ products.next_page_number }}" class="page-link" aria-label="Próximo">&raquo;</a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endif %}
     </div>
+            {% comment %} Paginação {% endcomment %}
+            {% if products.paginator.num_pages > 1 %}
+            <nav aria-label="Paginação da página">
+                <ul class="pagination justify-content-end">
+                    {% if products.has_previous %}
+                    <li class="page-item">
+                        <a href="?page={{ products.previous_page_number }}" class="page-link" aria-label="Anterior">&laquo;</a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ products.number }}</span>
+                    </li>
+                    {% if products.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ products.next_page_number }}" class="page-link" aria-label="Próximo">&raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
 </div>
 
 {% endblock  %}

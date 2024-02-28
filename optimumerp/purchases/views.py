@@ -24,7 +24,7 @@ def index(request):
     """
     purchase = Purchases.objects.order_by("-id")
     purchase_filter = PurchasesFilter(request.GET, queryset=purchase)
-    paginator = Paginator(purchase_filter.qs.distinct(), 3)
+    paginator = Paginator(purchase_filter.qs.distinct(), 1)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)

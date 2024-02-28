@@ -37,7 +37,7 @@
     {% include "partials/_filter.html" with main_page="suppliers:index" %}
   </div>
 
-  <div class="table-responsive flex-column bg-white p-2 col-md-9 rounded">
+  <div class="table-responsive flex-column bg-white p-2 col-md-9 rounded" style="height:80vh">
     <table class="table table-borderless table-hover table-sm table-color">
       <thead class="table-border">
         <tr>
@@ -79,7 +79,7 @@
       </tbody>
     </table>
 
-    {% include "partials/_paginator.html" %}
   </div>
+  {% include "partials/_paginator.html" %}
 </div>
 {% endblock  %}
