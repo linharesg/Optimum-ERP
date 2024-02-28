@@ -28,7 +28,8 @@ def index(request):
     suppliers = Suppliers.objects.order_by("-id")
     supplier_filter = SuppliersFilter(request.GET, queryset=suppliers)
 
-    paginator = Paginator(supplier_filter.qs, 2)
+    # Aplicando a paginação
+    paginator = Paginator(supplier_filter.qs, 50)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)

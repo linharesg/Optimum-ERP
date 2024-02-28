@@ -22,9 +22,11 @@ def index(request):
     Returns:
         HttpResponse: Uma resposta HTTP que renderiza a página de listagem de pedidos de compra.
     """
+
+    # Aplicando a paginação
     purchase = Purchases.objects.order_by("-id")
     purchase_filter = PurchasesFilter(request.GET, queryset=purchase)
-    paginator = Paginator(purchase_filter.qs.distinct(), 1)
+    paginator = Paginator(purchase_filter.qs.distinct(), 50)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)

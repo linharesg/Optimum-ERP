@@ -28,7 +28,8 @@ def index(request):
     transactions = Transaction.objects.order_by("-id")
     transactions_filter = TransactionsFilter(request.GET, queryset=transactions)
 
-    paginator = Paginator(transactions_filter.qs, 5)
+    # Aplicando a paginação
+    paginator = Paginator(transactions_filter.qs, 50)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
